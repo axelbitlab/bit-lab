@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitlab Terminal</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.css">
+<style>
+  :root { --bg:#0e1116; --panel:#161b22; --line:#2a313c; --text:#e6edf3; --muted:#8b949e;
+          --accent:#3ecf8e; --danger:#f85149; --warn:#d29922; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 -apple-system, system-ui, sans-serif; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid var(--line); }
+  header b { font-size:16px; letter-spacing:.3px; } header b span { color:var(--accent); }
+  main { max-width:1100px; margin:0 auto; padding:20px; display:grid; gap:14px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  label { color:var(--muted); font-size:12px; display:block; margin-bottom:4px; }
+  select, input { background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; font:inherit; min-width:220px; }
+  button { background:var(--accent); color:#04130b; border:0; border-radius:6px; padding:9px 16px; font-weight:600; cursor:pointer; }
+  button.ghost { background:transparent; color:var(--muted); border:1px solid var(--line); }
+  button:disabled { opacity:.5; cursor:default; }
+  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--muted); margin-right:6px; }
+  .dot.on { background:var(--accent); box-shadow:0 0 8px var(--accent); }
+  #term { height:430px; padding:8px; background:#000; border-radius:8px; }
+  #estado { font-family:ui-monospace, Menlo, monospace; font-size:13px; color:var(--muted); }
+  #estado.ok { color:var(--accent); } #estado.err { color:var(--danger); } #estado.run { color:var(--warn); }
+  #login { max-width:360px; margin:80px auto; display:grid; gap:10px; }
+  #login input { width:100%; } .hide { display:none !important; } .err-msg { color:var(--danger); min-height:18px; }
+</style>
+</head>
+<body>
+<header><b>Bitlab <span>Terminal</span></b><div class="row"><span id="usuario" style="color:var(--muted)"></span><button id="salir" class="ghost hide">Salir</button></div></header>
+
+<section id="login" class="card">
+  <b>Iniciar sesión</b>
+  <input id="email" type="email" placeholder="correo" autocomplete="username">
+  <input id="pass" type="password" placeholder="contraseña" autocomplete="current-password">
+  <button id="entrar">Entrar</button>
+  <div id="loginErr" class="err-msg"></div>
+</section>
+
+<main id="app" class="hide">
+  <div class="card row">
+    <div><label>Equipo</label><select id="equipo"></select></div>
+    <div><label>Comando del catálogo</label><select id="comando"></select></div>
+    <div><label>&nbsp;</label><label style="display:flex;gap:6px;align-items:center;margin:0;color:var(--text)"><input id="sim" type="checkbox" style="min-width:0"> Simulación</label></div>
+    <div><label>&nbsp;</label><button id="ejecutar">Ejecutar</button></div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <span id="estado">Listo.</span><button id="limpiar" class="ghost">Limpiar</button>
+    </div>
+    <div id="term"></div>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.js"></script>
+<script>
+const sb = supabase.createClient(window.BT_CONFIG.SUPABASE_URL, window.BT_CONFIG.PUBLISHABLE_KEY);
+const $ = id => document.getElementById(id);
+const term = new Terminal({ convertEol:true, fontSize:13, cursorBlink:false, disableStdin:true,
+  fontFamily:'ui-monospace, Menlo, Consolas, monospace', theme:{ background:'#000000' } });
+const fit = new FitAddon.FitAddon(); term.loadAddon(fit);
+const COLOR = { stdout:'', stderr:'\x1b[31m', sistema:'\x1b[33m' };
+let equipos = [], comandos = [], canal = null, vistos = new Set(), inicio = 0, cerrado = false;
+
+// ---------- sesión ----------
+async function entrar() {
+  $('loginErr').textContent = '';
+  const { error } = await sb.auth.signInWithPassword({ email:$('email').value.trim(), password:$('pass').value });
+  if (error) $('loginErr').textContent = error.message;
+}
+$('entrar').onclick = entrar; $('pass').onkeydown = e => e.key === 'Enter' && entrar();
+$('salir').onclick = () => sb.auth.signOut();
+sb.auth.onAuthStateChange((_e, s) => s ? arrancar(s) : mostrarLogin());
+
+function mostrarLogin() { $('login').classList.remove('hide'); $('app').classList.add('hide'); $('salir').classList.add('hide'); $('usuario').textContent=''; }
+let arrancado = false;
+async function arrancar(s) {
+  $('login').classList.add('hide'); $('app').classList.remove('hide'); $('salir').classList.remove('hide');
+  $('usuario').textContent = s.user.email;
+  if (arrancado) return; arrancado = true;
+  term.open($('term')); fit.fit(); addEventListener('resize', () => fit.fit());
+  term.writeln('\x1b[32mBitlab Terminal\x1b[0m · elige un equipo y un comando del catálogo.');
+  await cargarComandos(); await cargarEquipos(); setInterval(cargarEquipos, 5000);
+}
+
+// ---------- datos ----------
+const enLinea = e => e.ultimo_contacto && (Date.now() - new Date(e.ultimo_contacto)) < 15000;
+async function cargarEquipos() {
+  const { data, error } = await sb.from('dispositivos').select('id,nombre,sistema,ultimo_contacto').order('nombre');
+  if (error) return estado(error.message, 'err');
+  const sel = $('equipo').value; equipos = data;
+  $('equipo').innerHTML = data.map(e => `<option value="${e.id}">${enLinea(e) ? '● ' : '○ '}${e.nombre} (${e.sistema}${enLinea(e) ? ', en línea' : ', sin conexión'})</option>`).join('');
+  if (sel) $('equipo').value = sel;
+  filtrarComandos();
+}
+async function cargarComandos() {
+  const { data, error } = await sb.from('comandos').select('id,nombre,sistema,script,destructivo').order('nombre');
+  if (error) return estado(error.message, 'err');
+  comandos = data;
+}
+let sistemaActual = null;
+function filtrarComandos() {
+  const eq = equipos.find(e => e.id === $('equipo').value); if (!eq || eq.sistema === sistemaActual) return;
+  sistemaActual = eq.sistema; const sel = $('comando').value;
+  $('comando').innerHTML = comandos.filter(c => c.sistema === eq.sistema)
+    .map(c => `<option value="${c.id}" title="${c.script.replace(/"/g,'&quot;')}">${c.nombre}</option>`).join('');
+  if (sel) $('comando').value = sel;
+}
+$('equipo').onchange = () => { sistemaActual = null; filtrarComandos(); };
+
+// ---------- ejecutar ----------
+function estado(txt, cls='') { $('estado').textContent = txt; $('estado').className = cls; }
+function escribir(f) {
+  if (vistos.has(f.secuencia)) return; vistos.add(f.secuencia);
+  term.writeln((COLOR[f.flujo] || '') + f.texto + '\x1b[0m');
+}
+function finalizado(e) {
+  if (cerrado) return; cerrado = true;
+  const seg = ((Date.now() - inicio) / 1000).toFixed(1);
+  if (e.estado === 'exitosa') estado(`✔ Exitosa · código ${e.codigo_salida ?? 0} · ${seg} s`, 'ok');
+  else estado(`✖ ${e.estado} · código ${e.codigo_salida ?? '-'} · ${seg} s`, 'err');
+  term.writeln(`\x1b[90m── fin (${e.estado}) ──\x1b[0m`);
+  $('ejecutar').disabled = false;
+}
+
+$('ejecutar').onclick = async () => {
+  const eq = equipos.find(e => e.id === $('equipo').value);
+  const cmd = comandos.find(c => String(c.id) === $('comando').value);
+  if (!eq || !cmd) return;
+  if (cmd.destructivo && !$('sim').checked && !confirm(`"${cmd.nombre}" es destructivo. ¿Ejecutarlo en ${eq.nombre}?`)) return;
+  if (!enLinea(eq)) estado(`${eq.nombre} parece sin conexión; quedará en cola.`, 'run');
+
+  $('ejecutar').disabled = true; vistos = new Set(); inicio = Date.now(); cerrado = false;
+  if (canal) { await sb.removeChannel(canal); canal = null; }
+  term.writeln(`\r\n\x1b[36m${eq.nombre} >\x1b[0m ${cmd.script}${$('sim').checked ? '  \x1b[33m[simulación]\x1b[0m' : ''}`);
+
+  const { data: ej, error } = await sb.from('ejecuciones_comandos')
+    .insert({ dispositivo_id: eq.id, comando_id: cmd.id, modo_simulacion: $('sim').checked })
+    .select('id').single();
+  if (error) { estado(error.message, 'err'); $('ejecutar').disabled = false; return; }
+  estado(`En cola · ejecución #${ej.id} · esperando al agente…`, 'run');
+
+  canal = sb.channel('ej-' + ej.id)
+    .on('postgres_changes', { event:'INSERT', schema:'public', table:'fragmentos_salida_comandos', filter:`ejecucion_id=eq.${ej.id}` },
+        p => escribir(p.new))
+    .on('postgres_changes', { event:'UPDATE', schema:'public', table:'ejecuciones_comandos', filter:`id=eq.${ej.id}` },
+        p => { const e = p.new;
+               if (e.estado === 'ejecutando') estado(`▶ Ejecutando · ejecución #${e.id}`, 'run');
+               else if (e.estado !== 'pendiente') finalizado(e); })
+    .subscribe(async st => {
+      if (st !== 'SUBSCRIBED') return;
+      // por si el agente fue más rápido que la suscripción
+      const { data: prev } = await sb.from('fragmentos_salida_comandos').select('secuencia,flujo,texto')
+        .eq('ejecucion_id', ej.id).order('secuencia');
+      (prev || []).forEach(escribir);
+      const { data: e } = await sb.from('ejecuciones_comandos').select('*').eq('id', ej.id).single();
+      if (e && !['pendiente','ejecutando'].includes(e.estado)) finalizado(e);
+    });
+};
+$('limpiar').onclick = () => term.clear();
+</script>
+</body>
+</html>
