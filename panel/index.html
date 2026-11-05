@@ -1,13 +1,9 @@
-<!doctype html>
-<html lang="es"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bitlab Terminal · Monitoreo remoto</title>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bitlab-IT · Panel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
 :root{color-scheme:dark;
 --neg:#04070a;--tx:#e6f5ee;--tx2:#98afa6;--tx3:#62786f;
 --verde:#39ff88;--azul:#2f7bff;--cian:#22e5ff;--lima:#b7ff3c;--indigo:#8a7dff;--pel:#ff4d6d;--ambar:#ffc857;
@@ -418,7 +414,53 @@ table.t tr.hijo td:first-child{padding-left:30px}
   .lado-eq{max-height:38vh}
 }
 .t-cab .seg button{white-space:nowrap}
+
+/* ---- catálogo ---- */
+.cata-wrap{display:flex;flex-direction:column;gap:0;min-height:0}
+.sel-inline{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:11px;
+  color:var(--tx);font:500 12.5px var(--f-cuerpo);padding:8px 11px;cursor:pointer}
+.sel-inline:focus{outline:none;border-color:rgba(57,255,136,.4)}
+.cata-tabla{display:flex;flex-direction:column;gap:0}
+.cata-thead{display:grid;grid-template-columns:minmax(0,2fr) 1fr 1fr 1fr 1fr auto;gap:0 14px;
+  padding:8px 16px;color:var(--tx3);font:600 10px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;
+  border-bottom:1px solid rgba(255,255,255,.07)}
+.cata-fila{display:grid;grid-template-columns:minmax(0,2fr) 1fr 1fr 1fr 1fr auto;gap:0 14px;
+  align-items:center;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.05);
+  transition:.14s;cursor:default}
+.cata-fila:hover{background:rgba(255,255,255,.03)}
+.cata-nombre{min-width:0}
+.cata-nombre b.cata-nm{display:block;font:600 13px var(--f-cuerpo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cata-nombre small{color:var(--tx3);font:500 11px var(--f-mono);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px}
+.cata-flags{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.cata-actos{display:flex;gap:4px;opacity:0;transition:.14s}
+.cata-fila:hover .cata-actos{opacity:1}
+.flag.pel{color:var(--pel);border-color:rgba(255,84,112,.3);background:rgba(255,84,112,.08)}
+
+/* formulario catálogo */
+.form-cata{display:flex;flex-direction:column;gap:14px;padding-top:4px}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lbl-f{display:flex;flex-direction:column;gap:6px;font:600 11.5px var(--f-mono);color:var(--tx2);letter-spacing:.04em}
+.inp-f{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:11px;
+  color:var(--tx);font:500 13px var(--f-cuerpo);padding:9px 12px;width:100%;box-sizing:border-box}
+.inp-f:focus{outline:none;border-color:rgba(57,255,136,.4);background:rgba(57,255,136,.04)}
+.inp-f.mono{font-family:var(--f-mono);font-size:12.5px;resize:vertical;min-height:100px}
+textarea.inp-f{line-height:1.5}
+.lbl-chk{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:8px 12px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:11px}
+.lbl-chk input[type=checkbox]{margin-top:2px;accent-color:var(--verde);width:15px;height:15px;flex:none}
+.lbl-chk small{display:block;color:var(--tx3);font:500 11px var(--f-mono);margin-top:3px;line-height:1.4}
+select.inp-f{cursor:pointer}
+select.inp-f option{background:#1a1a26}
+
+@media(max-width:880px){
+  .cata-thead{display:none}
+  .cata-fila{grid-template-columns:1fr;gap:7px;padding:12px 14px}
+  .cata-actos{opacity:1}
+  .form-row-2{grid-template-columns:1fr}
+}
+
 </style>
+
 </head>
 <body>
 
@@ -470,6 +512,9 @@ table.t tr.hijo td:first-child{padding-left:30px}
 <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
 <script src="config.js"></script>
 <script>
+;(function(){
+
+/* ===== iconos.js ===== */
 const P={
 terminal:'<path d="M4 17l6-6-6-6M12 19h8"/>',
 monitor:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
@@ -506,11 +551,17 @@ power:'<path d="M12 3v9M6.5 6.5a8 8 0 1 0 11 0"/>',
 list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
 pin:'<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/>',
 dots:'<path d="M5 12h.01M12 12h.01M19 12h.01"/>',
-plug:'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>'
+plug:'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>',
+hdd:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M16 14h.01"/>',
+print:'<path d="M6 9V3h12v6H6zM6 18H4a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-2"/><rect x="6" y="13" width="12" height="8" rx="1"/>'
 };
 const ico=(n,s=18)=>`<svg class="ico" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]||''}</svg>`;
 
 /* ============ catálogos base ============ */
+
+
+
+/* ===== e-base.js ===== */
 /* =====================================================================
    Bitlab Terminal · Panel de la demo
    Tres pantallas: acceso, equipos disponibles y terminal remota en vivo.
@@ -546,16 +597,16 @@ const EST={pendiente:['En cola','var(--tx2)'],ejecutando:['Ejecutando','var(--ci
            exitosa:['Exitosa','var(--verde)'],fallida:['Fallida','var(--pel)'],
            cancelada:['Cancelada','var(--indigo)'],tiempo_agotado:['Tiempo agotado','var(--ambar)']};
 const FIN=['exitosa','fallida','cancelada','tiempo_agotado'];
-const VISTAS=[['equipos','Equipos','monitor'],['terminal','Terminal','terminal']];
+const VISTAS=[['equipos','Equipos','monitor'],['catalogo','Catálogo','list'],['terminal','Terminal','terminal']];
 
 /* ---------- estado ---------- */
 const S={
  vista:'equipos', perfil:null, correo:null,
  dispositivos:[], comandos:[], categorias:[],
- dispActivo:leer('disp',null),      // equipo abierto en la terminal
- ejActiva:null,                      // ejecución en curso
- interprete:null,                    // intérprete elegido para la sesión
- historialEntrada:[], hpos:-1,       // historial de comandos escritos
+ dispActivo:leer('disp',null),
+ ejActiva:null,
+ interprete:null,
+ historialEntrada:[], hpos:-1,
  silenciado:leer('silencio',false),
  canalEq:null, canalSalida:null, canalEjec:null,
 };
@@ -643,6 +694,10 @@ $('#f-login').addEventListener('submit',async e=>{
  Acceso.dentro(data.session);
 });
 
+
+
+/* ===== f-datos.js ===== */
+
 /* =====================================================================
    Datos reales
    ===================================================================== */
@@ -676,16 +731,52 @@ const Datos={
  async comandos(){
   const [{data:cats},{data:cmds,error}]=await Promise.all([
    sb.from('categorias_comandos').select('id,nombre,orden').order('orden').order('nombre'),
-   sb.from('comandos').select('id,categoria_id,nombre,descripcion,sistema,script,interprete,destructivo,requiere_admin,timeout_seg,activo')
+   sb.from('comandos').select('id,categoria_id,nombre,descripcion,sistema,script,interprete,destructivo,requiere_admin,timeout_seg,tipo_alerta,activo')
      .eq('activo',true).order('nombre')]);
   if(error){Toast.mostrar('No se pudo leer el catálogo','aviso',error.message);return}
   S.categorias=cats||[]; S.comandos=cmds||[];
  },
 
- /* comandos recomendados para el equipo abierto */
- recomendados(d){ return d?S.comandos.filter(c=>c.sistema===d.sistema):[] },
+ /* ─── Recomendaciones por reglas (sin IA) ───────────────────────────
+    Analiza las métricas reales del equipo y devuelve los comandos del
+    catálogo que son relevantes según el estado detectado.
+    Orden: alertas activas primero, luego por sistema operativo.         */
+ recomendados(d){
+  if(!d)return [];
+  const alertas=this._alertasActivas(d);
+  const compatibles=S.comandos.filter(c=>
+   c.sistema===d.sistema || c.sistema==='todos');
+  const prioritarios=compatibles.filter(c=>
+   c.tipo_alerta && alertas.includes(c.tipo_alerta));
+  const resto=compatibles.filter(c=>
+   !c.tipo_alerta || !alertas.includes(c.tipo_alerta));
+  return [...prioritarios,...resto];
+ },
 
- /* lanza un comando escrito a mano o del catálogo; devuelve el id de ejecución */
+ _alertasActivas(d){
+  const alertas=[];
+  const m=d;
+  if(m.cpu!=null && m.cpu>80) alertas.push('cpu');
+  if(m.ram!=null && m.ram>85) alertas.push('memoria');
+  if(m.disco){
+   const usadoPct=m.disco.pct!=null?m.disco.pct:null;
+   if(usadoPct!=null && usadoPct<20) alertas.push('disco');
+  }
+  if(Array.isArray(m.discos)){
+   m.discos.forEach(dk=>{
+    if(dk.libre_pct!=null && dk.libre_pct<20 && !alertas.includes('disco'))
+     alertas.push('disco');
+   });
+  }
+  if(Array.isArray(m.procesos)&&m.procesos.some(p=>p.cpu>50))
+   alertas.push('proceso');
+  if(m.visto){
+   const seg=(Date.now()-new Date(m.visto))/1000;
+   if(seg>120) alertas.push('red');
+  }
+  return alertas;
+ },
+
  async ejecutar({dispositivo,comando=null,texto=null,confirmar=false}){
   const {data,error}=await sb.rpc('crear_ejecucion',{
    p_dispositivo:dispositivo, p_comando:comando, p_texto:texto,
@@ -711,6 +802,42 @@ const Datos={
    .select('secuencia,flujo,texto').eq('ejecucion_id',id)
    .gt('secuencia',desde).order('secuencia').limit(4000);
   return data||[];
+ },
+
+ async crearComando(campos){
+  const {data,error}=await sb.rpc('crear_comando',{
+   p_nombre:campos.nombre, p_descripcion:campos.descripcion||'',
+   p_categoria_id:campos.categoria_id, p_sistema:campos.sistema,
+   p_script:campos.script, p_interprete:campos.interprete||'powershell',
+   p_destructivo:!!campos.destructivo, p_requiere_admin:!!campos.requiere_admin,
+   p_timeout_seg:campos.timeout_seg||60, p_tipo_alerta:campos.tipo_alerta||null});
+  if(error)throw error;
+  await this.comandos();
+  return data;
+ },
+
+ async actualizarComando(id,campos){
+  const {error}=await sb.rpc('actualizar_comando',{
+   p_id:id, p_nombre:campos.nombre, p_descripcion:campos.descripcion||'',
+   p_categoria_id:campos.categoria_id, p_sistema:campos.sistema,
+   p_script:campos.script, p_interprete:campos.interprete||'powershell',
+   p_destructivo:!!campos.destructivo, p_requiere_admin:!!campos.requiere_admin,
+   p_timeout_seg:campos.timeout_seg||60, p_tipo_alerta:campos.tipo_alerta||null});
+  if(error)throw error;
+  await this.comandos();
+ },
+
+ async eliminarComando(id){
+  const {error}=await sb.rpc('eliminar_comando',{p_id:id});
+  if(error)throw error;
+  await this.comandos();
+ },
+
+ async duplicarComando(id){
+  const {data,error}=await sb.rpc('duplicar_comando',{p_id:id});
+  if(error)throw error;
+  await this.comandos();
+  return data;
  }
 };
 
@@ -735,7 +862,6 @@ const Realtime={
    })
    .subscribe(st=>this.indicador(st));
  },
- /* se suscribe a la salida de UNA ejecución mientras corre */
  seguir(id,alLlegar,alCerrar){
   this.dejar();
   S.canalSalida=sb.channel('sal-'+id)
@@ -762,8 +888,10 @@ const Realtime={
  }
 };
 
-/* refresco de respaldo: si Realtime se cae, el panel no se queda ciego */
 setInterval(()=>{ if(S.perfil)Datos.equipos().then(()=>Bus.emit('equipos')) },30000);
+
+
+/* ===== g-toast.js ===== */
 const Toast={
  mostrar(t,tipo='ok',sub=''){
   if(S.silenciado&&tipo!=='forzar')return;
@@ -784,6 +912,9 @@ const Modal={
  cerrar(){const m=$('#modal');m.hidden=true;m.innerHTML=''}
 };
 const pintaNotif=()=>{const b=$('#btnNotif');if(!b)return;b.innerHTML=ico(S.silenciado?'bellOff':'bell',16);b.setAttribute('aria-pressed',S.silenciado)};
+
+
+/* ===== h-equipos.js ===== */
 
 /* =====================================================================
    Pantalla 2 · Equipos disponibles
@@ -873,313 +1004,528 @@ Acc.eqAbrir=el=>{
 };
 Bus.on('equipos',()=>{ if(S.vista==='equipos')Vistas.equipos.refrescar(); if(S.vista==='terminal')Vistas.terminal.cabecera() });
 
+
+/* ===== l-catalogo.js ===== */
+
 /* =====================================================================
-   Pantalla 3 · Terminal remota en vivo
-   El comando se escribe aquí, lo ejecuta el agente en la computadora
-   y la salida regresa por Realtime conforme se produce.
+   Catálogo de comandos — CRUD completo
    ===================================================================== */
-const A={R:'\x1b[0m',rojo:'\x1b[91m',verde:'\x1b[92m',gris:'\x1b[2;37m',
-         cian:'\x1b[96m',ambar:'\x1b[93m',neg:'\x1b[1m'};
+const TIPO_ALERTA_OPTS=[
+ ['','Sin categoría de alerta'],
+ ['cpu','CPU'],
+ ['memoria','Memoria'],
+ ['disco','Disco'],
+ ['proceso','Procesos'],
+ ['impresora','Impresoras'],
+ ['red','Red'],
+ ['sistema','Sistema'],
+];
 
+const SISTEMA_OPTS=[
+ ['todos','Todos (multi-SO)'],
+ ['windows','Windows'],
+ ['macos','macOS'],
+ ['linux','Linux'],
+];
+
+const INTERPRETE_OPTS=[
+ ['powershell','PowerShell'],
+ ['bash','Bash'],
+ ['cmd','CMD'],
+ ['zsh','Zsh'],
+ ['automatico','Automático'],
+];
+
+const TA={
+ cpu:{ic:'cpu',c:'var(--ambar)'},
+ memoria:{ic:'activity',c:'var(--indigo)'},
+ disco:{ic:'hdd',c:'var(--cian)'},
+ proceso:{ic:'layers',c:'var(--lima)'},
+ impresora:{ic:'print',c:'var(--pel)'},
+ red:{ic:'wifi',c:'var(--azul)'},
+ sistema:{ic:'shield',c:'var(--gris,#aaa)'},
+};
+
+const esAdmin=()=>S.perfil?.rol==='admin';
+
+Vistas.catalogo={
+ titulo:'Catálogo',
+ sub:()=>`${S.comandos.length} comandos`,
+ llena:false,
+ _q:'',_so:'',_cat:'',_ta:'',
+ render(){
+  const admin=esAdmin();
+  const cats=S.categorias;
+  return `<div class="cata-wrap">
+   <!-- toolbar -->
+   <div class="toolbar" style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+    <div style="position:relative;flex:1;min-width:160px">
+     <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--tx3)">${ico('search',15)}</span>
+     <input class="inp" data-inp="cataQ" placeholder="Buscar comando…" value="${esc(this._q)}" style="padding-left:32px;width:100%;box-sizing:border-box">
+    </div>
+    <select class="sel-inline" data-inp="cataSO" style="min-width:120px">
+     <option value="">SO: todos</option>
+     ${SISTEMA_OPTS.map(([v,l])=>`<option value="${v}"${this._so===v?' selected':''}>${l}</option>`).join('')}
+    </select>
+    <select class="sel-inline" data-inp="cataCat" style="min-width:140px">
+     <option value="">Categoría: todas</option>
+     ${cats.map(c=>`<option value="${c.id}"${this._cat==c.id?' selected':''}>${esc(c.nombre)}</option>`).join('')}
+    </select>
+    <select class="sel-inline" data-inp="cataTA" style="min-width:140px">
+     <option value="">Alerta: todas</option>
+     ${TIPO_ALERTA_OPTS.filter(x=>x[0]).map(([v,l])=>`<option value="${v}"${this._ta===v?' selected':''}>${l}</option>`).join('')}
+    </select>
+    ${admin?`<button class="btn" data-acc="cataNew" style="flex:none;white-space:nowrap">${ico('plus',16)} Nuevo comando</button>`:''}
+   </div>
+   <!-- stats -->
+   ${this._stats()}
+   <!-- tabla -->
+   <div class="tarj" style="overflow:hidden;padding:0">
+    <div class="cata-thead">
+     <span>Nombre</span><span>Sistema</span><span>Categoría</span><span>Alerta</span><span>Flags</span><span></span>
+    </div>
+    <div class="cata-tabla" id="cata-lista"></div>
+   </div>
+  </div>`;
+ },
+ montar(){
+  this._q=''; this._so=''; this._cat=''; this._ta='';
+  this._renderLista();
+  Bus.on('comandos',()=>this._renderLista());
+ },
+ _stats(){
+  const c=S.comandos;
+  const win=c.filter(x=>x.sistema==='windows').length;
+  const mac=c.filter(x=>x.sistema==='macos').length;
+  const multi=c.filter(x=>x.sistema==='todos').length;
+  const dest=c.filter(x=>x.destructivo).length;
+  return `<div class="stats" style="margin-bottom:16px">
+   <div class="stat cr"><b>${c.length}</b><small>Total</small></div>
+   <div class="stat cr" style="--c:var(--azul)"><b>${win}</b><small>Windows</small></div>
+   <div class="stat cr" style="--c:var(--cian)"><b>${mac}</b><small>macOS</small></div>
+   <div class="stat cr" style="--c:var(--indigo)"><b>${multi}</b><small>Multi-SO</small></div>
+   <div class="stat cr" style="--c:var(--pel)"><b>${dest}</b><small>Destructivos</small></div>
+  </div>`;
+ },
+ _renderLista(){
+  const el=$('#cata-lista'); if(!el)return;
+  const lista=this._filtrar();
+  el.innerHTML=lista.length?lista.map(c=>this._fila(c,esAdmin())).join('')
+   :`<div class="vacio" style="padding:48px 24px">${ico('search',28)}<br>Sin resultados</div>`;
+ },
+ _filtrar(){
+  const q=this._q.toLowerCase(), so=this._so, cat=this._cat, ta=this._ta;
+  return S.comandos.filter(c=>{
+   if(q&&!c.nombre.toLowerCase().includes(q)&&!(c.descripcion||'').toLowerCase().includes(q))return false;
+   if(so&&c.sistema!==so)return false;
+   if(cat&&c.categoria_id!=cat)return false;
+   if(ta&&c.tipo_alerta!==ta)return false;
+   return true;
+  });
+ },
+ _fila(c,admin){
+  const catNom=S.categorias.find(x=>x.id===c.categoria_id)?.nombre||'—';
+  const taBadge=c.tipo_alerta&&TA[c.tipo_alerta]
+   ?`<span class="flag" style="color:${TA[c.tipo_alerta].c};border-color:${TA[c.tipo_alerta].c}44;background:${TA[c.tipo_alerta].c}11">${ico(TA[c.tipo_alerta].ic,12)} ${c.tipo_alerta}</span>`
+   :'<span style="color:var(--tx3);font-size:11px">—</span>';
+  const soB=c.sistema==='windows'?'<span class="flag" style="color:var(--azul)">Win</span>'
+   :c.sistema==='macos'?'<span class="flag" style="color:var(--cian)">macOS</span>'
+   :c.sistema==='linux'?'<span class="flag" style="color:var(--lima)">Linux</span>'
+   :'<span class="flag">Multi</span>';
+  const flags=[
+   c.destructivo?`<span class="flag pel">${ico('alert',11)} Destructivo</span>`:'',
+   c.requiere_admin?`<span class="flag" style="color:var(--ambar)">${ico('shield',11)} Admin</span>`:'',
+  ].filter(Boolean).join('');
+  const acciones=admin?`<div class="cata-actos">
+   <button class="btn-ic" title="Editar" data-acc="cataEditar" data-id="${c.id}">${ico('edit',15)}</button>
+   <button class="btn-ic" title="Duplicar" data-acc="cataDuplicar" data-id="${c.id}">${ico('copy',15)}</button>
+   <button class="btn-ic" title="Eliminar" data-acc="cataEliminar" data-id="${c.id}" style="color:var(--pel)">${ico('trash',15)}</button>
+  </div>`:'';
+  return `<div class="cata-fila">
+   <div class="cata-nombre"><b class="cata-nm">${esc(c.nombre)}</b>
+    <small>${esc(c.descripcion||'')}</small></div>
+   <div>${soB}</div>
+   <div style="font-size:12px;color:var(--tx2)">${esc(catNom)}</div>
+   <div>${taBadge}</div>
+   <div class="cata-flags">${flags||'<span style="color:var(--tx3);font-size:11px">—</span>'}</div>
+   ${acciones}
+  </div>`;
+ },
+ abrirForm(id=null){
+  const c=id?S.comandos.find(x=>x.id===id):null;
+  Modal.abrir({
+   aria:c?'Editar comando':'Nuevo comando',
+   ancho:640,titulo:c?'Editar comando':'Nuevo comando',
+   html:`<div class="form-cata">${this._htmlForm(c)}</div>`,
+   pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
+    <button class="btn ok" data-acc="cataGuardar" data-id="${id||''}">${c?'Guardar cambios':'Crear comando'}</button>`
+  });
+ },
+ _htmlForm(c){
+  const cats=S.categorias;
+  const v=(f,fb='')=>c?esc(c[f]??fb):fb;
+  const sel=(f,opts,fb='')=>opts.map(([val,lab])=>`<option value="${val}"${(c?c[f]:fb)===val?' selected':''}>${lab}</option>`).join('');
+  return `
+   <div class="form-row-2">
+    <label class="lbl-f">Nombre *
+     <input class="inp-f" name="nombre" placeholder="Nombre del comando" value="${v('nombre')}" required>
+    </label>
+    <label class="lbl-f">Sistema operativo
+     <select class="inp-f" name="sistema"><option value="">—</option>${sel('sistema',SISTEMA_OPTS,'todos')}</select>
+    </label>
+   </div>
+   <label class="lbl-f">Descripción
+    <input class="inp-f" name="descripcion" placeholder="Descripción breve" value="${v('descripcion')}">
+   </label>
+   <div class="form-row-2">
+    <label class="lbl-f">Categoría
+     <select class="inp-f" name="categoria_id">
+      <option value="">Sin categoría</option>
+      ${cats.map(cat=>`<option value="${cat.id}"${c?.categoria_id==cat.id?' selected':''}>${esc(cat.nombre)}</option>`).join('')}
+     </select>
+    </label>
+    <label class="lbl-f">Tipo de alerta
+     <select class="inp-f" name="tipo_alerta">${TIPO_ALERTA_OPTS.map(([v2,l])=>`<option value="${v2}"${c?.tipo_alerta===v2?' selected':''}>${l}</option>`).join('')}</select>
+    </label>
+   </div>
+   <label class="lbl-f">Script / Comando *
+    <textarea class="inp-f mono" name="script" rows="5" placeholder="Escribe el comando o script aquí…">${v('script')}</textarea>
+   </label>
+   <div class="form-row-2">
+    <label class="lbl-f">Intérprete
+     <select class="inp-f" name="interprete">${sel('interprete',INTERPRETE_OPTS,'powershell')}</select>
+    </label>
+    <label class="lbl-f">Timeout (segundos)
+     <input class="inp-f" name="timeout_seg" type="number" min="5" max="3600" value="${v('timeout_seg','60')}">
+    </label>
+   </div>
+   <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <label class="lbl-chk" style="flex:1;min-width:200px">
+     <input type="checkbox" name="destructivo" ${c?.destructivo?'checked':''}>
+     <span><b>Comando destructivo</b><small>Requiere confirmación antes de ejecutar</small></span>
+    </label>
+    <label class="lbl-chk" style="flex:1;min-width:200px">
+     <input type="checkbox" name="requiere_admin" ${c?.requiere_admin?'checked':''}>
+     <span><b>Requiere administrador</b><small>Eleva privilegios al ejecutar</small></span>
+    </label>
+   </div>`;
+ },
+ async guardar(id=null){
+  const mo=$('#modal');
+  const campos={
+   nombre:mo.querySelector('[name=nombre]')?.value?.trim()||'',
+   descripcion:mo.querySelector('[name=descripcion]')?.value?.trim()||'',
+   sistema:mo.querySelector('[name=sistema]')?.value||'todos',
+   categoria_id:mo.querySelector('[name=categoria_id]')?.value||null,
+   tipo_alerta:mo.querySelector('[name=tipo_alerta]')?.value||null,
+   script:mo.querySelector('[name=script]')?.value?.trim()||'',
+   interprete:mo.querySelector('[name=interprete]')?.value||'powershell',
+   timeout_seg:parseInt(mo.querySelector('[name=timeout_seg]')?.value)||60,
+   destructivo:mo.querySelector('[name=destructivo]')?.checked||false,
+   requiere_admin:mo.querySelector('[name=requiere_admin]')?.checked||false,
+  };
+  if(!campos.nombre||!campos.script){
+   Toast.mostrar('Nombre y script son obligatorios','aviso'); return;
+  }
+  const btn=mo.querySelector('[data-acc=cataGuardar]');
+  if(btn){btn.disabled=true;btn.textContent='Guardando…'}
+  try{
+   if(id){ await Datos.actualizarComando(parseInt(id),campos); Toast.mostrar('Comando actualizado','ok') }
+   else { await Datos.crearComando(campos); Toast.mostrar('Comando creado','ok') }
+   Modal.cerrar();
+   Bus.emit('comandos');
+   this._renderLista();
+  }catch(e){ Toast.mostrar('Error al guardar','err',e.message); if(btn){btn.disabled=false;btn.textContent=id?'Guardar cambios':'Crear comando'} }
+ },
+ confirmarEliminar(id){
+  const c=S.comandos.find(x=>x.id===id);
+  Modal.abrir({aria:'Eliminar comando',ancho:420,titulo:'Eliminar comando',
+   html:`<p style="line-height:1.6">¿Eliminar el comando <b>${esc(c?.nombre||'')}</b>?<br>
+    <small style="color:var(--tx3)">Se desactiva; el historial de ejecuciones se conserva.</small></p>`,
+   pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
+    <button class="btn pel" data-acc="cataEliminarOk" data-id="${id}">Eliminar</button>`});
+ },
+ async eliminar(id){
+  try{
+   await Datos.eliminarComando(parseInt(id));
+   Toast.mostrar('Comando eliminado','ok');
+   Modal.cerrar();
+   this._renderLista();
+  }catch(e){ Toast.mostrar('Error al eliminar','err',e.message) }
+ },
+ async duplicar(id){
+  try{
+   await Datos.duplicarComando(parseInt(id));
+   Toast.mostrar('Comando duplicado','ok');
+   this._renderLista();
+  }catch(e){ Toast.mostrar('Error al duplicar','err',e.message) }
+ }
+};
+
+Inp.cataQ=el=>{Vistas.catalogo._q=el.value;Vistas.catalogo._renderLista()};
+Inp.cataSO=el=>{Vistas.catalogo._so=el.value;Vistas.catalogo._renderLista()};
+Inp.cataCat=el=>{Vistas.catalogo._cat=el.value;Vistas.catalogo._renderLista()};
+Inp.cataTA=el=>{Vistas.catalogo._ta=el.value;Vistas.catalogo._renderLista()};
+
+Acc.cataNew=()=>Vistas.catalogo.abrirForm(null);
+Acc.cataEditar=el=>Vistas.catalogo.abrirForm(parseInt(el.dataset.id));
+Acc.cataDuplicar=el=>Vistas.catalogo.duplicar(parseInt(el.dataset.id));
+Acc.cataEliminar=el=>Vistas.catalogo.confirmarEliminar(parseInt(el.dataset.id));
+Acc.cataEliminarOk=el=>Vistas.catalogo.eliminar(parseInt(el.dataset.id));
+Acc.cataGuardar=el=>Vistas.catalogo.guardar(el.dataset.id||null);
+
+
+/* ===== i-terminal.js ===== */
+
+/* =====================================================================
+   Terminal en vivo — xterm.js
+   ===================================================================== */
 const Term={
- t:null, fit:null, ultSeq:0, cerrando:false,
-
- crear(){
-  const host=$('#xterm-host'); if(!host)return;
-  if(this.t){this.t.dispose();this.t=null}
-  this.t=new Terminal({
-   fontFamily:"'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace",
-   fontSize:12.5, lineHeight:1.45, cursorBlink:false, disableStdin:true,
-   convertEol:true, scrollback:8000,
-   theme:{background:'#07070b',foreground:'#e9e9f0',cursor:'#39ff88',
-          selectionBackground:'rgba(57,255,136,.25)',
-          black:'#07070b',red:'#ff5470',green:'#39ff88',yellow:'#ffb703',
-          blue:'#5b9bff',magenta:'#8a7dff',cyan:'#22e5ff',white:'#e9e9f0',
-          brightBlack:'#6b6b7b',brightRed:'#ff5470',brightGreen:'#39ff88',
-          brightYellow:'#ffb703',brightBlue:'#5b9bff',brightMagenta:'#8a7dff',
-          brightCyan:'#22e5ff',brightWhite:'#ffffff'}});
-  this.fit=new FitAddon.FitAddon();
-  this.t.loadAddon(this.fit);
-  this.t.open(host);
-  requestAnimationFrame(()=>{try{this.fit.fit()}catch(e){}});
-  const d=dev(S.dispActivo);
-  this.sys(`Bitlab Terminal · conectado a ${d?d.nombre:'—'}`);
-  this.sys(`Agente v${d?.version_agente||'—'} · ${SO[d?.sistema]?.n||''} · intérprete ${(INT[inter(d)]||{}).n}`);
-  this.t.writeln('');
+ _inst:null,_fit:null,
+ mont(host){
+  if(this._inst){this._inst.dispose();this._inst=null}
+  const t=new Terminal({theme:{background:'#07070b',foreground:'#e2e8f0',
+   cursor:'#39ff88',selectionBackground:'rgba(57,255,136,.22)',
+   black:'#1e1e2e',red:'#ff5470',green:'#39ff88',yellow:'#ffb703',
+   blue:'#3b82f6',magenta:'#c084fc',cyan:'#22d3ee',white:'#e2e8f0',
+   brightBlack:'#64748b',brightRed:'#ff5470',brightGreen:'#39ff88',
+   brightYellow:'#ffb703',brightBlue:'#60a5fa',brightMagenta:'#d8b4fe',
+   brightCyan:'#67e8f9',brightWhite:'#f1f5f9'},
+   fontFamily:'JetBrains Mono, monospace',fontSize:13,
+   lineHeight:1.45,cursorBlink:true,scrollback:3000,
+   convertEol:true,allowTransparency:true});
+  if(window.FitAddon){const f=new FitAddon.FitAddon();t.loadAddon(f);this._fit=f}
+  if(window.WebLinksAddon)t.loadAddon(new WebLinksAddon.WebLinksAddon());
+  t.open(host);
+  this._inst=t;
+  setTimeout(()=>this.ajustar(),80);
+  const ro=new ResizeObserver(()=>this.ajustar());
+  ro.observe(host);
+  return t;
  },
- sys(t){ this.t&&this.t.writeln(A.gris+'· '+t+A.R) },
- linea(f,t){
-  if(!this.t)return;
-  const c=f==='stderr'?A.rojo:f==='sistema'?A.gris:'';
-  this.t.writeln(c+(f==='sistema'?'· ':'')+t+(c?A.R:''));
+ ajustar(){ try{this._fit?.fit()}catch(_){} },
+ escr(txt,tipo='std'){
+  const t=this._inst; if(!t)return;
+  if(tipo==='err')t.write('\x1b[31m'+txt+'\x1b[0m');
+  else if(tipo==='sys')t.write('\x1b[33m'+txt+'\x1b[0m');
+  else t.write(txt);
  },
- eco(d,cmd){ this.t&&this.t.writeln(A.verde+A.neg+gpt(d)+A.R+' '+cmd) },
- ajustar(){ if(this.fit){try{this.fit.fit()}catch(e){}} }
+ limpiar(){ this._inst?.clear() },
+ bienvenida(d){
+  if(!this._inst)return;
+  this._inst.writeln(`\x1b[32m╭─ Bitlab-IT Terminal ─────────────────────────────╮\x1b[0m`);
+  this._inst.writeln(`\x1b[32m│\x1b[0m  Equipo : \x1b[1m${d.nombre}\x1b[0m`);
+  this._inst.writeln(`\x1b[32m│\x1b[0m  SO     : ${d.sistema} ${d.version_so||''}`);
+  this._inst.writeln(`\x1b[32m│\x1b[0m  IP     : ${d.ip_local||'—'}`);
+  this._inst.writeln(`\x1b[32m╰──────────────────────────────────────────────────╯\x1b[0m`);
+  this._inst.writeln('');
+ }
 };
 
 Vistas.terminal={
  titulo:'Terminal',
+ sub:()=>S.dispActivo?dev(S.dispActivo)?.nombre||'':'Elige un equipo',
  llena:true,
- sub(){
-  const d=dev(S.dispActivo);
-  if(!d)return 'Sin equipo seleccionado';
-  return `${d.nombre} · ${SO[d.sistema].n} · ${d.en_linea?'en línea':'fuera de línea'}`;
- },
-
+ _q:'',
  render(){
-  const d=dev(S.dispActivo);
-  if(!d)return `<section class="vid panel vacio" style="display:grid;gap:14px;place-items:center;padding:44px 24px">
-   <span class="cico" style="--c:var(--cian);width:52px;height:52px;border-radius:16px">${ico('terminal',22)}</span>
-   <div style="text-align:center;line-height:1.6">Elige un equipo para abrir su terminal.</div>
-   <button class="btn pri" data-acc="nav" data-v="equipos">${ico('monitor',14)} Ver equipos</button></section>`;
   return `<div class="t-wrap">
-   <section class="vid panel t-main">
-    <div class="t-cab" id="t-cab"></div>
+   <!-- columna central: terminal -->
+   <div class="t-main tarj">
+    ${this.cabecera()}
     <div id="xterm-host"></div>
     <div class="t-pie">
      <div class="t-linea">
-      <span class="gp" id="t-gp">${esc(gpt(d))}</span>
-      <input type="text" id="t-cmd" placeholder="Escribe un comando y presiona Enter"
-       autocomplete="off" spellcheck="false" aria-label="Comando a ejecutar">
-      <button class="btn pri sm" data-acc="tEnviar" id="t-env">${ico('play',13)} Ejecutar</button>
+      <span class="gp">&gt;_</span>
+      <input id="t-input" data-inp="tCmd" placeholder="Escribe un comando…" autocomplete="off" spellcheck="false" ${!S.dispActivo?'disabled':''}>
+      <button class="btn ok" data-acc="tEnviar" ${!S.dispActivo?'disabled':''} style="flex:none">${ico('play',16)}</button>
      </div>
-     <div class="t-aviso" id="t-aviso"></div>
+     <div id="t-aviso" class="t-aviso">${this.estado()}</div>
     </div>
-   </section>
-   <aside class="vid panel t-lado">
+   </div>
+   <!-- columna derecha: comandos + datos equipo -->
+   <div class="t-lado tarj">
     <div class="lado-cmd">
-     <div class="fl" style="justify-content:space-between;margin-bottom:9px">
-      <span class="sec-t">Comandos recomendados</span>
-      <span class="mut3" id="t-rec-n" style="font:600 10px var(--f-mono)">${Datos.recomendados(d).length}</span></div>
-     <div class="buscar"><input type="search" id="t-q" data-inp="tQ" placeholder="Buscar comando"
-       autocomplete="off" aria-label="Buscar comando">${ico('search',14)}</div>
-     <div class="rec" id="t-rec"></div>
+     <div class="buscar">
+      <span class="ico">${ico('search',14)}</span>
+      <input class="inp" data-inp="tBuscar" placeholder="Buscar…" value="${esc(this._q)}">
+     </div>
+     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <span style="font:600 10.5px var(--f-mono);color:var(--tx3);text-transform:uppercase;letter-spacing:.08em">Comandos recomendados</span>
+      <button class="btn-ic" data-acc="tLimpiar" title="Limpiar terminal">${ico('x',14)}</button>
+     </div>
+     <div class="rec" id="rec-lista">${this.recomendados()}</div>
     </div>
-    <div class="lado-eq">
-     <div class="sec-t" style="margin-bottom:9px">Equipo</div>
-     <dl class="kv" id="t-kv"></dl>
-    </div>
-   </aside></div>`;
+    <div class="lado-eq" id="lado-eq-data">${this.datos()}</div>
+   </div>
+  </div>`;
  },
-
  montar(){
-  const d=dev(S.dispActivo); if(!d)return;
-  this._q='';
-  this.cabecera(); this.recomendados(); this.datos();
-  Term.crear();
-  const i=$('#t-cmd');
-  if(i){
-   i.addEventListener('keydown',e=>{
-    if(e.key==='Enter'){e.preventDefault();Acc.tEnviar()}
-    else if(e.key==='ArrowUp'){e.preventDefault();this.hist(-1)}
-    else if(e.key==='ArrowDown'){e.preventDefault();this.hist(1)}
-    else if(e.key==='c'&&e.ctrlKey&&S.ejActiva){e.preventDefault();Acc.tCancelar()}
-   });
-   setTimeout(()=>i.focus(),120);
+  const host=$('#xterm-host');
+  if(host){
+   Term.mont(host);
+   const d=dev(S.dispActivo);
+   if(d)Term.bienvenida(d);
   }
-  this.estado();
-  addEventListener('resize',this._r=()=>Term.ajustar());
+  this.hist();
+  Bus.on('equipos',()=>{
+   const h=$('#lado-eq-data'); if(h)h.innerHTML=this.datos();
+   const inp=$('#t-input'); const btn=$('[data-acc=tEnviar]');
+   const ok=!!dev(S.dispActivo);
+   if(inp)inp.disabled=!ok;
+   if(btn)btn.disabled=!ok;
+  });
  },
-
- hist(dir){
-  const h=S.historialEntrada, i=$('#t-cmd');
-  if(!h.length)return;
-  S.hpos=S.hpos<0?(dir<0?h.length-1:-1):Math.min(h.length,Math.max(-1,S.hpos+dir));
-  i.value=S.hpos<0||S.hpos>=h.length?'':h[S.hpos];
-  i.setSelectionRange(i.value.length,i.value.length);
- },
-
+ salir(){ Realtime.dejar() },
  cabecera(){
-  const c=$('#t-cab'), d=dev(S.dispActivo); if(!c||!d)return;
-  const otros=d.ints.filter(x=>INT[x]);
-  c.innerHTML=`<span class="dot ${d.en_linea?'on':'off'}"></span>
-   <span class="nn"><b>${esc(d.nombre)}</b><small>${esc(d.ip_local||'sin IP')} · ${esc(d.version_so||'')}</small></span>
-   ${soB(d.sistema)}
-   ${otros.length>1?`<div class="seg" role="group" aria-label="Intérprete">${otros.map(i=>
-     `<button class="${inter(d)===i?'on':''}" data-acc="tInt" data-v="${i}">${(INT[i]||{n:i}).n}</button>`).join('')}</div>`
-    :intB(inter(d))}
-   <span id="t-pill">${S.ejActiva?pill(S.ejActiva.estado):''}</span>
-   <span class="acts">
-    ${S.ejActiva&&!FIN.includes(S.ejActiva.estado)
-      ?`<button class="ib pel" data-acc="tCancelar" aria-label="Cancelar" title="Cancelar (Ctrl+C)">${ico('stop',14)}</button>`:''}
-    <button class="ib" data-acc="tLimpiar" aria-label="Limpiar pantalla" title="Limpiar">${ico('trash',15)}</button>
-    <button class="ib" data-acc="nav" data-v="equipos" aria-label="Cambiar de equipo" title="Cambiar de equipo">${ico('back',15)}</button>
-   </span>`;
- },
-
- recomendados(){
-  const r=$('#t-rec'), d=dev(S.dispActivo); if(!r||!d)return;
-  const q=(this._q||'').toLowerCase().trim();
-  const todos=Datos.recomendados(d);
-  const l=q?todos.filter(c=>(c.nombre+' '+(c.descripcion||'')+' '+c.script).toLowerCase().includes(q)):todos;
-  const n=$('#t-rec-n'); if(n)n.textContent=q?`${l.length}/${todos.length}`:todos.length;
-  const corriendo=!!(S.ejActiva&&!FIN.includes(S.ejActiva.estado));
-  r.innerHTML=l.map(c=>{
-   const cat=S.categorias.find(x=>x.id===c.categoria_id);
-   return `<button class="rec-i" data-acc="tCmd" data-id="${c.id}" ${corriendo||!d.en_linea?'disabled':''}
-    title="${esc(c.script)}">
-    <span class="cico" style="--c:${c.destructivo?'var(--pel)':'var(--azul)'};width:30px;height:30px;border-radius:10px">
-     ${ico(c.destructivo?'alert':'play',14)}</span>
-    <span class="tt"><b>${esc(c.nombre)}</b><small>${esc(c.descripcion||c.script)}</small></span>
-    ${c.requiere_admin?`<span class="flag adm">${ico('shield',10)}</span>`:''}</button>`;
-  }).join('')||`<div class="mut3" style="font-size:12px;line-height:1.5">
-   ${q?'Ningún comando coincide con «'+esc(q)+'».':'Sin comandos para '+SO[d.sistema].n+' en el catálogo.<br>Puedes escribirlos a mano abajo.'}</div>`;
- },
-
- datos(){
-  const k=$('#t-kv'), d=dev(S.dispActivo); if(!k||!d)return;
-  const f=(a,b)=>`<dt>${a}</dt><dd>${esc(b)}</dd>`;
-  const up=d.encendido?Math.floor(d.encendido/3600)+' h '+Math.round(d.encendido%3600/60)+' min':'—';
-  k.innerHTML=f('Sistema',d.version_so||SO[d.sistema].n)+f('Arquitectura',d.arquitectura||'—')
-   +f('Usuario',d.usuario_so||'—')+f('IP local',d.ip_local||'—')
-   +f('CPU',d.cpu==null?'—':d.cpu+'%')+f('Memoria',d.ram==null?'—':d.ram+'% de '+(d.ramTot||'?')+' GB')
-   +(d.disco?f('Disco '+d.disco.u,gb(d.disco.libre)+' de '+gb(d.disco.tot)):'')
-   +f('Encendido',up)+f('Agente','v'+(d.version_agente||'—'))+f('Último latido',relativo(d.visto));
- },
-
- estado(){
-  const d=dev(S.dispActivo), av=$('#t-aviso'), i=$('#t-cmd'), b=$('#t-env');
-  if(!av)return;
-  const corriendo=!!(S.ejActiva&&!FIN.includes(S.ejActiva.estado));
-  if(i)i.disabled=corriendo||!d?.en_linea;
-  if(b)b.disabled=corriendo||!d?.en_linea;
-  av.className='t-aviso'+(!d?.en_linea?' mal':'');
-  if(!d?.en_linea)av.innerHTML=ico('plug',13)+' <span>El equipo está fuera de línea. El agente no responde.</span>';
-  else if(corriendo)av.innerHTML=ico('activity',13)+` <span>Ejecutando… la salida aparece conforme se produce. Ctrl+C para cancelar.</span>`;
-  else av.innerHTML=ico('shield',13)+' <span>Cada orden va firmada con HMAC y queda en la auditoría. ↑ ↓ repite comandos.</span>';
-  this.cabecera(); this.recomendados();
- },
-
- salir(){ removeEventListener('resize',this._r); Realtime.dejar() }
-};
-Inp.tQ=el=>{Vistas.terminal._q=el.value;Vistas.terminal.recomendados()};
-
-/* =====================================================================
-   Motor de ejecución · del panel al agente y de vuelta
-   ===================================================================== */
-const Motor={
- async lanzar({texto=null,comando=null,confirmar=false,sinEco=false}){
   const d=dev(S.dispActivo);
-  if(!d){Toast.mostrar('Sin equipo seleccionado','aviso');return}
-  if(!d.en_linea){Toast.mostrar(d.nombre+' está fuera de línea','aviso','El agente no ha dado latido.');return}
-  if(S.ejActiva&&!FIN.includes(S.ejActiva.estado)){Toast.mostrar('Ya hay un comando en curso','aviso');return}
-
-  const cmd=comando?S.comandos.find(c=>c.id===comando):null;
-  const muestra=texto||cmd?.script||'';
-
-  if(!sinEco)Term.eco(d,muestra);
-  Term.ultSeq=0; Term.cerrando=false;
-
-  let id;
-  try{
-   id=await Datos.ejecutar({dispositivo:d.id,comando,texto,confirmar});
-  }catch(e){
-   const m=e.message||String(e);
-   if(/destructivo|confirm/i.test(m)){ this.confirmar({texto,comando,muestra}); return }
-   Term.linea('stderr','No se pudo encolar: '+m);
-   Toast.mostrar('El servidor rechazó el comando','err',m);
-   Vistas.terminal.estado(); return;
-  }
-
-  S.ejActiva={id,estado:'pendiente',texto_comando:muestra,dispositivo_id:d.id};
-  Term.linea('sistema',`ejecución #${id} en cola · firma HMAC enviada al agente`);
-  Vistas.terminal.estado();
-
-  Realtime.seguir(id,
-   f=>{ if(f.secuencia>Term.ultSeq){Term.ultSeq=f.secuencia;Term.linea(f.flujo,f.texto)} },
-   e=>this.avance(e));
-
-  /* el agente reclama cada 2 s: si no arranca en 25 s, avisamos */
-  this._t=setTimeout(()=>{
-   if(S.ejActiva&&S.ejActiva.id===id&&S.ejActiva.estado==='pendiente')
-    Term.linea('sistema','el agente aún no reclama la orden; revisa que el servicio esté corriendo');
-  },25000);
-
-  /* respaldo si Realtime pierde líneas */
-  this._p=setInterval(()=>this.reconciliar(id),3000);
+  return `<div class="t-cab">
+   <div class="nn">
+    <b>${d?esc(d.nombre):'Sin equipo seleccionado'}</b>
+    <small>${d?`${d.sistema} · ${d.ip_local||'—'}`:'Selecciona un equipo en Equipos'}</small>
+   </div>
+   ${d?`<span id="ws-ind" style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;border:1px solid rgba(255,255,255,.12);font:600 10.5px var(--f-mono);letter-spacing:.05em;color:var(--tx3)">
+    <span class="dot"></span><span id="ws-txt">Conectando…</span></span>`:''}
+   ${d?`<span class="seg">${ico('stop',14)}<button class="btn-ic" data-acc="tCancelar" title="Cancelar ejecución" disabled>${ico('stop',14)}</button></span>`:''}
+   <select class="sel-inline" data-inp="tInt" style="font:600 11.5px var(--f-mono)">
+    ${(d?.ints||['powershell']).map(i=>`<option>${i}</option>`).join('')}
+   </select>
+  </div>`;
  },
-
- async avance(e){
-  if(!S.ejActiva||S.ejActiva.id!==e.id)return;
-  const antes=S.ejActiva.estado;
-  S.ejActiva={...S.ejActiva,...e};
-  if(antes==='pendiente'&&e.estado==='ejecutando'){
-   clearTimeout(this._t);
-   Term.linea('sistema','el agente tomó la orden');
-  }
-  if(FIN.includes(e.estado)&&!Term.cerrando){
-   Term.cerrando=true;
-   clearTimeout(this._t); clearInterval(this._p);
-   await this.reconciliar(e.id);          // trae lo que faltó
-   Realtime.dejar();
-   const t=EST[e.estado]||[e.estado,''];
-   const cod=e.codigo_salida==null?'—':e.codigo_salida;
-   const c=e.estado==='exitosa'?A.verde:e.estado==='tiempo_agotado'?A.ambar:A.rojo;
-   Term.t&&Term.t.writeln(c+`· ${t[0]} · código ${cod} · ${durTxt(e.duracion_ms)}`+A.R);
-   if(e.mensaje_error)Term.linea('stderr',e.mensaje_error);
-   Term.t&&Term.t.writeln('');
-   if(!S.silenciado)Toast.mostrar(
-    e.estado==='exitosa'?'Comando exitoso':'Comando '+t[0].toLowerCase(),
-    e.estado==='exitosa'?'ok':e.estado==='tiempo_agotado'?'aviso':'err',
-    dev(S.ejActiva.dispositivo_id)?.nombre+' · '+durTxt(e.duracion_ms));
-   Vistas.terminal.estado();
-   const i=$('#t-cmd'); if(i){i.disabled=false;i.focus()}
-  }else Vistas.terminal.estado();
+ estado(){
+  const ej=S.ejActiva;
+  if(!ej)return `${ico('terminal',14)} Listo`;
+  const cl={en_cola:'var(--tx3)',despachado:'var(--ambar)',ejecutando:'var(--verde)',
+   exitoso:'var(--verde)',fallido:'var(--pel)',tiempo_agotado:'var(--pel)',cancelado:'var(--tx3)'};
+  const lbl={en_cola:'En cola…',despachado:'Despachando…',ejecutando:'Ejecutando…',
+   exitoso:`Listo (${ej.codigo_salida??'—'})`,fallido:`Error (${ej.codigo_salida??'—'})`,
+   tiempo_agotado:'Tiempo agotado',cancelado:'Cancelado'};
+  return `<span style="color:${cl[ej.estado]||'var(--tx)'}">${ico('activity',14)} ${lbl[ej.estado]||ej.estado}</span>`;
  },
-
- /* pide las líneas que Realtime no entregó, por número de secuencia */
- async reconciliar(id){
-  try{
-   const f=await Datos.salida(id,Term.ultSeq);
-   f.forEach(x=>{ if(x.secuencia>Term.ultSeq){Term.ultSeq=x.secuencia;Term.linea(x.flujo,x.texto)} });
-  }catch(e){}
+ recomendados(){
+  const d=dev(S.dispActivo); if(!d)return '<div class="mut3" style="font-size:12px;padding:4px">Selecciona un equipo para ver comandos recomendados</div>';
+  const q=this._q.toLowerCase();
+  const lista=Datos.recomendados(d).filter(c=>!q||c.nombre.toLowerCase().includes(q));
+  if(!lista.length)return '<div class="mut3" style="font-size:12px;padding:4px">Sin comandos disponibles</div>';
+  return lista.slice(0,30).map(c=>{
+   const ta=c.tipo_alerta&&TA[c.tipo_alerta];
+   const badge=ta?`<span style="color:${ta.c};font-size:10px;font-weight:600">${ico(ta.ic,10)} ${c.tipo_alerta}</span>`:
+    `<span style="color:var(--tx3);font-size:10px">${c.interprete||'auto'}</span>`;
+   const dest=c.destructivo?`<span class="flag pel" style="font-size:10px;padding:1px 5px">${ico('alert',9)}</span>`:'';
+   return `<button class="rec-i" data-acc="tCmd2" data-id="${c.id}" ${!d.en_linea?'disabled':''}
+    title="${esc(c.descripcion||c.nombre)}">
+    <span class="cico" style="--c:${ta?.c||'var(--indigo)'};width:30px;height:30px;border-radius:10px;flex:none">${ico(ta?.ic||'terminal',14)}</span>
+    <span class="tt"><b>${esc(c.nombre)}</b><small>${esc(c.descripcion||'')||badge}</small></span>
+    ${dest}
+   </button>`;
+  }).join('');
  },
-
- confirmar({texto,comando,muestra}){
-  Modal.abrir({aria:'Confirmar comando destructivo',ancho:520,titulo:'Este comando es destructivo',
-   html:`<div class="aviso">${ico('alert',15)}<span>El comando puede cambiar o borrar información en el equipo.
-     Se ejecutará en <b>${esc(dev(S.dispActivo)?.nombre||'')}</b>.</span></div>
-    <div class="codebox" style="margin-top:10px">${esc(muestra)}</div>
-    <p class="mut" style="font-size:12.5px;margin-top:10px">La acción queda registrada en la auditoría con tu usuario y tu IP.</p>`,
-   pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
-     <button class="btn pel" data-acc="tConfirmar">${ico('play',14)} Sí, ejecutar</button>`});
-  this._pend={texto,comando};
+ datos(){
+  const d=dev(S.dispActivo); if(!d)return '<div class="mut3" style="padding:12px;font-size:12px">Sin equipo</div>';
+  const bar=(v,max=100)=>`<div class="med-b"><i style="width:${Math.min(100,v||0)}%;background:${v>80?'var(--pel)':v>60?'var(--ambar)':'var(--verde)'}"></i></div>`;
+  return `<dl class="kv" style="grid-template-columns:auto 1fr;gap:5px 10px;font-size:12px">
+   <dt>IP</dt><dd>${esc(d.ip_local||'—')}</dd>
+   <dt>SO</dt><dd>${esc(d.sistema)} ${esc(d.version_so||'')}</dd>
+   <dt>Arch</dt><dd>${esc(d.arquitectura||'—')}</dd>
+   <dt>Agente</dt><dd>v${esc(d.version_agente||'—')}</dd>
+   <dt>CPU</dt><dd>${d.cpu!=null?d.cpu+'%':'—'}${d.cpu!=null?bar(d.cpu):''}</dd>
+   <dt>RAM</dt><dd>${d.ram!=null?d.ram+'%':'—'}${d.ram!=null?bar(d.ram):''}</dd>
+   ${d.disco?`<dt>${esc(d.disco.u||'C:')}</dt><dd>${d.disco.libre!=null?d.disco.libre+'GB libre':'—'}${d.disco.pct!=null?bar(100-d.disco.pct):''}</dd>`:''}
+   <dt>Visto</dt><dd>${relativo(d.visto)}</dd>
+  </dl>`;
  },
-
- async cancelar(){
-  if(!S.ejActiva)return;
-  try{
-   await Datos.cancelar(S.ejActiva.id);
-   Term.linea('sistema','cancelación solicitada; el agente detiene el proceso');
-   Toast.mostrar('Cancelación enviada','info');
-  }catch(e){ Toast.mostrar('No se pudo cancelar','err',e.message) }
+ hist(){
+  const ej=S.ejActiva;
+  if(!ej)return;
+  Datos.salida(ej.id,0).then(frags=>{
+   frags.forEach(f=>Term.escr(f.texto,f.flujo==='error_estandar'?'err':'std'));
+  });
+  if(!FIN.includes(ej.estado))
+   Realtime.seguir(ej.id,
+    f=>Term.escr(f.contenido,f.flujo==='error_estandar'?'err':'std'),
+    n=>{ S.ejActiva={...S.ejActiva,...n};
+     const a=$('#t-aviso'); if(a)a.innerHTML=Vistas.terminal.estado();
+     const btn=$('[data-acc=tCancelar]'); if(btn)btn.disabled=FIN.includes(n.estado);
+     if(FIN.includes(n.estado))Realtime.dejar(); }
+   );
  }
 };
 
-Acc.tEnviar=()=>{
- const i=$('#t-cmd'); if(!i)return;
- const v=i.value.trim(); if(!v)return;
- if(S.historialEntrada[S.historialEntrada.length-1]!==v)S.historialEntrada.push(v);
- S.hpos=-1; i.value='';
- Motor.lanzar({texto:v});
+Inp.tCmd=el=>{S._cmdPendiente=el.value};
+Inp.tBuscar=el=>{Vistas.terminal._q=el.value;const r=$('#rec-lista');if(r)r.innerHTML=Vistas.terminal.recomendados()};
+Inp.tInt=el=>{S._interprete=el.value};
+
+
+/* ===== j-motor.js ===== */
+
+/* =====================================================================
+   Motor de ejecución
+   ===================================================================== */
+const FIN=['exitoso','fallido','tiempo_agotado','cancelado'];
+
+const Motor={
+ async lanzar(texto=null,cmdId=null,confirmar=false){
+  const d=dev(S.dispActivo);
+  if(!d){Toast.mostrar('Selecciona un equipo primero','aviso');return}
+  if(!d.en_linea){Toast.mostrar('El equipo está fuera de línea','aviso');return}
+  if(!texto&&!cmdId){Toast.mostrar('Escribe un comando','aviso');return}
+  try{
+   const id=await Datos.ejecutar({dispositivo:d.id,comando:cmdId,texto,confirmar});
+   S.ejActiva={id,estado:'en_cola',codigo_salida:null};
+   Term.limpiar();
+   if(texto)Term.escr(`\x1b[36m$ ${texto}\x1b[0m\r\n`);
+   const aviso=$('#t-aviso'); if(aviso)aviso.innerHTML=Vistas.terminal.estado();
+   const btn=$('[data-acc=tCancelar]'); if(btn)btn.disabled=false;
+   const inp=$('#t-input'); if(inp){inp.value='';S._cmdPendiente=''}
+   Vistas.terminal.hist();
+  }catch(e){
+   if(e.message?.includes('destructivo')||e.message?.includes('confirmacion')){
+    Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
+     html:`<p style="line-height:1.6">Este comando está marcado como <b style="color:var(--pel)">destructivo</b>.<br>
+      ¿Deseas continuar?</p>`,
+     pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
+      <button class="btn pel" data-acc="tConfirmar" data-txt="${esc(texto||'')}" data-id="${cmdId||''}">Ejecutar de todas formas</button>`});
+   }else{
+    Toast.mostrar('Error al lanzar comando','err',e.message);
+   }
+  }
+ },
+ async avance(ej){
+  if(!ej||FIN.includes(ej.estado))return;
+  const datos=await Datos.ejecucion(ej.id);
+  if(!datos)return;
+  S.ejActiva={...ej,...datos};
+  const aviso=$('#t-aviso'); if(aviso)aviso.innerHTML=Vistas.terminal.estado();
+ },
+ reconciliar(){
+  if(!S.ejActiva||FIN.includes(S.ejActiva.estado))return;
+  this.avance(S.ejActiva);
+ }
 };
-Acc.tCmd=el=>{
- const c=S.comandos.find(x=>x.id===+el.dataset.id); if(!c)return;
- Motor.lanzar({comando:c.id});
+
+setInterval(()=>{if(S.perfil&&S.ejActiva)Motor.reconciliar()},8000);
+
+Acc.tEnviar=()=>Motor.lanzar(S._cmdPendiente?.trim()||$('#t-input')?.value?.trim());
+Acc.tCmd2=el=>{
+ const c=S.comandos.find(x=>x.id===parseInt(el.dataset.id)); if(!c)return;
+ if(c.destructivo){
+  Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
+   html:`<p style="line-height:1.6">El comando <b>${esc(c.nombre)}</b> está marcado como <b style="color:var(--pel)">destructivo</b>.<br>¿Continuar?</p>`,
+   pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
+    <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}">Ejecutar de todas formas</button>`});
+ }else{
+  Motor.lanzar(null,c.id);
+ }
 };
-Acc.tConfirmar=()=>{
- const p=Motor._pend; Modal.cerrar();
- if(p)Motor.lanzar({...p,confirmar:true,sinEco:true});
+Acc.tConfirmar=el=>Motor.lanzar(el.dataset.txt||null,el.dataset.id?parseInt(el.dataset.id):null,true);
+Acc.tCancelar=async()=>{
+ if(!S.ejActiva)return;
+ try{await Datos.cancelar(S.ejActiva.id);Toast.mostrar('Cancelando…','aviso')}
+ catch(e){Toast.mostrar('Error al cancelar','err',e.message)}
 };
-Acc.tCancelar=()=>Motor.cancelar();
-Acc.tLimpiar=()=>{ if(Term.t){Term.t.clear();Term.sys('pantalla limpia')} };
-Acc.tInt=el=>{
- S.interprete=el.dataset.v;
- const d=dev(S.dispActivo);
- $('#t-gp').textContent=gpt(d);
- Vistas.terminal.cabecera();
- Term.sys('intérprete: '+(INT[S.interprete]||{}).n);
-};
+Acc.tLimpiar=()=>Term.limpiar();
+
+
+/* ===== k-nav.js ===== */
 
 /* =====================================================================
    Navegación, dock y menú flotante
@@ -1259,6 +1605,7 @@ const Fab={
   return `<div class="eyebrow" style="padding:6px 10px 4px">Acceso rápido</div>
    ${it('terminal','var(--verde)','Terminal',d?d.nombre:'Elige un equipo','fTerminal',!d)}
    ${it('monitor','var(--azul)','Equipos',`${on.length} en línea de ${S.dispositivos.length}`,'fEquipos')}
+   ${it('list','var(--indigo)','Catálogo',`${S.comandos.length} comandos`,'fCatalogo')}
    ${it('activity','var(--cian)','Estado de agentes','Latidos y versiones','fAgentes')}
    ${it('retry','var(--lima)','Actualizar ahora','Vuelve a leer los equipos','fRefrescar')}
    <div class="recientes"><div class="eyebrow" style="margin-bottom:4px">Equipos en línea</div>
@@ -1286,6 +1633,7 @@ const Fab={
 Acc.fab=()=>{ if(Fab.movio)return; Fab.abierto?Fab.cerrar():Fab.abrir() };
 Acc.fTerminal=()=>{Fab.cerrar();Nav.ir('terminal')};
 Acc.fEquipos=()=>{Fab.cerrar();Nav.ir('equipos')};
+Acc.fCatalogo=()=>{Fab.cerrar();Nav.ir('catalogo')};
 Acc.fRefrescar=async()=>{Fab.cerrar();await Datos.cargar();Bus.emit('equipos');Toast.mostrar('Equipos actualizados','ok')};
 Acc.fAgentes=()=>{
  Fab.cerrar();
@@ -1333,6 +1681,9 @@ addEventListener('resize',()=>Dock.marcar());
 
 /* ---------- arranque ---------- */
 Acceso.iniciar();
+})();
+
+
 })();
 </script>
 </body>

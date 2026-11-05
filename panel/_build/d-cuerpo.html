@@ -1,0 +1,47 @@
+
+</head>
+<body>
+
+<div class="fondo" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+
+<!-- ============ 1. Acceso ============ -->
+<section id="p-login">
+  <form class="caja-ac vid panel" id="f-login" autocomplete="on">
+    <div class="marca">
+      <span class="cico" style="--c:var(--verde)" id="lg-ico"></span>
+      <div><b>Bitlab Terminal</b><small>Monitoreo remoto</small></div>
+    </div>
+    <label class="campo"><span>Correo</span>
+      <input type="email" id="lg-correo" required autocomplete="username" placeholder="usuario@bitlab-it.com"></label>
+    <label class="campo"><span>Contraseña</span>
+      <input type="password" id="lg-pass" required autocomplete="current-password" placeholder="••••••••"></label>
+    <div class="err" id="lg-err" role="alert"></div>
+    <button class="btn pri" type="submit" id="lg-btn">Entrar</button>
+    <div class="pie-ac">Conexión cifrada con TLS · acceso auditado</div>
+  </form>
+</section>
+
+<!-- ============ Armazón del panel ============ -->
+<div id="app" hidden>
+  <header class="top">
+    <div>
+      <h1 id="tit">Equipos</h1>
+      <div class="ts" id="subt"></div>
+    </div>
+    <div class="der">
+      <span class="ws" id="ws-ind"><i></i><span id="ws-txt">Conectado</span></span>
+      <button class="ib" id="btnNotif" data-acc="notif" aria-label="Silenciar notificaciones" title="Notificaciones"></button>
+      <button class="yo" id="yo" data-acc="salir" title="Cerrar sesión">··</button>
+    </div>
+  </header>
+  <main id="vista"></main>
+</div>
+
+<button id="fab" class="vid" data-acc="fab" aria-label="Menú de terminal rápida" aria-expanded="false" hidden></button>
+<div id="fabPanel" class="vid" hidden></div>
+
+<nav id="dock" class="vid" aria-label="Secciones del módulo" hidden><i id="lente"></i></nav>
+
+<div id="modal" hidden></div>
+<div id="toasts" aria-live="polite"></div>
+
