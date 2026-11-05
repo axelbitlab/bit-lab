@@ -1,0 +1,82 @@
+====================================================================
+ BITLAB TERMINAL - AGENTE PARA WINDOWS
+ Instalacion en el equipo que se va a monitorear
+====================================================================
+
+QUE ES
+  Un programa pequeno que se queda corriendo en esta computadora.
+  Reporta su estado al panel de Bitlab cada 30 segundos y ejecuta los
+  comandos que un administrador autorizado le manda desde el panel.
+
+
+COMO SE INSTALA  (dos clics)
+
+  1. Descomprime esta carpeta completa en el Escritorio.
+     Importante: descomprimirla, no abrirla desde dentro del ZIP.
+
+  2. Doble clic en INSTALAR.bat
+
+  3. Windows preguntara si permites cambios: elige "Si".
+
+  Eso es todo. En menos de un minuto la ventana dice que el equipo
+  quedo registrado, y ya aparece en el panel.
+
+
+SI WINDOWS MUESTRA UNA ADVERTENCIA AZUL
+  Dice "Windows protegio tu PC" porque el archivo viene de internet.
+  Haz clic en "Mas informacion" y luego en "Ejecutar de todas formas".
+
+
+QUE HACE LA INSTALACION
+  - Copia el agente a C:\ProgramData\BitlabAgente
+  - Deja esa carpeta accesible solo para el sistema y administradores
+  - Crea una tarea programada que lo arranca junto con el equipo
+  - Registra el equipo en el panel y guarda su credencial
+
+
+REQUISITOS
+  - Windows 10 o Windows 11 (tambien Windows Server 2016 o superior)
+  - Permisos de administrador en este equipo
+  - Salida a internet por HTTPS hacia el proyecto de Bitlab
+  No hay que instalar nada mas: usa el PowerShell que ya trae Windows.
+
+
+COMO SE QUITA
+  Doble clic en DESINSTALAR.bat y aceptar el aviso.
+  Detiene el agente, borra la tarea y elimina la carpeta.
+  El registro de actividad queda guardado en C:\ProgramData por si
+  hace falta revisarlo.
+
+
+SI ALGO FALLA
+  El detalle siempre queda en:
+     C:\ProgramData\BitlabAgente\logs\agente.log
+
+  Causas mas comunes:
+
+  "Clave de registro invalida o vencida"
+     La clave ya se uso el maximo de veces o paso su fecha limite.
+     Hay que pedir una nueva al administrador.
+
+  "Marca de tiempo fuera de rango"
+     El reloj del equipo esta desfasado. Se arregla abriendo una
+     ventana de comandos como administrador y escribiendo:
+        w32tm /resync
+
+  "No se pudo contactar al servidor"
+     No hay salida a internet, o un firewall bloquea la conexion.
+     El agente reintenta solo cada pocos segundos.
+
+
+SOBRE LA SEGURIDAD
+  - El agente solo ejecuta ordenes firmadas por el servidor.
+  - Cada mensaje va firmado con HMAC-SHA256 y lleva un numero unico
+    que impide reenviarlo.
+  - El token del equipo se guarda en credencial.json, accesible solo
+    para el sistema y administradores, y nunca se escribe en el log.
+  - Hay una lista de patrones peligrosos que el servidor rechaza
+    siempre, aunque quien los mande sea administrador.
+  - Toda ejecucion queda en la auditoria con usuario, IP y resultado.
+
+
+Bitlab-IT · Modulo de terminal remota

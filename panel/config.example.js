@@ -1,7 +1,6 @@
-// Copia este archivo como config.js y pon los datos de tu proyecto
-// (Supabase > Project Settings > API Keys). La publishable key es pública por diseño;
-// la seguridad la dan RLS y las funciones del agente. NUNCA pongas aquí la secret key.
-window.BT_CONFIG = {
-  SUPABASE_URL: "https://TU-PROYECTO.supabase.co",
-  PUBLISHABLE_KEY: "sb_publishable_..."
+// panel/config.js  —  NO subir a GitHub (está en .gitignore)
+// Copia este archivo como config.js y llena tus datos reales.
+const BTL_CONFIG = {
+  supabase_url: "https://TU-PROYECTO.supabase.co",
+  supabase_key: "sb_publishable_...",   // llave anon/publishable, NO la secret
 };

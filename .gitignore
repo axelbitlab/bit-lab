@@ -1,3 +1,26 @@
+# Secretos: nunca se suben
+.env
+.env.*
+!.env.example
 panel/config.js
 agente/agente.config.json
-.env
+**/agente.config.json
+**/token.txt
+*.pem
+*.key
+
+# Entornos y basura del sistema
+.venv/
+__pycache__/
+.DS_Store
+Thumbs.db
+
+# Compilados de instaladores (se publican como release, no en el repo)
+instaladores/salida/
+*.exe
+
+# Agente: configuración, credencial y archivos de trabajo
+agente/**/config.json
+**/credencial.json
+agente/**/logs/
+agente/**/tmp/
