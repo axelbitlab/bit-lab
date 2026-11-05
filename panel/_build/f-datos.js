@@ -30,12 +30,23 @@ const Datos={
  },
 
  async comandos(){
-  const [{data:cats},{data:cmds,error}]=await Promise.all([
-   sb.from('categorias_comandos').select('id,nombre,orden').order('orden').order('nombre'),
-   sb.from('comandos').select('id,categoria_id,nombre,descripcion,sistema,script,interprete,destructivo,requiere_admin,timeout_seg,tipo_alerta,activo')
-     .eq('activo',true).order('nombre')]);
-  if(error){Toast.mostrar('No se pudo leer el catálogo','aviso',error.message);return}
-  S.categorias=cats||[]; S.comandos=cmds||[];
+  const {data:cats}=await sb.from('categorias_comandos').select('id,nombre,orden').order('orden').order('nombre');
+  S.categorias=cats||[];
+  // Intentar con tipo_alerta; si la columna no existe (migración pendiente), reintentar sin ella
+  let cmds, error;
+  ({data:cmds,error}=await sb.from('comandos')
+   .select('id,categoria_id,nombre,descripcion,sistema,script,interprete,destructivo,requiere_admin,timeout_seg,tipo_alerta,activo')
+   .eq('activo',true).order('nombre'));
+  if(error && /tipo_alerta|column/i.test(error.message||'')){
+   ({data:cmds,error}=await sb.from('comandos')
+    .select('id,categoria_id,nombre,descripcion,sistema,script,interprete,destructivo,requiere_admin,timeout_seg,activo')
+    .eq('activo',true).order('nombre'));
+  }
+  if(error){
+   if(typeof Toast!=='undefined')Toast.mostrar('No se pudo leer el catálogo','aviso',error.message);
+   S.comandos=[]; return;
+  }
+  S.comandos=cmds||[];
  },
 
  /* ─── Recomendaciones por reglas (sin IA) ───────────────────────────

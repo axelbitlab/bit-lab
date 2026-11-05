@@ -141,7 +141,7 @@ document.addEventListener('click',e=>{
  const f=Acc[el.dataset.acc]; if(f)f(el,e);
 });
 document.addEventListener('keydown',e=>{
- if(e.key==='Escape'){ if(!$('#modal').hidden)Modal.cerrar(); else Fab.cerrar() }
+ if(e.key==='Escape'){ if(!$('#m-cuenta').hidden){Cuenta.cerrar()} else if(!$('#modal').hidden){Modal.cerrar()} else {Fab.cerrar()} }
 });
 document.addEventListener('change',e=>{const el=e.target.closest('[data-chg]');if(el&&Chg[el.dataset.chg])Chg[el.dataset.chg](el,e)});
 document.addEventListener('input',e=>{const el=e.target.closest('[data-inp]');if(el&&Inp[el.dataset.inp])Inp[el.dataset.inp](el,e)});

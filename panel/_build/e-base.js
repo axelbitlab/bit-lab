@@ -29,10 +29,10 @@ const SO={windows:{n:'Windows',c:'WIN',col:'var(--azul)',def:'powershell'},
           macos:{n:'macOS',c:'MAC',col:'var(--cian)',def:'zsh'}};
 const INT={powershell:{n:'PowerShell',g:'PS>'},cmd:{n:'cmd',g:'C:\\>'},
            pwsh:{n:'PS 7',g:'PS>'},zsh:{n:'zsh',g:'%'},bash:{n:'Bash',g:'$'}};
-const EST={pendiente:['En cola','var(--tx2)'],ejecutando:['Ejecutando','var(--cian)'],
-           exitosa:['Exitosa','var(--verde)'],fallida:['Fallida','var(--pel)'],
-           cancelada:['Cancelada','var(--indigo)'],tiempo_agotado:['Tiempo agotado','var(--ambar)']};
-const FIN=['exitosa','fallida','cancelada','tiempo_agotado'];
+const EST={en_cola:['En cola','var(--tx2)'],despachado:['Despachado','var(--tx2)'],ejecutando:['Ejecutando','var(--cian)'],
+           exitoso:['Exitoso','var(--verde)'],fallido:['Fallido','var(--pel)'],
+           cancelado:['Cancelado','var(--indigo)'],tiempo_agotado:['Tiempo agotado','var(--ambar)']};
+const FIN=['exitoso','fallido','cancelado','tiempo_agotado'];
 const VISTAS=[['equipos','Equipos','monitor'],['catalogo','Catálogo','list'],['terminal','Terminal','terminal']];
 
 /* ---------- estado ---------- */

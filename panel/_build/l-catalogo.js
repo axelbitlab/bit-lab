@@ -38,7 +38,7 @@ const TA={
  sistema:{ic:'shield',c:'var(--gris,#aaa)'},
 };
 
-const esAdmin=()=>S.perfil?.rol==='admin';
+const esAdmin=()=>true; // acceso total al CRUD para todos los usuarios
 
 Vistas.catalogo={
  titulo:'Catálogo',
@@ -48,26 +48,56 @@ Vistas.catalogo={
  render(){
   const admin=esAdmin();
   const cats=S.categorias;
+  // Etiquetas visibles de los chips
+  const labSO = this._so ? (SISTEMA_OPTS.find(o=>o[0]===this._so)?.[1]||'SO') : 'Sistema: todos';
+  const catNom = this._cat ? (cats.find(c=>c.id==this._cat)?.nombre||'Categoría') : 'Categoría: todas';
+  const labTA = this._ta ? (TIPO_ALERTA_OPTS.find(o=>o[0]===this._ta)?.[1]||'Alerta') : 'Alerta: todas';
+  const chevron = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex:none"><path d="M6 9l6 6 6-6"/></svg>`;
   return `<div class="cata-wrap">
-   <!-- toolbar -->
-   <div class="toolbar" style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
-    <div style="position:relative;flex:1;min-width:160px">
-     <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--tx3)">${ico('search',15)}</span>
-     <input class="inp" data-inp="cataQ" placeholder="Buscar comando…" value="${esc(this._q)}" style="padding-left:32px;width:100%;box-sizing:border-box">
+   <!-- toolbar con chips de filtro -->
+   <div class="cata-toolbar">
+    <div class="cata-buscar">
+     <span class="cata-buscar-ic">${ico('search',16)}</span>
+     <input data-inp="cataQ" placeholder="Buscar comando por nombre o descripción…" value="${esc(this._q)}">
+     ${this._q?`<button class="cata-clear" data-acc="cataLimpiarBuscar" title="Limpiar">${ico('x',14)}</button>`:''}
     </div>
-    <select class="sel-inline" data-inp="cataSO" style="min-width:120px">
-     <option value="">SO: todos</option>
-     ${SISTEMA_OPTS.map(([v,l])=>`<option value="${v}"${this._so===v?' selected':''}>${l}</option>`).join('')}
-    </select>
-    <select class="sel-inline" data-inp="cataCat" style="min-width:140px">
-     <option value="">Categoría: todas</option>
-     ${cats.map(c=>`<option value="${c.id}"${this._cat==c.id?' selected':''}>${esc(c.nombre)}</option>`).join('')}
-    </select>
-    <select class="sel-inline" data-inp="cataTA" style="min-width:140px">
-     <option value="">Alerta: todas</option>
-     ${TIPO_ALERTA_OPTS.filter(x=>x[0]).map(([v,l])=>`<option value="${v}"${this._ta===v?' selected':''}>${l}</option>`).join('')}
-    </select>
-    ${admin?`<button class="btn" data-acc="cataNew" style="flex:none;white-space:nowrap">${ico('plus',16)} Nuevo comando</button>`:''}
+    <div class="cata-chips">
+     <!-- Chip Sistema -->
+     <div class="chip-wrap" id="chip-so-wrap">
+      <button class="chip${this._so?' chip-on':''}" data-acc="chipTog" data-chip="so">
+       <span>${esc(labSO)}</span>${chevron}
+      </button>
+      <div class="chip-pop" id="chip-so-pop" hidden>
+       <button class="chip-opt${!this._so?' act':''}" data-acc="chipSet" data-chip="so" data-val="">Todos los sistemas</button>
+       ${SISTEMA_OPTS.map(([v,l])=>`<button class="chip-opt${this._so===v?' act':''}" data-acc="chipSet" data-chip="so" data-val="${v}">${l}</button>`).join('')}
+      </div>
+     </div>
+     <!-- Chip Categoría -->
+     <div class="chip-wrap" id="chip-cat-wrap">
+      <button class="chip${this._cat?' chip-on':''}" data-acc="chipTog" data-chip="cat">
+       <span>${esc(catNom)}</span>${chevron}
+      </button>
+      <div class="chip-pop" id="chip-cat-pop" hidden>
+       <button class="chip-opt${!this._cat?' act':''}" data-acc="chipSet" data-chip="cat" data-val="">Todas las categorías</button>
+       ${cats.map(c=>`<button class="chip-opt${this._cat==c.id?' act':''}" data-acc="chipSet" data-chip="cat" data-val="${c.id}">${esc(c.nombre)}</button>`).join('')}
+      </div>
+     </div>
+     <!-- Chip Alerta -->
+     <div class="chip-wrap" id="chip-ta-wrap">
+      <button class="chip${this._ta?' chip-on':''}" data-acc="chipTog" data-chip="ta">
+       <span>${esc(labTA)}</span>${chevron}
+      </button>
+      <div class="chip-pop" id="chip-ta-pop" hidden>
+       <button class="chip-opt${!this._ta?' act':''}" data-acc="chipSet" data-chip="ta" data-val="">Todas las alertas</button>
+       ${TIPO_ALERTA_OPTS.filter(x=>x[0]).map(([v,l])=>{
+        const t=TA[v]||{};
+        return `<button class="chip-opt${this._ta===v?' act':''}" data-acc="chipSet" data-chip="ta" data-val="${v}"><span class="chip-dot" style="background:${t.c||'var(--tx3)'}"></span>${l}</button>`;
+       }).join('')}
+      </div>
+     </div>
+     ${(this._q||this._so||this._cat||this._ta)?`<button class="chip chip-reset" data-acc="cataLimpiarFiltros" title="Limpiar todos los filtros">${ico('x',12)} Limpiar</button>`:''}
+    </div>
+    ${admin?`<button class="btn pri cata-new-btn" data-acc="cataNew">${ico('plus',18)} Nuevo comando</button>`:''}
    </div>
    <!-- stats -->
    ${this._stats()}
@@ -265,3 +295,41 @@ Acc.cataDuplicar=el=>Vistas.catalogo.duplicar(parseInt(el.dataset.id));
 Acc.cataEliminar=el=>Vistas.catalogo.confirmarEliminar(parseInt(el.dataset.id));
 Acc.cataEliminarOk=el=>Vistas.catalogo.eliminar(parseInt(el.dataset.id));
 Acc.cataGuardar=el=>Vistas.catalogo.guardar(el.dataset.id||null);
+
+/* ---------- Chips de filtro: dropdowns custom ---------- */
+Acc.chipTog=(el)=>{
+ const chip=el.dataset.chip;
+ const pop=$('#chip-'+chip+'-pop');
+ if(!pop)return;
+ // cerrar los otros
+ $$('.chip-pop').forEach(p=>{ if(p!==pop)p.hidden=true });
+ $$('.chip-wrap').forEach(w=>w.classList.remove('open'));
+ pop.hidden=!pop.hidden;
+ if(!pop.hidden)$('#chip-'+chip+'-wrap').classList.add('open');
+};
+Acc.chipSet=(el)=>{
+ const chip=el.dataset.chip, val=el.dataset.val;
+ const V=Vistas.catalogo;
+ if(chip==='so')V._so=val;
+ else if(chip==='cat')V._cat=val;
+ else if(chip==='ta')V._ta=val;
+ // cerrar popovers y re-renderizar toda la vista
+ $$('.chip-pop').forEach(p=>p.hidden=true);
+ Nav.ir('catalogo');
+};
+Acc.cataLimpiarBuscar=()=>{
+ Vistas.catalogo._q='';
+ Nav.ir('catalogo');
+};
+Acc.cataLimpiarFiltros=()=>{
+ const V=Vistas.catalogo;
+ V._q=''; V._so=''; V._cat=''; V._ta='';
+ Nav.ir('catalogo');
+};
+
+// Cerrar popovers al hacer clic afuera
+document.addEventListener('click',e=>{
+ if(e.target.closest('.chip-wrap'))return;
+ $$('.chip-pop').forEach(p=>p.hidden=true);
+ $$('.chip-wrap').forEach(w=>w.classList.remove('open'));
+},true);

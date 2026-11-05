@@ -2,7 +2,6 @@
 /* =====================================================================
    Motor de ejecución
    ===================================================================== */
-const FIN=['exitoso','fallido','tiempo_agotado','cancelado'];
 
 const Motor={
  async lanzar(texto=null,cmdId=null,confirmar=false){
