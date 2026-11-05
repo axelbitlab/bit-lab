@@ -95,24 +95,36 @@ const Acceso={
   setTimeout(()=>$('#lg-correo').focus(),80);
  },
  async dentro(ses){
-  S.correo=ses.user.email;
-  const {data:p}=await sb.rpc('mi_perfil');
-  S.perfil=Array.isArray(p)?p[0]:p;
-  const n=S.perfil?.nombre||S.correo;
-  $('#yo').textContent=n.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
-  $('#yo').title=`${n} · ${S.perfil?.rol||'usuario'} — cerrar sesión`;
-  $('#p-login').hidden=true; $('#app').hidden=false;
-  $('#dock').hidden=false; $('#fab').hidden=false;
-  await Datos.cargar();
-  Dock.montar(); Fab.montar(); pintaNotif();
-  Realtime.conectar();
-  Nav.ir(leer('vista','equipos'));
+  try{
+   S.correo=ses.user.email;
+   // mi_perfil puede no existir aún — no bloqueamos el acceso
+   try{
+    const {data:p,error:pe}=await sb.rpc('mi_perfil');
+    if(!pe)S.perfil=Array.isArray(p)?p[0]:(p||null);
+   }catch(_){}
+   const n=S.perfil?.nombre||S.correo||'';
+   const ini=n.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase()||'U';
+   $('#yo').textContent=ini;
+   $('#yo').title=`${n} · ${S.perfil?.rol||'usuario'} — cerrar sesión`;
+   $('#p-login').hidden=true; $('#app').hidden=false;
+   $('#dock').hidden=false; $('#fab').hidden=false;
+   await Datos.cargar();
+   Dock.montar(); Fab.montar(); pintaNotif();
+   Realtime.conectar();
+   Nav.ir(leer('vista','equipos'));
+  }catch(e){
+   console.error('Error al entrar:',e);
+   const err=$('#lg-err');
+   if(err)err.textContent='Error al cargar el panel: '+e.message;
+   // Forzar re-login solo si es error de autenticación
+   if(e.message&&(/auth|jwt|token/i.test(e.message)))this.fuera();
+  }
  },
  async salir(){
   Realtime.cortar();
   await sb.auth.signOut();
   S.perfil=null; S.dispActivo=null; S.ejActiva=null;
-  if(Term.t){Term.t.dispose();Term.t=null}
+  if(Term._inst){Term._inst.dispose();Term._inst=null}
   this.fuera();
  }
 };

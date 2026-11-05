@@ -560,7 +560,6 @@ const ico=(n,s=18)=>`<svg class="ico" width="${s}" height="${s}" viewBox="0 0 24
 /* ============ catálogos base ============ */
 
 
-
 /* ===== e-base.js ===== */
 /* =====================================================================
    Bitlab Terminal · Panel de la demo
@@ -659,24 +658,36 @@ const Acceso={
   setTimeout(()=>$('#lg-correo').focus(),80);
  },
  async dentro(ses){
-  S.correo=ses.user.email;
-  const {data:p}=await sb.rpc('mi_perfil');
-  S.perfil=Array.isArray(p)?p[0]:p;
-  const n=S.perfil?.nombre||S.correo;
-  $('#yo').textContent=n.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase();
-  $('#yo').title=`${n} · ${S.perfil?.rol||'usuario'} — cerrar sesión`;
-  $('#p-login').hidden=true; $('#app').hidden=false;
-  $('#dock').hidden=false; $('#fab').hidden=false;
-  await Datos.cargar();
-  Dock.montar(); Fab.montar(); pintaNotif();
-  Realtime.conectar();
-  Nav.ir(leer('vista','equipos'));
+  try{
+   S.correo=ses.user.email;
+   // mi_perfil puede no existir aún — no bloqueamos el acceso
+   try{
+    const {data:p,error:pe}=await sb.rpc('mi_perfil');
+    if(!pe)S.perfil=Array.isArray(p)?p[0]:(p||null);
+   }catch(_){}
+   const n=S.perfil?.nombre||S.correo||'';
+   const ini=n.split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase()||'U';
+   $('#yo').textContent=ini;
+   $('#yo').title=`${n} · ${S.perfil?.rol||'usuario'} — cerrar sesión`;
+   $('#p-login').hidden=true; $('#app').hidden=false;
+   $('#dock').hidden=false; $('#fab').hidden=false;
+   await Datos.cargar();
+   Dock.montar(); Fab.montar(); pintaNotif();
+   Realtime.conectar();
+   Nav.ir(leer('vista','equipos'));
+  }catch(e){
+   console.error('Error al entrar:',e);
+   const err=$('#lg-err');
+   if(err)err.textContent='Error al cargar el panel: '+e.message;
+   // Forzar re-login solo si es error de autenticación
+   if(e.message&&(/auth|jwt|token/i.test(e.message)))this.fuera();
+  }
  },
  async salir(){
   Realtime.cortar();
   await sb.auth.signOut();
   S.perfil=null; S.dispActivo=null; S.ejActiva=null;
-  if(Term.t){Term.t.dispose();Term.t=null}
+  if(Term._inst){Term._inst.dispose();Term._inst=null}
   this.fuera();
  }
 };
@@ -693,7 +704,6 @@ $('#f-login').addEventListener('submit',async e=>{
  $('#lg-pass').value='';
  Acceso.dentro(data.session);
 });
-
 
 
 /* ===== f-datos.js ===== */
@@ -890,7 +900,6 @@ const Realtime={
 
 setInterval(()=>{ if(S.perfil)Datos.equipos().then(()=>Bus.emit('equipos')) },30000);
 
-
 /* ===== g-toast.js ===== */
 const Toast={
  mostrar(t,tipo='ok',sub=''){
@@ -912,7 +921,6 @@ const Modal={
  cerrar(){const m=$('#modal');m.hidden=true;m.innerHTML=''}
 };
 const pintaNotif=()=>{const b=$('#btnNotif');if(!b)return;b.innerHTML=ico(S.silenciado?'bellOff':'bell',16);b.setAttribute('aria-pressed',S.silenciado)};
-
 
 /* ===== h-equipos.js ===== */
 
@@ -1003,7 +1011,6 @@ Acc.eqAbrir=el=>{
  Nav.ir('terminal');
 };
 Bus.on('equipos',()=>{ if(S.vista==='equipos')Vistas.equipos.refrescar(); if(S.vista==='terminal')Vistas.terminal.cabecera() });
-
 
 /* ===== l-catalogo.js ===== */
 
@@ -1274,7 +1281,6 @@ Acc.cataEliminar=el=>Vistas.catalogo.confirmarEliminar(parseInt(el.dataset.id));
 Acc.cataEliminarOk=el=>Vistas.catalogo.eliminar(parseInt(el.dataset.id));
 Acc.cataGuardar=el=>Vistas.catalogo.guardar(el.dataset.id||null);
 
-
 /* ===== i-terminal.js ===== */
 
 /* =====================================================================
@@ -1454,7 +1460,6 @@ Inp.tCmd=el=>{S._cmdPendiente=el.value};
 Inp.tBuscar=el=>{Vistas.terminal._q=el.value;const r=$('#rec-lista');if(r)r.innerHTML=Vistas.terminal.recomendados()};
 Inp.tInt=el=>{S._interprete=el.value};
 
-
 /* ===== j-motor.js ===== */
 
 /* =====================================================================
@@ -1523,7 +1528,6 @@ Acc.tCancelar=async()=>{
  catch(e){Toast.mostrar('Error al cancelar','err',e.message)}
 };
 Acc.tLimpiar=()=>Term.limpiar();
-
 
 /* ===== k-nav.js ===== */
 
@@ -1682,7 +1686,6 @@ addEventListener('resize',()=>Dock.marcar());
 /* ---------- arranque ---------- */
 Acceso.iniciar();
 })();
-
 
 })();
 </script>
