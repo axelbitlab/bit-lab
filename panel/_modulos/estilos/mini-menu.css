@@ -1,0 +1,84 @@
+/* =====================================================================
+   Mini menú contextual por equipo
+   ===================================================================== */
+.mm-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.25);backdrop-filter:blur(2px);animation:mmFade .18s}
+.mm-panel{position:fixed;z-index:601;width:min(380px, calc(100vw - 32px));max-height:min(600px, calc(100vh - 32px));
+ overflow:hidden;display:flex;flex-direction:column;border-radius:20px;padding:0;
+ background:linear-gradient(155deg,rgba(18,18,26,.96),rgba(8,8,13,.96));
+ border:1px solid rgba(255,255,255,.1);
+ box-shadow:0 30px 70px -20px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04);
+ animation:mmUp .22s cubic-bezier(.32,1.5,.5,1)}
+.mm-panel.abierto{transform:translateZ(0)}
+@keyframes mmFade{from{opacity:0}to{opacity:1}}
+@keyframes mmUp{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.mm-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,.06);gap:10px}
+.mm-nn{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.mm-nn .dot{flex:none}
+.mm-nn b{display:block;font:700 14px var(--f-cuerpo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-nn small{display:block;color:var(--tx3);font:500 10.5px var(--f-mono);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-x{flex:none}
+
+.mm-alertas{display:flex;flex-wrap:wrap;gap:5px;padding:10px 14px;background:rgba(255,199,87,.05);border-bottom:1px solid rgba(255,255,255,.04)}
+.mm-alerta{display:inline-flex;align-items:center;gap:4px;font:700 10.5px var(--f-mono);padding:4px 9px;border-radius:99px;
+ color:var(--c);background:color-mix(in srgb, var(--c) 12%, transparent);border:1px solid color-mix(in srgb, var(--c) 30%, transparent)}
+.mm-sin-alertas{padding:8px 14px;color:var(--verde);font:600 11.5px var(--f-mono);display:flex;align-items:center;gap:6px}
+
+.mm-sec-titulo{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;
+ color:var(--tx3);font:700 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
+.mm-sec-titulo span{display:flex;align-items:center;gap:6px}
+.mm-sec-titulo small{font:500 10.5px var(--f-mono);text-transform:none;letter-spacing:0;color:var(--tx3)}
+
+.mm-cmds{display:flex;flex-direction:column;gap:3px;padding:2px 10px;overflow:auto;flex:1;min-height:0;max-height:300px}
+.mm-cmd{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 10px;border-radius:12px;
+ border:1px solid transparent;background:transparent;color:inherit;cursor:pointer;font:inherit;transition:.14s}
+.mm-cmd:hover:not(:disabled){background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);transform:translateX(2px)}
+.mm-cmd:disabled{opacity:.4;cursor:not-allowed}
+.mm-ic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;flex:none;background:color-mix(in srgb, var(--c) 15%, transparent);color:var(--c);border:1px solid color-mix(in srgb, var(--c) 30%, transparent)}
+.mm-tx{flex:1;min-width:0}
+.mm-tx b{display:block;font:600 12.5px var(--f-cuerpo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-tx small{display:block;color:var(--tx3);font:500 10.5px var(--f-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.mm-reco{color:var(--ambar);flex:none}
+.mm-dest{color:var(--pel);flex:none}
+.mm-vacio{color:var(--tx3);padding:20px;text-align:center;font-size:12px}
+
+.mm-acciones{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.06)}
+.mm-acciones .btn{padding:9px 10px;font-size:12px;border-radius:11px}
+.mm-acciones .btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Chip de alertas en la tarjeta del equipo */
+.eq-alerta-chip{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:99px;
+ background:rgba(255,183,3,.15);border:1px solid rgba(255,183,3,.35);color:var(--ambar);
+ font:700 10.5px var(--f-mono);letter-spacing:.04em;flex:none;margin-left:4px}
+.eq.con-alertas{border-color:rgba(255,183,3,.3)}
+
+/* Checkboxes de tipos_alerta en el formulario */
+.ta-multi{display:flex;flex-wrap:wrap;gap:5px}
+.ta-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px 5px 7px;border-radius:99px;cursor:pointer;
+ background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);
+ font:600 11.5px var(--f-cuerpo);color:var(--tx2);user-select:none;transition:.14s}
+.ta-chip input{display:none}
+.ta-chip:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18)}
+.ta-chip.act{background:color-mix(in srgb, var(--c) 15%, transparent);border-color:color-mix(in srgb, var(--c) 45%, transparent);color:var(--c)}
+.ta-chip-i{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:5px;background:color-mix(in srgb, var(--c) 18%, transparent);color:var(--c)}
+.ta-chip.act .ta-chip-i{background:var(--c);color:#0a1420}
+
+/* Alertas en el catálogo */
+.cata-alertas{display:flex;flex-wrap:wrap;gap:3px;min-width:0}
+.cata-alertas .flag{font:700 9.5px var(--f-mono);padding:2px 6px 2px 4px}
+
+/* ----- Tema claro para mini menú ----- */
+:root[data-tema="claro"] .mm-overlay{background:rgba(10,20,32,.3)}
+:root[data-tema="claro"] .mm-panel{background:linear-gradient(155deg,#fafbfc,#f1f4f6);border:1.5px solid #b4c0cc;box-shadow:0 20px 50px rgba(10,20,32,.2),0 1px 3px rgba(10,20,32,.08)}
+:root[data-tema="claro"] .mm-head{border-bottom:1.5px solid #d1dae2}
+:root[data-tema="claro"] .mm-nn b{color:var(--tx)}
+:root[data-tema="claro"] .mm-nn small{color:var(--tx2);font-weight:600}
+:root[data-tema="claro"] .mm-sec-titulo{color:var(--tx2);font-weight:700}
+:root[data-tema="claro"] .mm-alertas{background:rgba(194,65,12,.08);border-bottom:1.5px solid #d1dae2}
+:root[data-tema="claro"] .mm-cmd:hover:not(:disabled){background:#f1f4f6;border-color:#d1dae2}
+:root[data-tema="claro"] .mm-cmd b{color:var(--tx)}
+:root[data-tema="claro"] .mm-cmd small{color:var(--tx2);font-weight:500}
+:root[data-tema="claro"] .mm-acciones{border-top:1.5px solid #d1dae2}
+:root[data-tema="claro"] .ta-chip{background:#fafbfc;border-color:#8a99a8;color:var(--tx)}
+:root[data-tema="claro"] .ta-chip:hover{background:#f1f4f6;border-color:#64748b}
+:root[data-tema="claro"] .eq-alerta-chip{background:rgba(194,65,12,.15);border:1.5px solid #c2410c;color:#c2410c;font-weight:700}

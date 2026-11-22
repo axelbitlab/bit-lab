@@ -1,0 +1,17 @@
+/* =====================================================================
+   CUENTA · Tema claro / oscuro (persistente en localStorage)
+   ===================================================================== */
+const Tema={
+ clave:'btl.tema',
+ actual(){ try{return localStorage.getItem(this.clave)||'oscuro'}catch(_){return 'oscuro'} },
+ aplicar(t){
+  document.documentElement.setAttribute('data-tema',t==='claro'?'claro':'oscuro');
+  try{localStorage.setItem(this.clave,t)}catch(_){}
+  const oA=$('#mc-t-oscuro'),cA=$('#mc-t-claro');
+  if(oA&&cA){
+   oA.classList.toggle('act',t==='oscuro');
+   cA.classList.toggle('act',t==='claro');
+  }
+ },
+ iniciar(){ this.aplicar(this.actual()) }
+};
