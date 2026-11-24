@@ -46,10 +46,20 @@ const PanelAlertas={
   panel.id='alerta-panel'; panel.className='vid alerta-popup';
   panel.innerHTML=`<div class="ap-head"><span>${ico('bell',14)} <b>Alertas activas</b></span>
    <span class="badge">${alertas.length}</span></div>
-   ${alertas.length?alertas.map(a=>`<div class="ap-item" data-acc="apIrEquipo" data-id="${a.id}">
-    <span style="color:${a.color};flex:none">${ico(a.icono,14)}</span>
-    <div><b>${esc(a.nombre)}</b><small>${esc(a.mensaje)}</small></div>
-   </div>`).join(''):'<div class="ap-vacio">Sin alertas activas</div>'}
+   ${alertas.length?alertas.map(a=>`<div class="ap-item" data-id="${a.id}">
+    <div class="ap-item-top">
+     <span class="ap-ico-equipo" style="color:${a.color}">${ico(a.icono,15)}</span>
+     <div class="ap-txt"><b class="ap-nombre">${esc(a.nombre)}</b><small class="ap-msg">${esc(a.mensaje)}</small></div>
+    </div>
+    <div class="ap-acciones">
+     <button class="ap-btn ap-btn-menu" data-acc="apAbrirMiniMenu" data-id="${a.id}" title="Abrir menú del equipo">
+      ${ico('monitor',12)} Mini menú
+     </button>
+     <button class="ap-btn ap-btn-det" data-acc="apVerDetalle" data-id="${a.id}" title="Ver detalles">
+      ${ico('info',12)} Detalle
+     </button>
+    </div>
+   </div>`).join(''):'<div class="ap-vacio">✅ Sin alertas activas</div>'}
    ${S.silenciado?`<div class="ap-sil">${ico('bellOff',12)} Notificaciones silenciadas</div>`:''}
    <div class="ap-pie">
     <button class="ib sm" data-acc="notifToggle">${S.silenciado?ico('bell',13)+' Activar':ico('bellOff',13)+' Silenciar'}</button>
@@ -87,6 +97,43 @@ Acc.apIrEquipo=el=>{
  PanelAlertas.cerrar();
  if(id&&typeof Sel!=='undefined') Sel.fijar([id]);
  if(typeof Nav!=='undefined') Nav.ir('monitoreo');
+};
+Acc.apAbrirMiniMenu=el=>{
+ const id=el.closest('[data-id]')?.dataset.id; if(!id)return;
+ PanelAlertas.cerrar();
+ // Buscar tarjeta del equipo en el grid para anclar el mini menú junto a ella
+ const tarjeta=document.querySelector(`.vid[data-id="${id}"]`)||document.querySelector(`[data-id="${id}"]`);
+ if(tarjeta){
+  const r=tarjeta.getBoundingClientRect();
+  if(typeof MiniMenu!=='undefined') MiniMenu.abrir(id, r.right+6, r.top);
+  else if(typeof Sel!=='undefined'){ Sel.fijar([id]); }
+ } else {
+  // Equipo no visible – ir a monitoreo primero
+  if(typeof Nav!=='undefined') Nav.ir('monitoreo');
+  setTimeout(()=>{
+   const t=document.querySelector(`[data-id="${id}"]`);
+   if(t&&typeof MiniMenu!=='undefined'){
+    const r=t.getBoundingClientRect();
+    MiniMenu.abrir(id,r.right+6,r.top);
+   }
+  },350);
+ }
+};
+Acc.apVerDetalle=el=>{
+ const item=el.closest('.ap-item'); if(!item)return;
+ item.classList.toggle('ap-item--expandido');
+ const id=item.dataset.id;
+ const a=PanelAlertas._alertas().find(x=>x.id===id); if(!a)return;
+ let det=item.querySelector('.ap-detalle-bloque');
+ if(!det){
+  det=document.createElement('div'); det.className='ap-detalle-bloque';
+  const lineas=[];
+  if(a.valor!==undefined) lineas.push(`Valor actual: <b>${a.valor}${a.unidad||'%'}</b>`);
+  if(a.umbral!==undefined) lineas.push(`Límite configurado: ${a.umbral}${a.unidad||'%'}`);
+  if(a.ts) lineas.push(`Detectado: ${new Date(a.ts).toLocaleTimeString('es-MX')}`);
+  det.innerHTML=lineas.length?lineas.join(' · '):'<i>Sin datos adicionales disponibles</i>';
+  item.appendChild(det);
+ }
 };
 Acc.notifToggle=()=>{
  S.silenciado=!S.silenciado; guardar('silencio',S.silenciado);

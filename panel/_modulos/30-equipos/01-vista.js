@@ -166,24 +166,37 @@ const VistaMonitoreo={
   const banda=$('#alerta-banda-wrap');
   if(!banda)return;
   banda.classList.add('visible');
-  // Actualizar badge de campana
   const btn=$('#btnNotif');
   if(btn){
    btn.setAttribute('data-badge',alertas.length);
    btn.classList.add('tiene-alertas');
   }
-  // 5 segundos después → colapsar hacia campana
+  // 4.2s después → succión hacia campana + vibración simultánea
   setTimeout(()=>{
-   banda.classList.add('colapsando');
    const btnR=$('#btnNotif');
    if(btnR){
     const br=btnR.getBoundingClientRect();
     const wr=banda.getBoundingClientRect();
     banda.style.setProperty('--dest-x',(br.left-wr.left+br.width/2-wr.width/2)+'px');
     banda.style.setProperty('--dest-y',(br.top-wr.top-wr.height+br.height/2)+'px');
+    // Campana vibra MIENTRAS la banda vuela hacia ella
+    btnR.classList.add('campana-absorbe');
+    btnR.addEventListener('animationend',()=>btnR.classList.remove('campana-absorbe'),{once:true});
    }
-   setTimeout(()=>{banda.hidden=true;banda.classList.remove('visible','colapsando')},600);
-  },5000);
+   banda.classList.add('colapsando');
+   // Al terminar animación de succión → rebote final de campana
+   setTimeout(()=>{
+    banda.hidden=true;
+    banda.classList.remove('visible','colapsando');
+    if(btnR){
+     btnR.style.transition='transform .3s cubic-bezier(.34,1.56,.64,1)';
+     btnR.style.transform='scale(1.35)';
+     setTimeout(()=>{ btnR.style.transform='scale(1)';
+      setTimeout(()=>btnR.style.transition='',320);
+     },120);
+    }
+   },580);
+  },4200);
  },
  salir(){
   Bus.off('equipos',this._onEquipos);
