@@ -2523,20 +2523,21 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] {
     color-scheme: light;
     /* superficie y texto */
-    --neg: #f5f3ff;
-    --tx:  #1a0a3d;
-    --tx2: #5b4878;
-    --tx3: #9480b0;
-    /* acento: morado sólido y profundo — legible sobre fondo blanco */
-    --verde:  #6c27d4;
-    --azul:   #9b3cf7;
-    --cian:   #7c3aed;
-    --lima:   #4f46e5;
-    --indigo: #5b4fd4;
-    --pel:    #c0215a;
-    --ambar:  #9a6300;
-    /* borde sutil */
-    --rim: rgba(108, 39, 212, .14)
+    --neg: #f4f1ff;
+    --tx:  #0d001f;
+    --tx2: #3d1a6e;
+    --tx3: #7a4fb0;
+    /* verdes → morado neón oscuro e intenso */
+    --verde:  #7000ff;      /* morado neón principal — reemplaza verde */
+    --lima:   #5500cc;      /* morado profundo — reemplaza lima */
+    --cian:   #9b00ff;      /* violeta neón — reemplaza cian */
+    /* azules → azul eléctrico ultra intenso */
+    --azul:   #0040ff;      /* azul eléctrico puro */
+    --indigo: #0025cc;      /* azul real profundo */
+    --pel:    #cc0044;      /* rojo/rosa intenso — sin cambio */
+    --ambar:  #8a5500;      /* ámbar — sin cambio */
+    /* borde neón morado */
+    --rim: rgba(112, 0, 255, .15)
 }
 
 /* ── fondo del body ── */
@@ -2544,21 +2545,21 @@ table.t tr.hijo td:first-child {
     background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%)
 }
 
-/* ── orbes de fondo (más pálidos, tonos pastel) ── */
+/* ── orbes de fondo — morado neón + azul eléctrico ── */
 :root[data-tema="claro"] .fondo {
-    background: radial-gradient(120% 90% at 50% 0%, #ede9fe 0%, #f5f3ff 60%)
+    background: radial-gradient(120% 90% at 50% 0%, #ece5ff 0%, #f0edff 55%, #f5f4ff 100%)
 }
 :root[data-tema="claro"] .fondo .a {
-    background: radial-gradient(circle, rgba(108,39,212,.35), transparent 66%);
-    opacity: .30
+    background: radial-gradient(circle, rgba(112,0,255,.28), transparent 66%);
+    opacity: .45
 }
 :root[data-tema="claro"] .fondo .b {
-    background: radial-gradient(circle, rgba(79,70,229,.4), transparent 66%);
-    opacity: .22
+    background: radial-gradient(circle, rgba(0,64,255,.35), transparent 66%);
+    opacity: .30
 }
 :root[data-tema="claro"] .fondo .c {
-    background: radial-gradient(circle, rgba(155,60,247,.35), transparent 66%);
-    opacity: .12
+    background: radial-gradient(circle, rgba(155,0,255,.30), transparent 66%);
+    opacity: .22
 }
 :root[data-tema="claro"] .fondo::after {
     background-image:
@@ -2569,15 +2570,15 @@ table.t tr.hijo td:first-child {
 /* ── liquid glass claro ── */
 :root[data-tema="claro"] .vid {
     background: linear-gradient(150deg,
-        rgba(255,255,255,.88),
-        rgba(248,245,255,.72) 42%,
-        rgba(243,238,255,.80));
-    border-color: rgba(108,39,212,.15);
+        rgba(255,255,255,.92),
+        rgba(248,244,255,.76) 42%,
+        rgba(241,236,255,.84));
+    border-color: rgba(112,0,255,.18);
     box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(108,39,212,.06),
-        inset 0 0 34px rgba(108,39,212,.04),
-        0 8px 32px -8px rgba(80,30,160,.18)
+        inset 0 1px 0 rgba(255,255,255,.97),
+        inset 0 -1px 0 rgba(112,0,255,.08),
+        inset 0 0 34px rgba(112,0,255,.05),
+        0 8px 32px -8px rgba(60,0,180,.22)
 }
 :root[data-tema="claro"] .vid::before {
     background: linear-gradient(155deg,
