@@ -1,5 +1,5 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795494711"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bitlab-IT · Panel</title><!-- build 1795494711 -->
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795494945"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bitlab-IT · Panel</title><!-- build 1795494945 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
@@ -2981,10 +2981,20 @@ table.t tr.hijo td:first-child {
     background: rgba(255,255,255,.88);
     box-shadow: 0 6px 24px rgba(0,0,0,.10), 0 0 0 1px color-mix(in srgb,var(--c) 35%,transparent)
 }
+/* Iconos circulares de categoría y pills: girar verde→morado, cian→azul en modo claro */
+:root[data-tema="claro"] .cico,
+:root[data-tema="claro"] .cata-pill .cata-pill-dot {
+    filter: hue-rotate(200deg) saturate(1.5)
+}
+/* Texto de nombre de categoría en tarjeta del catálogo */
+:root[data-tema="claro"] .cata-card-info small {
+    filter: hue-rotate(200deg) saturate(1.4) brightness(.85)
+}
 :root[data-tema="claro"] .cata-card-ico {
     background: color-mix(in srgb,var(--c) 12%,transparent);
     border-color: color-mix(in srgb,var(--c) 30%,transparent);
-    color: var(--c)
+    color: var(--c);
+    filter: hue-rotate(200deg) saturate(1.4)
 }
 :root[data-tema="claro"] .cata-card-info b { color: rgba(0,0,0,.85) }
 :root[data-tema="claro"] .cata-card-desc { color: rgba(0,0,0,.55) }
@@ -4908,18 +4918,18 @@ const Datos={
  async comandos(){
   // Categorías base por defecto si la base de datos está vacía
   const defaultCats=[
-   {id:1,nombre:'Diagnóstico',color:'#7000ff',icono:'activity',orden:10},
-   {id:2,nombre:'Red',color:'#0040ff',icono:'wifi',orden:20},
-   {id:3,nombre:'Servicios',color:'#0025cc',icono:'cpu',orden:30},
+   {id:1,nombre:'Diagnóstico',color:'#00f59b',icono:'activity',orden:10},
+   {id:2,nombre:'Red',color:'#06b6d4',icono:'wifi',orden:20},
+   {id:3,nombre:'Servicios',color:'#3b82f6',icono:'cpu',orden:30},
    {id:4,nombre:'Mantenimiento',color:'#8b5cf6',icono:'wrench',orden:40},
-   {id:5,nombre:'Seguridad',color:'#9b00ff',icono:'lock',orden:50},
+   {id:5,nombre:'Seguridad',color:'#10b981',icono:'lock',orden:50},
    {id:6,nombre:'Disco',color:'#f59e0b',icono:'hdd',orden:60}
   ];
   let {data:cats}=await sb.from('categorias_comandos').select('id,nombre,color,icono,orden').order('orden').order('nombre');
   if(!cats || !cats.length){
    cats=leer('categorias_locales',defaultCats);
   }
-  S.categorias=(cats||[]).map(c=>({...c,color:c.color||'#7000ff',icono:c.icono||'tag'}));
+  S.categorias=(cats||[]).map(c=>({...c,color:c.color||'#06b6d4',icono:c.icono||'tag'}));
   // Intentar con variantes + tipos_alerta (array) y tipo_alerta (texto legacy).
   // Si alguna columna no existe, se hace fallback sin ella.
   let cmds, error;
@@ -5899,7 +5909,7 @@ const VistaCatalogo={
    <button class="cata-pill${!this._cat?' act':''}" data-acc="cataPillCat" data-id="" style="--c:var(--verde)">
     <span class="cata-pill-dot"></span> Todas
    </button>
-   ${cats.map(cat=>`<button class="cata-pill${this._cat==cat.id?' act':''}" data-acc="cataPillCat" data-id="${cat.id}" style="--c:${esc(cat.color||'var(--verde)')}">
+   ${cats.map(cat=>`<button class="cata-pill${this._cat==cat.id?' act':''}" data-acc="cataPillCat" data-id="${cat.id}" style="--c:${esc(cat.color||'var(--cian)')}">
     <span class="cata-pill-dot"></span> ${esc(cat.nombre)}
    </button>`).join('')}
   </div>`;
@@ -5994,7 +6004,7 @@ const VistaCatalogo={
  _fila(c,admin){
   const cat=S.categorias.find(x=>x.id===c.categoria_id);
   const catNom=cat?.nombre||'Sin categoría';
-  const catColor=cat?.color||'#7000ff';
+  const catColor=cat?.color||'#06b6d4';
   const catIcon=cat?.icono||'activity';
   const taList=alertasDe(c);
   const taBadges = taList.length ?
@@ -6184,9 +6194,9 @@ Acc.cataPillCat=el=>{
 
 Acc.cataGestionarCategorias=()=>{
  const cats=S.categorias||[];
- const colores=['#7000ff','#0040ff','#9b00ff','#5500cc','#0025cc','#c0215a','#ef4444','#f59e0b','#7c3aed','#1d4ed8'];
+ const colores=['#00f59b','#06b6d4','#3b82f6','#8b5cf6','#a855f7','#ec4899','#f43f5e','#ef4444','#f59e0b','#10b981'];
  const listaHtml=cats.length?cats.map(c=>`<div class="item-c" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:12px">
-  <span style="width:14px;height:14px;border-radius:50%;background:${esc(c.color||'#7000ff')}"></span>
+  <span style="width:14px;height:14px;border-radius:50%;background:${esc(c.color||'#06b6d4')}"></span>
   <b style="flex:1">${esc(c.nombre)}</b>
   <small style="color:var(--tx3);font-family:var(--f-mono)">${esc(c.icono||'activity')}</small>
   <button class="ib pel" data-acc="cataEliminarCategoria" data-id="${c.id}" title="Eliminar">${ico('trash',14)}</button>
@@ -6225,7 +6235,7 @@ Acc.cataPickColor=el=>{
 
 Acc.cataGuardarCategoria=async()=>{
  const nom=$('#cat-nuevo-nom')?.value?.trim();
- const col=$('#cat-nuevo-col')?.value||'#7000ff';
+ const col=$('#cat-nuevo-col')?.value||'#06b6d4';
  if(!nom){ Toast.mostrar('Escribe un nombre de categoría','aviso'); return; }
  try{
   const {data,error}=await sb.from('categorias_comandos').insert({nombre:nom,color:col,icono:'activity',orden:99}).select().single();

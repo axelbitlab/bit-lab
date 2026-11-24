@@ -42,18 +42,18 @@ const Datos={
  async comandos(){
   // Categorías base por defecto si la base de datos está vacía
   const defaultCats=[
-   {id:1,nombre:'Diagnóstico',color:'#7000ff',icono:'activity',orden:10},
-   {id:2,nombre:'Red',color:'#0040ff',icono:'wifi',orden:20},
-   {id:3,nombre:'Servicios',color:'#0025cc',icono:'cpu',orden:30},
+   {id:1,nombre:'Diagnóstico',color:'#00f59b',icono:'activity',orden:10},
+   {id:2,nombre:'Red',color:'#06b6d4',icono:'wifi',orden:20},
+   {id:3,nombre:'Servicios',color:'#3b82f6',icono:'cpu',orden:30},
    {id:4,nombre:'Mantenimiento',color:'#8b5cf6',icono:'wrench',orden:40},
-   {id:5,nombre:'Seguridad',color:'#9b00ff',icono:'lock',orden:50},
+   {id:5,nombre:'Seguridad',color:'#10b981',icono:'lock',orden:50},
    {id:6,nombre:'Disco',color:'#f59e0b',icono:'hdd',orden:60}
   ];
   let {data:cats}=await sb.from('categorias_comandos').select('id,nombre,color,icono,orden').order('orden').order('nombre');
   if(!cats || !cats.length){
    cats=leer('categorias_locales',defaultCats);
   }
-  S.categorias=(cats||[]).map(c=>({...c,color:c.color||'#7000ff',icono:c.icono||'tag'}));
+  S.categorias=(cats||[]).map(c=>({...c,color:c.color||'#06b6d4',icono:c.icono||'tag'}));
   // Intentar con variantes + tipos_alerta (array) y tipo_alerta (texto legacy).
   // Si alguna columna no existe, se hace fallback sin ella.
   let cmds, error;
