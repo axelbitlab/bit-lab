@@ -6,8 +6,6 @@ const Fab={
  montar(){
   this.el=$('#fab'); this.p=$('#fabPanel');
   if(this._listo)return; this._listo=true;
-  this.el.hidden=true;
-  return;
   const pos=leer('fab',null);
   if(pos){this.el.style.left=pos.x+'px';this.el.style.top=pos.y+'px'}
   else{this.el.style.left='16px';this.el.style.top='calc(14px + env(safe-area-inset-top,0px))'}
@@ -32,6 +30,10 @@ const Fab={
   };
   this.el.addEventListener('pointerup',fin);
   this.el.addEventListener('pointercancel',fin);
+  // Cerrar al hacer clic fuera
+  document.addEventListener('pointerdown',e=>{
+   if(this.abierto&&!this.el.contains(e.target)&&!this.p.contains(e.target)){this.cerrar()}
+  },{capture:true});
  },
  html(){
   const on=S.dispositivos.filter(d=>d.en_linea), d=dev(S.dispActivo);
@@ -41,6 +43,8 @@ const Fab={
    ${it('terminal','var(--verde)','Terminal',d?d.nombre:'Elige un equipo','fTerminal',!d)}
    ${it('monitor','var(--azul)','Equipos',`${on.length} en línea de ${S.dispositivos.length}`,'fEquipos')}
    ${it('list','var(--indigo)','Catálogo',`${S.comandos.length} comandos`,'fCatalogo')}
+   ${it('history','var(--ambar)','Historial',`Ejecuciones recientes`,'fHistorial')}
+   ${it('layers','var(--violeta,#8b5cf6)','Masiva',`Ejecutar en varios equipos`,'fMasiva')}
    ${it('activity','var(--cian)','Estado de agentes','Latidos y versiones','fAgentes')}
    ${it('retry','var(--lima)','Actualizar ahora','Vuelve a leer los equipos','fRefrescar')}
    <div class="recientes"><div class="eyebrow" style="margin-bottom:4px">Equipos en línea</div>

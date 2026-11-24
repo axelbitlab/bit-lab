@@ -2934,3 +2934,249 @@ table.t tr.hijo td:first-child {
 
 /* ── top bar claro ── */
 :root[data-tema="claro"] .top h1 { color: var(--tx) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — CATÁLOGO (cata-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .cata-wrap { background: transparent }
+:root[data-tema="claro"] .cata-toolbar { background: rgba(255,255,255,.60); border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .cata-buscar { background: rgba(255,255,255,.70); border-color: rgba(0,0,0,.12) }
+:root[data-tema="claro"] .cata-buscar input { color: var(--tx); background: transparent }
+:root[data-tema="claro"] .cata-buscar input::placeholder { color: rgba(0,0,0,.35) }
+:root[data-tema="claro"] .cata-clear { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .cata-clear:hover { color: var(--pel) }
+
+/* Píldoras de categorías */
+:root[data-tema="claro"] .cata-pill-bar { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .cata-pill {
+    background: rgba(0,0,0,.04);
+    border-color: rgba(0,0,0,.10);
+    color: rgba(0,0,0,.55)
+}
+:root[data-tema="claro"] .cata-pill:hover {
+    background: rgba(0,0,0,.08);
+    color: var(--tx)
+}
+:root[data-tema="claro"] .cata-pill.act {
+    background: color-mix(in srgb,var(--c) 15%,transparent);
+    border-color: color-mix(in srgb,var(--c) 40%,transparent);
+    color: var(--c)
+}
+:root[data-tema="claro"] .cata-pill-dot { background: var(--c) }
+
+/* Tarjeta de comando */
+:root[data-tema="claro"] .cata-card {
+    background: rgba(255,255,255,.65);
+    border-color: color-mix(in srgb,var(--c) 20%,rgba(0,0,0,.08));
+    box-shadow: 0 2px 10px rgba(0,0,0,.06)
+}
+:root[data-tema="claro"] .cata-card:hover {
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 6px 24px rgba(0,0,0,.10), 0 0 0 1px color-mix(in srgb,var(--c) 35%,transparent)
+}
+:root[data-tema="claro"] .cata-card-ico {
+    background: color-mix(in srgb,var(--c) 12%,transparent);
+    border-color: color-mix(in srgb,var(--c) 30%,transparent);
+    color: var(--c)
+}
+:root[data-tema="claro"] .cata-card-info b { color: rgba(0,0,0,.85) }
+:root[data-tema="claro"] .cata-card-desc { color: rgba(0,0,0,.55) }
+:root[data-tema="claro"] .cata-card-code {
+    background: rgba(0,0,0,.04);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .cata-card-code code { color: rgba(0,0,0,.72) }
+:root[data-tema="claro"] .cata-card-foot { border-color: rgba(0,0,0,.07) }
+
+/* Tags dentro de la tarjeta (ya había win/mac/lin; añadir genéricos) */
+:root[data-tema="claro"] .cata-tag {
+    background: rgba(0,0,0,.05);
+    border-color: rgba(0,0,0,.12);
+    color: rgba(0,0,0,.60)
+}
+:root[data-tema="claro"] .cata-tag.dest { background: rgba(220,20,60,.10); border-color: rgba(220,20,60,.30); color: #991b1b }
+:root[data-tema="claro"] .cata-tag.adm  { background: rgba(217,119,6,.10);  border-color: rgba(217,119,6,.30);  color: #92400e }
+:root[data-tema="claro"] .cata-tag.multi { background: rgba(124,58,237,.10); border-color: rgba(124,58,237,.30); color: #5b21b6 }
+
+/* Botones en pie de tarjeta */
+:root[data-tema="claro"] .cata-btn-run {
+    background: color-mix(in srgb,var(--verde) 12%,transparent);
+    border-color: color-mix(in srgb,var(--verde) 35%,transparent);
+    color: color-mix(in srgb,var(--verde) 80%,#000)
+}
+:root[data-tema="claro"] .cata-btn-run:hover {
+    background: color-mix(in srgb,var(--verde) 20%,transparent)
+}
+:root[data-tema="claro"] .cata-btn-ico {
+    background: rgba(0,0,0,.05);
+    border-color: rgba(0,0,0,.10);
+    color: rgba(0,0,0,.55)
+}
+:root[data-tema="claro"] .cata-btn-ico:hover { background: rgba(0,0,0,.10); color: var(--tx) }
+:root[data-tema="claro"] .cata-btn-ico.pel:hover { background: rgba(220,38,38,.10); color: #dc2626 }
+
+/* Chips de filtro */
+:root[data-tema="claro"] .chip { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.12); color: rgba(0,0,0,.65) }
+:root[data-tema="claro"] .chip:hover { background: rgba(0,0,0,.09); color: var(--tx) }
+:root[data-tema="claro"] .chip.chip-on { background: rgba(26,102,255,.10); border-color: rgba(26,102,255,.35); color: #1a66ff }
+:root[data-tema="claro"] .chip-pop {
+    background: rgba(255,255,255,.92);
+    border-color: rgba(0,0,0,.10);
+    box-shadow: 0 8px 24px rgba(0,0,0,.12)
+}
+:root[data-tema="claro"] .chip-opt { color: rgba(0,0,0,.70) }
+:root[data-tema="claro"] .chip-opt:hover { background: rgba(0,0,0,.06); color: var(--tx) }
+:root[data-tema="claro"] .chip-opt.act { background: rgba(26,102,255,.10); color: #1a66ff }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — MINI MENÚ CONTEXTUAL (.mm-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .mm-panel {
+    background: rgba(255,255,255,.88);
+    border-color: rgba(0,0,0,.10);
+    box-shadow: 0 16px 48px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.06)
+}
+:root[data-tema="claro"] .mm-head { border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .mm-head b { color: rgba(0,0,0,.85) }
+:root[data-tema="claro"] .mm-head small { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .mm-x { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-x:hover { background: rgba(0,0,0,.06); color: var(--tx) }
+
+:root[data-tema="claro"] .mm-alertas { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .mm-alerta { background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .mm-sin-alertas { background: rgba(0,0,0,.03); color: rgba(0,0,0,.45) }
+
+:root[data-tema="claro"] .mm-rejilla { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .mm-acc {
+    background: rgba(0,0,0,.03);
+    border-color: rgba(0,0,0,.08);
+    color: rgba(0,0,0,.70)
+}
+:root[data-tema="claro"] .mm-acc:hover:not(.mm-dis) {
+    background: color-mix(in srgb,var(--c,.5) 10%,rgba(255,255,255,.8));
+    border-color: color-mix(in srgb,var(--c,.5) 30%,rgba(0,0,0,.12))
+}
+:root[data-tema="claro"] .mm-acc b { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .mm-acc small { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-dis { opacity: .4 }
+
+:root[data-tema="claro"] .mm-sec-titulo { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-cmd {
+    background: rgba(0,0,0,.03);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .mm-cmd:hover:not([disabled]) {
+    background: rgba(0,0,0,.07);
+    border-color: rgba(0,0,0,.14)
+}
+:root[data-tema="claro"] .mm-cmd b { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .mm-cmd small { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-foot { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .mm-overlay { background: rgba(0,0,0,.12) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — PANEL LATERAL TERMINAL (ptabs, pcard, pfiltros)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .ptabs { border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .ptabs button {
+    color: rgba(0,0,0,.50);
+    border-color: transparent
+}
+:root[data-tema="claro"] .ptabs button:hover { color: var(--tx); background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .ptabs button.on {
+    color: var(--verde);
+    border-color: var(--verde);
+    background: rgba(0,200,100,.08)
+}
+
+:root[data-tema="claro"] .pcard {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .pcard:hover { background: rgba(255,255,255,.85) }
+
+:root[data-tema="claro"] .pfiltros { border-color: rgba(0,0,0,.07) }
+
+/* Panel historial de terminal en modo claro */
+:root[data-tema="claro"] #p-hist-lista { color: rgba(0,0,0,.70) }
+:root[data-tema="claro"] #pcuerpo .vacio { color: rgba(0,0,0,.40) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — TERMINAL PRINCIPAL
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .twrap {
+    background: rgba(255,255,255,.45);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .tcab {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .tcab .nm b { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .tcab .nm small { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .tpest { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .tpest button { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .tpest button.on { color: var(--verde); border-color: var(--verde) }
+:root[data-tema="claro"] .tpest button:hover { background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .tapanel {
+    background: rgba(255,255,255,.55);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .tfoot {
+    background: rgba(255,255,255,.55);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] #t-input {
+    background: rgba(255,255,255,.70);
+    border-color: rgba(0,0,0,.12);
+    color: var(--tx)
+}
+:root[data-tema="claro"] #t-input::placeholder { color: rgba(0,0,0,.35) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — HISTORIAL (hist-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .hist-wrap { color: var(--tx) }
+:root[data-tema="claro"] .filtros { background: rgba(255,255,255,.55); border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .filtros .campo span { color: rgba(0,0,0,.55) }
+:root[data-tema="claro"] table.t tr.grupo { background: rgba(0,0,0,.03) }
+:root[data-tema="claro"] table.t tr.hijo { background: rgba(26,102,255,.03) }
+:root[data-tema="claro"] table.t tr:hover { background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .cmdn { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .cmdt { color: rgba(0,0,0,.45) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — MASIVA (mas-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .mas-wrap { background: transparent }
+:root[data-tema="claro"] .mcab {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .mcab h3 { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .mcount { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .mas-sel {
+    background: rgba(255,255,255,.55);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .mas-eq {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08);
+    color: rgba(0,0,0,.75)
+}
+:root[data-tema="claro"] .mas-eq:hover { background: rgba(255,255,255,.85) }
+:root[data-tema="claro"] .mas-eq.sel {
+    background: rgba(26,102,255,.07);
+    border-color: rgba(26,102,255,.30)
+}
+:root[data-tema="claro"] .mas-cmd {
+    background: rgba(255,255,255,.50);
+    border-color: rgba(0,0,0,.07)
+}
+:root[data-tema="claro"] .mas-cmd h4 { color: rgba(0,0,0,.60) }
+:root[data-tema="claro"] .mosaico { background: transparent }
+:root[data-tema="claro"] .tile {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+

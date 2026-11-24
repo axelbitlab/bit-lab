@@ -1,5 +1,5 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795487974"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bitlab-IT · Panel</title><!-- build 1795487974 -->
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795492913"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bitlab-IT · Panel</title><!-- build 1795492913 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
@@ -2941,6 +2941,252 @@ table.t tr.hijo td:first-child {
 /* ── top bar claro ── */
 :root[data-tema="claro"] .top h1 { color: var(--tx) }
 
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — CATÁLOGO (cata-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .cata-wrap { background: transparent }
+:root[data-tema="claro"] .cata-toolbar { background: rgba(255,255,255,.60); border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .cata-buscar { background: rgba(255,255,255,.70); border-color: rgba(0,0,0,.12) }
+:root[data-tema="claro"] .cata-buscar input { color: var(--tx); background: transparent }
+:root[data-tema="claro"] .cata-buscar input::placeholder { color: rgba(0,0,0,.35) }
+:root[data-tema="claro"] .cata-clear { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .cata-clear:hover { color: var(--pel) }
+
+/* Píldoras de categorías */
+:root[data-tema="claro"] .cata-pill-bar { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .cata-pill {
+    background: rgba(0,0,0,.04);
+    border-color: rgba(0,0,0,.10);
+    color: rgba(0,0,0,.55)
+}
+:root[data-tema="claro"] .cata-pill:hover {
+    background: rgba(0,0,0,.08);
+    color: var(--tx)
+}
+:root[data-tema="claro"] .cata-pill.act {
+    background: color-mix(in srgb,var(--c) 15%,transparent);
+    border-color: color-mix(in srgb,var(--c) 40%,transparent);
+    color: var(--c)
+}
+:root[data-tema="claro"] .cata-pill-dot { background: var(--c) }
+
+/* Tarjeta de comando */
+:root[data-tema="claro"] .cata-card {
+    background: rgba(255,255,255,.65);
+    border-color: color-mix(in srgb,var(--c) 20%,rgba(0,0,0,.08));
+    box-shadow: 0 2px 10px rgba(0,0,0,.06)
+}
+:root[data-tema="claro"] .cata-card:hover {
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 6px 24px rgba(0,0,0,.10), 0 0 0 1px color-mix(in srgb,var(--c) 35%,transparent)
+}
+:root[data-tema="claro"] .cata-card-ico {
+    background: color-mix(in srgb,var(--c) 12%,transparent);
+    border-color: color-mix(in srgb,var(--c) 30%,transparent);
+    color: var(--c)
+}
+:root[data-tema="claro"] .cata-card-info b { color: rgba(0,0,0,.85) }
+:root[data-tema="claro"] .cata-card-desc { color: rgba(0,0,0,.55) }
+:root[data-tema="claro"] .cata-card-code {
+    background: rgba(0,0,0,.04);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .cata-card-code code { color: rgba(0,0,0,.72) }
+:root[data-tema="claro"] .cata-card-foot { border-color: rgba(0,0,0,.07) }
+
+/* Tags dentro de la tarjeta (ya había win/mac/lin; añadir genéricos) */
+:root[data-tema="claro"] .cata-tag {
+    background: rgba(0,0,0,.05);
+    border-color: rgba(0,0,0,.12);
+    color: rgba(0,0,0,.60)
+}
+:root[data-tema="claro"] .cata-tag.dest { background: rgba(220,20,60,.10); border-color: rgba(220,20,60,.30); color: #991b1b }
+:root[data-tema="claro"] .cata-tag.adm  { background: rgba(217,119,6,.10);  border-color: rgba(217,119,6,.30);  color: #92400e }
+:root[data-tema="claro"] .cata-tag.multi { background: rgba(124,58,237,.10); border-color: rgba(124,58,237,.30); color: #5b21b6 }
+
+/* Botones en pie de tarjeta */
+:root[data-tema="claro"] .cata-btn-run {
+    background: color-mix(in srgb,var(--verde) 12%,transparent);
+    border-color: color-mix(in srgb,var(--verde) 35%,transparent);
+    color: color-mix(in srgb,var(--verde) 80%,#000)
+}
+:root[data-tema="claro"] .cata-btn-run:hover {
+    background: color-mix(in srgb,var(--verde) 20%,transparent)
+}
+:root[data-tema="claro"] .cata-btn-ico {
+    background: rgba(0,0,0,.05);
+    border-color: rgba(0,0,0,.10);
+    color: rgba(0,0,0,.55)
+}
+:root[data-tema="claro"] .cata-btn-ico:hover { background: rgba(0,0,0,.10); color: var(--tx) }
+:root[data-tema="claro"] .cata-btn-ico.pel:hover { background: rgba(220,38,38,.10); color: #dc2626 }
+
+/* Chips de filtro */
+:root[data-tema="claro"] .chip { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.12); color: rgba(0,0,0,.65) }
+:root[data-tema="claro"] .chip:hover { background: rgba(0,0,0,.09); color: var(--tx) }
+:root[data-tema="claro"] .chip.chip-on { background: rgba(26,102,255,.10); border-color: rgba(26,102,255,.35); color: #1a66ff }
+:root[data-tema="claro"] .chip-pop {
+    background: rgba(255,255,255,.92);
+    border-color: rgba(0,0,0,.10);
+    box-shadow: 0 8px 24px rgba(0,0,0,.12)
+}
+:root[data-tema="claro"] .chip-opt { color: rgba(0,0,0,.70) }
+:root[data-tema="claro"] .chip-opt:hover { background: rgba(0,0,0,.06); color: var(--tx) }
+:root[data-tema="claro"] .chip-opt.act { background: rgba(26,102,255,.10); color: #1a66ff }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — MINI MENÚ CONTEXTUAL (.mm-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .mm-panel {
+    background: rgba(255,255,255,.88);
+    border-color: rgba(0,0,0,.10);
+    box-shadow: 0 16px 48px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.06)
+}
+:root[data-tema="claro"] .mm-head { border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .mm-head b { color: rgba(0,0,0,.85) }
+:root[data-tema="claro"] .mm-head small { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .mm-x { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-x:hover { background: rgba(0,0,0,.06); color: var(--tx) }
+
+:root[data-tema="claro"] .mm-alertas { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .mm-alerta { background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .mm-sin-alertas { background: rgba(0,0,0,.03); color: rgba(0,0,0,.45) }
+
+:root[data-tema="claro"] .mm-rejilla { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .mm-acc {
+    background: rgba(0,0,0,.03);
+    border-color: rgba(0,0,0,.08);
+    color: rgba(0,0,0,.70)
+}
+:root[data-tema="claro"] .mm-acc:hover:not(.mm-dis) {
+    background: color-mix(in srgb,var(--c,.5) 10%,rgba(255,255,255,.8));
+    border-color: color-mix(in srgb,var(--c,.5) 30%,rgba(0,0,0,.12))
+}
+:root[data-tema="claro"] .mm-acc b { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .mm-acc small { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-dis { opacity: .4 }
+
+:root[data-tema="claro"] .mm-sec-titulo { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-cmd {
+    background: rgba(0,0,0,.03);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .mm-cmd:hover:not([disabled]) {
+    background: rgba(0,0,0,.07);
+    border-color: rgba(0,0,0,.14)
+}
+:root[data-tema="claro"] .mm-cmd b { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .mm-cmd small { color: rgba(0,0,0,.45) }
+:root[data-tema="claro"] .mm-foot { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .mm-overlay { background: rgba(0,0,0,.12) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — PANEL LATERAL TERMINAL (ptabs, pcard, pfiltros)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .ptabs { border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .ptabs button {
+    color: rgba(0,0,0,.50);
+    border-color: transparent
+}
+:root[data-tema="claro"] .ptabs button:hover { color: var(--tx); background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .ptabs button.on {
+    color: var(--verde);
+    border-color: var(--verde);
+    background: rgba(0,200,100,.08)
+}
+
+:root[data-tema="claro"] .pcard {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .pcard:hover { background: rgba(255,255,255,.85) }
+
+:root[data-tema="claro"] .pfiltros { border-color: rgba(0,0,0,.07) }
+
+/* Panel historial de terminal en modo claro */
+:root[data-tema="claro"] #p-hist-lista { color: rgba(0,0,0,.70) }
+:root[data-tema="claro"] #pcuerpo .vacio { color: rgba(0,0,0,.40) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — TERMINAL PRINCIPAL
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .twrap {
+    background: rgba(255,255,255,.45);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .tcab {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .tcab .nm b { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .tcab .nm small { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .tpest { border-color: rgba(0,0,0,.07) }
+:root[data-tema="claro"] .tpest button { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .tpest button.on { color: var(--verde); border-color: var(--verde) }
+:root[data-tema="claro"] .tpest button:hover { background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .tapanel {
+    background: rgba(255,255,255,.55);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .tfoot {
+    background: rgba(255,255,255,.55);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] #t-input {
+    background: rgba(255,255,255,.70);
+    border-color: rgba(0,0,0,.12);
+    color: var(--tx)
+}
+:root[data-tema="claro"] #t-input::placeholder { color: rgba(0,0,0,.35) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — HISTORIAL (hist-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .hist-wrap { color: var(--tx) }
+:root[data-tema="claro"] .filtros { background: rgba(255,255,255,.55); border-color: rgba(0,0,0,.08) }
+:root[data-tema="claro"] .filtros .campo span { color: rgba(0,0,0,.55) }
+:root[data-tema="claro"] table.t tr.grupo { background: rgba(0,0,0,.03) }
+:root[data-tema="claro"] table.t tr.hijo { background: rgba(26,102,255,.03) }
+:root[data-tema="claro"] table.t tr:hover { background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .cmdn { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .cmdt { color: rgba(0,0,0,.45) }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO — MASIVA (mas-*)
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] .mas-wrap { background: transparent }
+:root[data-tema="claro"] .mcab {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .mcab h3 { color: rgba(0,0,0,.80) }
+:root[data-tema="claro"] .mcount { color: rgba(0,0,0,.50) }
+:root[data-tema="claro"] .mas-sel {
+    background: rgba(255,255,255,.55);
+    border-color: rgba(0,0,0,.08)
+}
+:root[data-tema="claro"] .mas-eq {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08);
+    color: rgba(0,0,0,.75)
+}
+:root[data-tema="claro"] .mas-eq:hover { background: rgba(255,255,255,.85) }
+:root[data-tema="claro"] .mas-eq.sel {
+    background: rgba(26,102,255,.07);
+    border-color: rgba(26,102,255,.30)
+}
+:root[data-tema="claro"] .mas-cmd {
+    background: rgba(255,255,255,.50);
+    border-color: rgba(0,0,0,.07)
+}
+:root[data-tema="claro"] .mas-cmd h4 { color: rgba(0,0,0,.60) }
+:root[data-tema="claro"] .mosaico { background: transparent }
+:root[data-tema="claro"] .tile {
+    background: rgba(255,255,255,.60);
+    border-color: rgba(0,0,0,.08)
+}
+
+
 /* ====== Estilos demo ====== */
 /* ====== Añadidos propios de la demo de tres pantallas ====== */
 
@@ -4917,8 +5163,6 @@ const Fab={
  montar(){
   this.el=$('#fab'); this.p=$('#fabPanel');
   if(this._listo)return; this._listo=true;
-  this.el.hidden=true;
-  return;
   const pos=leer('fab',null);
   if(pos){this.el.style.left=pos.x+'px';this.el.style.top=pos.y+'px'}
   else{this.el.style.left='16px';this.el.style.top='calc(14px + env(safe-area-inset-top,0px))'}
@@ -4943,6 +5187,10 @@ const Fab={
   };
   this.el.addEventListener('pointerup',fin);
   this.el.addEventListener('pointercancel',fin);
+  // Cerrar al hacer clic fuera
+  document.addEventListener('pointerdown',e=>{
+   if(this.abierto&&!this.el.contains(e.target)&&!this.p.contains(e.target)){this.cerrar()}
+  },{capture:true});
  },
  html(){
   const on=S.dispositivos.filter(d=>d.en_linea), d=dev(S.dispActivo);
@@ -4952,6 +5200,8 @@ const Fab={
    ${it('terminal','var(--verde)','Terminal',d?d.nombre:'Elige un equipo','fTerminal',!d)}
    ${it('monitor','var(--azul)','Equipos',`${on.length} en línea de ${S.dispositivos.length}`,'fEquipos')}
    ${it('list','var(--indigo)','Catálogo',`${S.comandos.length} comandos`,'fCatalogo')}
+   ${it('history','var(--ambar)','Historial',`Ejecuciones recientes`,'fHistorial')}
+   ${it('layers','var(--violeta,#8b5cf6)','Masiva',`Ejecutar en varios equipos`,'fMasiva')}
    ${it('activity','var(--cian)','Estado de agentes','Latidos y versiones','fAgentes')}
    ${it('retry','var(--lima)','Actualizar ahora','Vuelve a leer los equipos','fRefrescar')}
    <div class="recientes"><div class="eyebrow" style="margin-bottom:4px">Equipos en línea</div>
@@ -6004,8 +6254,8 @@ const VistaTerminal={
     <select data-chg="tInt" id="t-int" class="sel-filt">
      ${(d&&d.ints||['powershell']).map(i=>`<option value="${i}"${act.int===i?' selected':''}>${(INT[i]||{n:i}).n}</option>`).join('')}
     </select>
-    <button class="btn-ico" data-acc="tLimpiar" title="Limpiar">${ico('trash',14)}</button>
-    <button class="btn-ico" data-acc="tCancelar" title="Cancelar" ${!S.ejActiva?'disabled':''}>${ico('x',14)}</button>
+    <button class="btn-ico" data-acc="tLimpiar" title="Limpiar terminal">${ico('trash',14)}</button>
+    <button class="btn-ico" data-acc="tCancelar" title="Cancelar ejecución" ${!S.ejActiva?'disabled':''}>${ico('x',14)}</button>
    </span>
   </div>`;
  },
@@ -6098,24 +6348,73 @@ const VistaTerminal={
   return h;
  },
 
+ /* ── Panel Historial: carga desde Supabase ── */
+ _histCargado:false,
+ _histDatos:[],
+
  _panelHistorial(){
-  const ejecs=(S.historialLocal||[]).slice(0,15);
-  let h='<div class="pfiltros"><span class="pfilt-label">'+ico('clock',13)+' Últimas ejecuciones</span></div>';
-  if(!ejecs.length){
+  // Cabecera con botón refrescar
+  let h='<div class="pfiltros" style="display:flex;align-items:center;gap:8px">'
+   +'<span style="flex:1;font-size:12px;color:var(--tx2)">'+ico('clock',13)+' Últimas ejecuciones</span>'
+   +'<button class="btn-ico" data-acc="tHistRefrescar" title="Actualizar historial">'+ico('retry',13)+'</button>'
+   +'</div>'
+   +'<div id="p-hist-lista">';
+
+  // Usar datos ya cargados si existen, o mostrar spinner y arrancar carga
+  const datos=S.historialPanel||[];
+  if(!datos.length && !this._histCargado){
+   h+='<div class="vacio" id="p-hist-cargando">'+ico('clock',18)+'<span>Cargando historial...</span></div>';
+   // Arrancar carga asíncrona
+   setTimeout(()=>VistaTerminal._cargarHistorialPanel(),0);
+  } else if(!datos.length){
    h+='<div class="vacio">'+ico('clock',18)+'<span>Historial vacío</span></div>';
-   return h;
+  } else {
+   datos.forEach(function(ej){
+    const d=dev(ej.dispositivo_id);
+    const cls={exitoso:'ok',fallido:'pel',cancelado:'off',tiempo_agotado:'warn'}[ej.estado]||'info';
+    const nombre=ej.texto_comando||(S.comandos.find(x=>x.id===ej.comando_id)||{}).nombre||'(comando)';
+    h+='<div class="pcard" data-acc="tHistVer" data-id="'+ej.id+'" style="cursor:pointer">'
+     +'<div class="pcard-h"><span class="dot '+cls+'"></span>'
+     +'<div class="pcard-inf">'
+     +'<b>'+esc(nombre.slice(0,45))+'</b>'
+     +'<small>'+pill(ej.estado,cls)+' '+(ej.duracion_ms?durTxt(ej.duracion_ms):'')
+     +(d?' · '+esc(d.nombre):'')
+     +'</small>'
+     +'</div>'
+     +'<div style="display:flex;gap:4px">'
+     +'<button class="btn-ico" data-acc="tHistReplay" data-id="'+ej.id+'" title="Re-ejecutar" onclick="event.stopPropagation()">'+ico('retry',12)+'</button>'
+     +'<button class="btn-ico" data-acc="tHistVer" data-id="'+ej.id+'" title="Ver salida" onclick="event.stopPropagation()">'+ico('expand',12)+'</button>'
+     +'</div>'
+     +'</div></div>';
+   });
   }
-  ejecs.forEach(function(ej){
-   const cls={exitoso:'ok',fallido:'pel',cancelado:'off'}[ej.estado]||'info';
-   h+='<div class="pcard" data-acc="tReplay" data-ej="'+ej.id+'">'
-    +'<div class="pcard-h"><span class="dot '+cls+'"></span>'
-    +'<div class="pcard-inf"><b>'+esc((ej.texto_comando||'').slice(0,40)||'(comando)')+'</b>'
-    +'<small>'+pill(ej.estado,cls)+' '+(ej.duracion_ms?durTxt(ej.duracion_ms):'')+'</small>'
-    +'</div>'
-    +'<button class="btn-ico" data-acc="tReplay" data-ej="'+ej.id+'" onclick="event.stopPropagation()">'+ico('retry',12)+'</button>'
-    +'</div></div>';
-  });
+  h+='</div>';
   return h;
+ },
+
+ async _cargarHistorialPanel(){
+  try{
+   const dispActivo=S.dispActivo;
+   let q=sb.from('ejecuciones_comandos')
+    .select('id,dispositivo_id,comando_id,estado,texto_comando,duracion_ms,creado,codigo_salida')
+    .order('creado',{ascending:false})
+    .limit(50);
+   // Filtrar por equipo activo si hay uno seleccionado
+   if(dispActivo) q=q.eq('dispositivo_id',dispActivo);
+   const {data,error}=await q;
+   if(error) throw error;
+   this._histCargado=true;
+   S.historialPanel=data||[];
+   // Re-renderizar solo el panel si sigue en la pestaña historial
+   if(S.panelDer==='historial'){
+    const pc=$('#pcuerpo');
+    if(pc) pc.innerHTML=VistaTerminal._panelHistorial();
+   }
+  }catch(e){
+   this._histCargado=true;
+   const el=$('#p-hist-cargando');
+   if(el) el.innerHTML=ico('info',18)+'<span>Error al cargar historial</span>';
+  }
  },
 
  _panelDetalles(){
@@ -6170,9 +6469,18 @@ const VistaTerminal={
    if(fin.includes(ej.estado)){
     const col=ej.estado==='exitoso'?'\x1b[32m':'\x1b[31m';
     Term.escr('\r\n'+col+'['+ej.estado.toUpperCase()+'] código: '+(ej.codigo_salida!=null?ej.codigo_salida:'—')+'\x1b[0m\r\n');
+    // Agregar al historial local Y resetear cache del panel
     S.historialLocal=S.historialLocal||[];
     S.historialLocal.unshift(ej);
     if(S.historialLocal.length>50)S.historialLocal.pop();
+    // Forzar recarga del historial del panel en la próxima apertura
+    S.historialPanel=null;
+    this._histCargado=false;
+    // Si el panel lateral está en historial, refrescarlo
+    if(S.panelDer==='historial'){
+     const pc=$('#pcuerpo');
+     if(pc) pc.innerHTML=VistaTerminal._panelHistorial();
+    }
     const g=$('#t-guardar'); if(g)g.style.display='flex';
    }
   },
@@ -6302,6 +6610,9 @@ Acc.tAbrirSesion=function(el){
  guardar('disp',dispId);
  // Sincronizar selección global para que el mini-menú y otros módulos sepan cuál equipo está activo
  if(typeof Sel!=='undefined') Sel.fijar([dispId]);
+ // Resetear historial del panel para que cargue el del equipo nuevo
+ S.historialPanel=null;
+ VistaTerminal._histCargado=false;
  // Si ya estamos en terminal, actualizar en el lugar sin re-render completo
  if(S.vista==='terminal'){
   // Refrescar árbol (marca el equipo como activo)
@@ -6317,23 +6628,24 @@ Acc.tAbrirSesion=function(el){
    Term.mont(cuerpo);
    Term.bienvenida(d);
    (s.lineas||[]).forEach(function(l){
-    if(l.f==='s') Term.escr('[90m'+l.t+'[0m
-');
-    else if(l.f==='e') Term.escr('[31m'+l.t+'[0m
-');
-    else if(l.f==='i') Term.escr('[36m'+(l.p||'>')+' '+l.t+'[0m
-');
-    else Term.escr(l.t+'
-');
+    if(l.f==='s') Term.escr('\x1b[90m'+l.t+'\x1b[0m\r\n');
+    else if(l.f==='e') Term.escr('\x1b[31m'+l.t+'\x1b[0m\r\n');
+    else if(l.f==='i') Term.escr('\x1b[36m'+(l.p||'>')+' '+l.t+'\x1b[0m\r\n');
+    else Term.escr(l.t+'\r\n');
    });
   }
-  // Restaurar entrada y botón guardar
+  // Restaurar entrada y botón guardar si no existen
   const ent=$('.tentrada');
   if(!ent){
    const central=$('.col.central');
    if(central){
     const guardEl=$('#t-guardar');
-    if(guardEl) central.insertBefore(VistaTerminal._entradaDOM(s,d),guardEl);
+    const entHTML=VistaTerminal._entrada(s,d);
+    if(guardEl){
+     guardEl.insertAdjacentHTML('beforebegin',entHTML);
+    } else {
+     central.insertAdjacentHTML('beforeend',entHTML);
+    }
    }
   }
   Nav.sub();
@@ -6349,6 +6661,11 @@ Acc.tCambiarSesion=function(el){
  if(!s) return;
  S.sesionActiva=sid;
  S.dispActivo=s.dispId; guardar('disp',s.dispId);
+ // Sincronizar selección
+ if(typeof Sel!=='undefined') Sel.fijar([s.dispId]);
+ // Resetear historial panel para el nuevo equipo
+ S.historialPanel=null;
+ VistaTerminal._histCargado=false;
  Nav.ir('terminal');
 };
 
@@ -6362,6 +6679,10 @@ Acc.tCerrarSesion=function(el){
 Acc.tPanelTab=function(el){
  S.panelDer=el.dataset.v;
  $$('.ptab').forEach(function(t){t.classList.toggle('act',t.dataset.v===S.panelDer)});
+ // Si es historial y no hay datos cargados, arranca la carga
+ if(S.panelDer==='historial' && !VistaTerminal._histCargado){
+  S.historialPanel=null;
+ }
  VistaTerminal._refrescarPanel();
 };
 
@@ -6403,6 +6724,65 @@ Acc.tReplay=function(el){
  const ej=(S.historialLocal||[]).find(function(x){return String(x.id)===String(ejId)});
  if(!ej) return;
  if(typeof Motor!=='undefined') Motor.lanzar(ej.texto_comando||null,ej.comando_id||null);
+};
+
+/* Historial en el panel lateral: ver salida */
+Acc.tHistVer=async function(el){
+ const id=parseInt(el.dataset.id||el.closest('[data-id]')?.dataset.id);
+ if(!id) return;
+ try{
+  const frags=await Datos.salida(id,0);
+  const ej=await Datos.ejecucion(id);
+  const d=dev(ej?.dispositivo_id);
+  const txt=frags&&frags.length?frags.map(f=>{
+   if(f.flujo==='error_estandar'||f.flujo==='stderr')return `<div class="ln e">${esc(f.texto||f.contenido||'')}</div>`;
+   if(f.flujo==='sistema')return `<div class="ln s">${esc(f.texto||f.contenido||'')}</div>`;
+   return `<div class="ln o">${esc(f.texto||f.contenido||'')}</div>`;
+  }).join(''):'<div class="ln s">Sin salida registrada.</div>';
+  Modal.abrir({aria:'Salida de ejecución',lado:true,ancho:640,
+   titulo:'Salida · '+(d?.nombre||'Equipo'),
+   html:`<div class="kv" style="margin-bottom:12px">
+    <dt>Estado</dt><dd>${pill(ej?.estado||'—')}</dd>
+    <dt>Duración</dt><dd>${durTxt(ej?.duracion_ms)}</dd>
+    <dt>Código</dt><dd>${ej?.codigo_salida!=null?ej.codigo_salida:'—'}</dd>
+    ${ej?.mensaje_error?`<dt>Error</dt><dd style="color:var(--pel)">${esc(ej.mensaje_error)}</dd>`:''}
+   </div>
+   <div class="tcuerpo" style="max-height:50vh;border-radius:14px">${txt}</div>`,
+   pie:`<button class="btn" data-acc="mCerrar">Cerrar</button>`
+  });
+ }catch(e){
+  Toast.mostrar('Error al cargar salida','err',e.message);
+ }
+};
+
+/* Historial en el panel lateral: re-ejecutar */
+Acc.tHistReplay=async function(el){
+ const id=parseInt(el.dataset.id);
+ if(!id) return;
+ try{
+  const ej=await Datos.ejecucion(id);
+  if(!ej) return;
+  const d=dev(ej.dispositivo_id);
+  if(!d){Toast.mostrar('Equipo no encontrado','aviso');return}
+  if(!d.en_linea){Toast.mostrar(d.nombre+' está fuera de línea','aviso');return}
+  // Cambiar al equipo correcto si no es el activo
+  if(S.dispActivo!==d.id){
+   S.dispActivo=d.id; guardar('disp',d.id);
+   Sesion.abrir(d.id);
+   if(typeof Sel!=='undefined') Sel.fijar([d.id]);
+  }
+  if(typeof Motor!=='undefined') Motor.lanzar(ej.texto_comando||null,ej.comando_id||null);
+ }catch(e){
+  Toast.mostrar('Error al re-ejecutar','err',e.message);
+ }
+};
+
+/* Historial en el panel lateral: refrescar */
+Acc.tHistRefrescar=function(){
+ S.historialPanel=null;
+ VistaTerminal._histCargado=false;
+ const pc=$('#pcuerpo');
+ if(pc) pc.innerHTML=VistaTerminal._panelHistorial();
 };
 
 Chg.tInt=function(el){

@@ -95,8 +95,8 @@ const VistaTerminal={
     <select data-chg="tInt" id="t-int" class="sel-filt">
      ${(d&&d.ints||['powershell']).map(i=>`<option value="${i}"${act.int===i?' selected':''}>${(INT[i]||{n:i}).n}</option>`).join('')}
     </select>
-    <button class="btn-ico" data-acc="tLimpiar" title="Limpiar">${ico('trash',14)}</button>
-    <button class="btn-ico" data-acc="tCancelar" title="Cancelar" ${!S.ejActiva?'disabled':''}>${ico('x',14)}</button>
+    <button class="btn-ico" data-acc="tLimpiar" title="Limpiar terminal">${ico('trash',14)}</button>
+    <button class="btn-ico" data-acc="tCancelar" title="Cancelar ejecución" ${!S.ejActiva?'disabled':''}>${ico('x',14)}</button>
    </span>
   </div>`;
  },
@@ -189,24 +189,73 @@ const VistaTerminal={
   return h;
  },
 
+ /* ── Panel Historial: carga desde Supabase ── */
+ _histCargado:false,
+ _histDatos:[],
+
  _panelHistorial(){
-  const ejecs=(S.historialLocal||[]).slice(0,15);
-  let h='<div class="pfiltros"><span class="pfilt-label">'+ico('clock',13)+' Últimas ejecuciones</span></div>';
-  if(!ejecs.length){
+  // Cabecera con botón refrescar
+  let h='<div class="pfiltros" style="display:flex;align-items:center;gap:8px">'
+   +'<span style="flex:1;font-size:12px;color:var(--tx2)">'+ico('clock',13)+' Últimas ejecuciones</span>'
+   +'<button class="btn-ico" data-acc="tHistRefrescar" title="Actualizar historial">'+ico('retry',13)+'</button>'
+   +'</div>'
+   +'<div id="p-hist-lista">';
+
+  // Usar datos ya cargados si existen, o mostrar spinner y arrancar carga
+  const datos=S.historialPanel||[];
+  if(!datos.length && !this._histCargado){
+   h+='<div class="vacio" id="p-hist-cargando">'+ico('clock',18)+'<span>Cargando historial...</span></div>';
+   // Arrancar carga asíncrona
+   setTimeout(()=>VistaTerminal._cargarHistorialPanel(),0);
+  } else if(!datos.length){
    h+='<div class="vacio">'+ico('clock',18)+'<span>Historial vacío</span></div>';
-   return h;
+  } else {
+   datos.forEach(function(ej){
+    const d=dev(ej.dispositivo_id);
+    const cls={exitoso:'ok',fallido:'pel',cancelado:'off',tiempo_agotado:'warn'}[ej.estado]||'info';
+    const nombre=ej.texto_comando||(S.comandos.find(x=>x.id===ej.comando_id)||{}).nombre||'(comando)';
+    h+='<div class="pcard" data-acc="tHistVer" data-id="'+ej.id+'" style="cursor:pointer">'
+     +'<div class="pcard-h"><span class="dot '+cls+'"></span>'
+     +'<div class="pcard-inf">'
+     +'<b>'+esc(nombre.slice(0,45))+'</b>'
+     +'<small>'+pill(ej.estado,cls)+' '+(ej.duracion_ms?durTxt(ej.duracion_ms):'')
+     +(d?' · '+esc(d.nombre):'')
+     +'</small>'
+     +'</div>'
+     +'<div style="display:flex;gap:4px">'
+     +'<button class="btn-ico" data-acc="tHistReplay" data-id="'+ej.id+'" title="Re-ejecutar" onclick="event.stopPropagation()">'+ico('retry',12)+'</button>'
+     +'<button class="btn-ico" data-acc="tHistVer" data-id="'+ej.id+'" title="Ver salida" onclick="event.stopPropagation()">'+ico('expand',12)+'</button>'
+     +'</div>'
+     +'</div></div>';
+   });
   }
-  ejecs.forEach(function(ej){
-   const cls={exitoso:'ok',fallido:'pel',cancelado:'off'}[ej.estado]||'info';
-   h+='<div class="pcard" data-acc="tReplay" data-ej="'+ej.id+'">'
-    +'<div class="pcard-h"><span class="dot '+cls+'"></span>'
-    +'<div class="pcard-inf"><b>'+esc((ej.texto_comando||'').slice(0,40)||'(comando)')+'</b>'
-    +'<small>'+pill(ej.estado,cls)+' '+(ej.duracion_ms?durTxt(ej.duracion_ms):'')+'</small>'
-    +'</div>'
-    +'<button class="btn-ico" data-acc="tReplay" data-ej="'+ej.id+'" onclick="event.stopPropagation()">'+ico('retry',12)+'</button>'
-    +'</div></div>';
-  });
+  h+='</div>';
   return h;
+ },
+
+ async _cargarHistorialPanel(){
+  try{
+   const dispActivo=S.dispActivo;
+   let q=sb.from('ejecuciones_comandos')
+    .select('id,dispositivo_id,comando_id,estado,texto_comando,duracion_ms,creado,codigo_salida')
+    .order('creado',{ascending:false})
+    .limit(50);
+   // Filtrar por equipo activo si hay uno seleccionado
+   if(dispActivo) q=q.eq('dispositivo_id',dispActivo);
+   const {data,error}=await q;
+   if(error) throw error;
+   this._histCargado=true;
+   S.historialPanel=data||[];
+   // Re-renderizar solo el panel si sigue en la pestaña historial
+   if(S.panelDer==='historial'){
+    const pc=$('#pcuerpo');
+    if(pc) pc.innerHTML=VistaTerminal._panelHistorial();
+   }
+  }catch(e){
+   this._histCargado=true;
+   const el=$('#p-hist-cargando');
+   if(el) el.innerHTML=ico('info',18)+'<span>Error al cargar historial</span>';
+  }
  },
 
  _panelDetalles(){
@@ -261,9 +310,18 @@ const VistaTerminal={
    if(fin.includes(ej.estado)){
     const col=ej.estado==='exitoso'?'\x1b[32m':'\x1b[31m';
     Term.escr('\r\n'+col+'['+ej.estado.toUpperCase()+'] código: '+(ej.codigo_salida!=null?ej.codigo_salida:'—')+'\x1b[0m\r\n');
+    // Agregar al historial local Y resetear cache del panel
     S.historialLocal=S.historialLocal||[];
     S.historialLocal.unshift(ej);
     if(S.historialLocal.length>50)S.historialLocal.pop();
+    // Forzar recarga del historial del panel en la próxima apertura
+    S.historialPanel=null;
+    this._histCargado=false;
+    // Si el panel lateral está en historial, refrescarlo
+    if(S.panelDer==='historial'){
+     const pc=$('#pcuerpo');
+     if(pc) pc.innerHTML=VistaTerminal._panelHistorial();
+    }
     const g=$('#t-guardar'); if(g)g.style.display='flex';
    }
   },
@@ -393,6 +451,9 @@ Acc.tAbrirSesion=function(el){
  guardar('disp',dispId);
  // Sincronizar selección global para que el mini-menú y otros módulos sepan cuál equipo está activo
  if(typeof Sel!=='undefined') Sel.fijar([dispId]);
+ // Resetear historial del panel para que cargue el del equipo nuevo
+ S.historialPanel=null;
+ VistaTerminal._histCargado=false;
  // Si ya estamos en terminal, actualizar en el lugar sin re-render completo
  if(S.vista==='terminal'){
   // Refrescar árbol (marca el equipo como activo)
@@ -408,23 +469,24 @@ Acc.tAbrirSesion=function(el){
    Term.mont(cuerpo);
    Term.bienvenida(d);
    (s.lineas||[]).forEach(function(l){
-    if(l.f==='s') Term.escr('[90m'+l.t+'[0m
-');
-    else if(l.f==='e') Term.escr('[31m'+l.t+'[0m
-');
-    else if(l.f==='i') Term.escr('[36m'+(l.p||'>')+' '+l.t+'[0m
-');
-    else Term.escr(l.t+'
-');
+    if(l.f==='s') Term.escr('\x1b[90m'+l.t+'\x1b[0m\r\n');
+    else if(l.f==='e') Term.escr('\x1b[31m'+l.t+'\x1b[0m\r\n');
+    else if(l.f==='i') Term.escr('\x1b[36m'+(l.p||'>')+' '+l.t+'\x1b[0m\r\n');
+    else Term.escr(l.t+'\r\n');
    });
   }
-  // Restaurar entrada y botón guardar
+  // Restaurar entrada y botón guardar si no existen
   const ent=$('.tentrada');
   if(!ent){
    const central=$('.col.central');
    if(central){
     const guardEl=$('#t-guardar');
-    if(guardEl) central.insertBefore(VistaTerminal._entradaDOM(s,d),guardEl);
+    const entHTML=VistaTerminal._entrada(s,d);
+    if(guardEl){
+     guardEl.insertAdjacentHTML('beforebegin',entHTML);
+    } else {
+     central.insertAdjacentHTML('beforeend',entHTML);
+    }
    }
   }
   Nav.sub();
@@ -440,6 +502,11 @@ Acc.tCambiarSesion=function(el){
  if(!s) return;
  S.sesionActiva=sid;
  S.dispActivo=s.dispId; guardar('disp',s.dispId);
+ // Sincronizar selección
+ if(typeof Sel!=='undefined') Sel.fijar([s.dispId]);
+ // Resetear historial panel para el nuevo equipo
+ S.historialPanel=null;
+ VistaTerminal._histCargado=false;
  Nav.ir('terminal');
 };
 
@@ -453,6 +520,10 @@ Acc.tCerrarSesion=function(el){
 Acc.tPanelTab=function(el){
  S.panelDer=el.dataset.v;
  $$('.ptab').forEach(function(t){t.classList.toggle('act',t.dataset.v===S.panelDer)});
+ // Si es historial y no hay datos cargados, arranca la carga
+ if(S.panelDer==='historial' && !VistaTerminal._histCargado){
+  S.historialPanel=null;
+ }
  VistaTerminal._refrescarPanel();
 };
 
@@ -494,6 +565,65 @@ Acc.tReplay=function(el){
  const ej=(S.historialLocal||[]).find(function(x){return String(x.id)===String(ejId)});
  if(!ej) return;
  if(typeof Motor!=='undefined') Motor.lanzar(ej.texto_comando||null,ej.comando_id||null);
+};
+
+/* Historial en el panel lateral: ver salida */
+Acc.tHistVer=async function(el){
+ const id=parseInt(el.dataset.id||el.closest('[data-id]')?.dataset.id);
+ if(!id) return;
+ try{
+  const frags=await Datos.salida(id,0);
+  const ej=await Datos.ejecucion(id);
+  const d=dev(ej?.dispositivo_id);
+  const txt=frags&&frags.length?frags.map(f=>{
+   if(f.flujo==='error_estandar'||f.flujo==='stderr')return `<div class="ln e">${esc(f.texto||f.contenido||'')}</div>`;
+   if(f.flujo==='sistema')return `<div class="ln s">${esc(f.texto||f.contenido||'')}</div>`;
+   return `<div class="ln o">${esc(f.texto||f.contenido||'')}</div>`;
+  }).join(''):'<div class="ln s">Sin salida registrada.</div>';
+  Modal.abrir({aria:'Salida de ejecución',lado:true,ancho:640,
+   titulo:'Salida · '+(d?.nombre||'Equipo'),
+   html:`<div class="kv" style="margin-bottom:12px">
+    <dt>Estado</dt><dd>${pill(ej?.estado||'—')}</dd>
+    <dt>Duración</dt><dd>${durTxt(ej?.duracion_ms)}</dd>
+    <dt>Código</dt><dd>${ej?.codigo_salida!=null?ej.codigo_salida:'—'}</dd>
+    ${ej?.mensaje_error?`<dt>Error</dt><dd style="color:var(--pel)">${esc(ej.mensaje_error)}</dd>`:''}
+   </div>
+   <div class="tcuerpo" style="max-height:50vh;border-radius:14px">${txt}</div>`,
+   pie:`<button class="btn" data-acc="mCerrar">Cerrar</button>`
+  });
+ }catch(e){
+  Toast.mostrar('Error al cargar salida','err',e.message);
+ }
+};
+
+/* Historial en el panel lateral: re-ejecutar */
+Acc.tHistReplay=async function(el){
+ const id=parseInt(el.dataset.id);
+ if(!id) return;
+ try{
+  const ej=await Datos.ejecucion(id);
+  if(!ej) return;
+  const d=dev(ej.dispositivo_id);
+  if(!d){Toast.mostrar('Equipo no encontrado','aviso');return}
+  if(!d.en_linea){Toast.mostrar(d.nombre+' está fuera de línea','aviso');return}
+  // Cambiar al equipo correcto si no es el activo
+  if(S.dispActivo!==d.id){
+   S.dispActivo=d.id; guardar('disp',d.id);
+   Sesion.abrir(d.id);
+   if(typeof Sel!=='undefined') Sel.fijar([d.id]);
+  }
+  if(typeof Motor!=='undefined') Motor.lanzar(ej.texto_comando||null,ej.comando_id||null);
+ }catch(e){
+  Toast.mostrar('Error al re-ejecutar','err',e.message);
+ }
+};
+
+/* Historial en el panel lateral: refrescar */
+Acc.tHistRefrescar=function(){
+ S.historialPanel=null;
+ VistaTerminal._histCargado=false;
+ const pc=$('#pcuerpo');
+ if(pc) pc.innerHTML=VistaTerminal._panelHistorial();
 };
 
 Chg.tInt=function(el){
