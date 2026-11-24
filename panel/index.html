@@ -1,5 +1,5 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795494476"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bitlab-IT · Panel</title><!-- build 1795494476 -->
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795494711"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bitlab-IT · Panel</title><!-- build 1795494711 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
@@ -2701,14 +2701,14 @@ table.t tr.hijo td:first-child {
 
 /* ── catálogo ── */
 :root[data-tema="claro"] .codebox {
-    background: rgba(0,0,0,.05);
-    border-color: rgba(0,0,0,.08);
-    color: #005c3c
+    background: rgba(112,0,255,.06);
+    border-color: rgba(112,0,255,.18);
+    color: #5500cc
 }
-:root[data-tema="claro"] .cata-tag.win { background: rgba(0,120,215,.12); border-color: rgba(0,120,215,.4); color: #005eb8 }
-:root[data-tema="claro"] .cata-tag.mac { background: rgba(0,0,0,.07);     border-color: rgba(0,0,0,.18);    color: #2c2c2e }
-:root[data-tema="claro"] .cata-tag.lin { background: rgba(255,160,0,.12); border-color: rgba(255,160,0,.4); color: #7c4a00 }
-:root[data-tema="claro"] .cata-tag.mul { background: rgba(0,184,90,.12);  border-color: rgba(0,184,90,.4);  color: #005c30 }
+:root[data-tema="claro"] .cata-tag.win { background: rgba(0,64,255,.10); border-color: rgba(0,64,255,.35); color: #0030cc }
+:root[data-tema="claro"] .cata-tag.mac { background: rgba(112,0,255,.10); border-color: rgba(112,0,255,.30); color: #5500cc }
+:root[data-tema="claro"] .cata-tag.lin { background: rgba(155,0,255,.10); border-color: rgba(155,0,255,.30); color: #7000cc }
+:root[data-tema="claro"] .cata-tag.mul { background: rgba(0,37,204,.10);  border-color: rgba(0,37,204,.35);  color: #0025cc }
 
 /* ── terminal (3 columnas) claro ── */
 :root[data-tema="claro"] .col {
@@ -3003,7 +3003,7 @@ table.t tr.hijo td:first-child {
 }
 :root[data-tema="claro"] .cata-tag.dest { background: rgba(220,20,60,.10); border-color: rgba(220,20,60,.30); color: #991b1b }
 :root[data-tema="claro"] .cata-tag.adm  { background: rgba(217,119,6,.10);  border-color: rgba(217,119,6,.30);  color: #92400e }
-:root[data-tema="claro"] .cata-tag.multi { background: rgba(124,58,237,.10); border-color: rgba(124,58,237,.30); color: #5b21b6 }
+:root[data-tema="claro"] .cata-tag.multi { background: rgba(0,37,204,.10); border-color: rgba(0,37,204,.30); color: #0025cc }
 
 /* Botones en pie de tarjeta */
 :root[data-tema="claro"] .cata-btn-run {
@@ -3025,7 +3025,7 @@ table.t tr.hijo td:first-child {
 /* Chips de filtro */
 :root[data-tema="claro"] .chip { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.12); color: rgba(0,0,0,.65) }
 :root[data-tema="claro"] .chip:hover { background: rgba(0,0,0,.09); color: var(--tx) }
-:root[data-tema="claro"] .chip.chip-on { background: rgba(26,102,255,.10); border-color: rgba(26,102,255,.35); color: #1a66ff }
+:root[data-tema="claro"] .chip.chip-on { background: rgba(0,64,255,.12); border-color: rgba(0,64,255,.40); color: #0040ff }
 :root[data-tema="claro"] .chip-pop {
     background: rgba(255,255,255,.92);
     border-color: rgba(0,0,0,.10);
@@ -3033,7 +3033,7 @@ table.t tr.hijo td:first-child {
 }
 :root[data-tema="claro"] .chip-opt { color: rgba(0,0,0,.70) }
 :root[data-tema="claro"] .chip-opt:hover { background: rgba(0,0,0,.06); color: var(--tx) }
-:root[data-tema="claro"] .chip-opt.act { background: rgba(26,102,255,.10); color: #1a66ff }
+:root[data-tema="claro"] .chip-opt.act { background: rgba(0,64,255,.12); color: #0040ff }
 
 /* ═══════════════════════════════════════════════════════════
    MODO CLARO — MINI MENÚ CONTEXTUAL (.mm-*)
@@ -4908,18 +4908,18 @@ const Datos={
  async comandos(){
   // Categorías base por defecto si la base de datos está vacía
   const defaultCats=[
-   {id:1,nombre:'Diagnóstico',color:'#00f59b',icono:'activity',orden:10},
-   {id:2,nombre:'Red',color:'#06b6d4',icono:'wifi',orden:20},
-   {id:3,nombre:'Servicios',color:'#3b82f6',icono:'cpu',orden:30},
+   {id:1,nombre:'Diagnóstico',color:'#7000ff',icono:'activity',orden:10},
+   {id:2,nombre:'Red',color:'#0040ff',icono:'wifi',orden:20},
+   {id:3,nombre:'Servicios',color:'#0025cc',icono:'cpu',orden:30},
    {id:4,nombre:'Mantenimiento',color:'#8b5cf6',icono:'wrench',orden:40},
-   {id:5,nombre:'Seguridad',color:'#10b981',icono:'lock',orden:50},
+   {id:5,nombre:'Seguridad',color:'#9b00ff',icono:'lock',orden:50},
    {id:6,nombre:'Disco',color:'#f59e0b',icono:'hdd',orden:60}
   ];
   let {data:cats}=await sb.from('categorias_comandos').select('id,nombre,color,icono,orden').order('orden').order('nombre');
   if(!cats || !cats.length){
    cats=leer('categorias_locales',defaultCats);
   }
-  S.categorias=(cats||[]).map(c=>({...c,color:c.color||'#06b6d4',icono:c.icono||'tag'}));
+  S.categorias=(cats||[]).map(c=>({...c,color:c.color||'#7000ff',icono:c.icono||'tag'}));
   // Intentar con variantes + tipos_alerta (array) y tipo_alerta (texto legacy).
   // Si alguna columna no existe, se hace fallback sin ella.
   let cmds, error;
@@ -5899,7 +5899,7 @@ const VistaCatalogo={
    <button class="cata-pill${!this._cat?' act':''}" data-acc="cataPillCat" data-id="" style="--c:var(--verde)">
     <span class="cata-pill-dot"></span> Todas
    </button>
-   ${cats.map(cat=>`<button class="cata-pill${this._cat==cat.id?' act':''}" data-acc="cataPillCat" data-id="${cat.id}" style="--c:${esc(cat.color||'var(--cian)')}">
+   ${cats.map(cat=>`<button class="cata-pill${this._cat==cat.id?' act':''}" data-acc="cataPillCat" data-id="${cat.id}" style="--c:${esc(cat.color||'var(--verde)')}">
     <span class="cata-pill-dot"></span> ${esc(cat.nombre)}
    </button>`).join('')}
   </div>`;
@@ -5994,7 +5994,7 @@ const VistaCatalogo={
  _fila(c,admin){
   const cat=S.categorias.find(x=>x.id===c.categoria_id);
   const catNom=cat?.nombre||'Sin categoría';
-  const catColor=cat?.color||'#06b6d4';
+  const catColor=cat?.color||'#7000ff';
   const catIcon=cat?.icono||'activity';
   const taList=alertasDe(c);
   const taBadges = taList.length ?
@@ -6184,9 +6184,9 @@ Acc.cataPillCat=el=>{
 
 Acc.cataGestionarCategorias=()=>{
  const cats=S.categorias||[];
- const colores=['#00f59b','#06b6d4','#3b82f6','#8b5cf6','#a855f7','#ec4899','#f43f5e','#ef4444','#f59e0b','#10b981'];
+ const colores=['#7000ff','#0040ff','#9b00ff','#5500cc','#0025cc','#c0215a','#ef4444','#f59e0b','#7c3aed','#1d4ed8'];
  const listaHtml=cats.length?cats.map(c=>`<div class="item-c" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:12px">
-  <span style="width:14px;height:14px;border-radius:50%;background:${esc(c.color||'#06b6d4')}"></span>
+  <span style="width:14px;height:14px;border-radius:50%;background:${esc(c.color||'#7000ff')}"></span>
   <b style="flex:1">${esc(c.nombre)}</b>
   <small style="color:var(--tx3);font-family:var(--f-mono)">${esc(c.icono||'activity')}</small>
   <button class="ib pel" data-acc="cataEliminarCategoria" data-id="${c.id}" title="Eliminar">${ico('trash',14)}</button>
@@ -6225,7 +6225,7 @@ Acc.cataPickColor=el=>{
 
 Acc.cataGuardarCategoria=async()=>{
  const nom=$('#cat-nuevo-nom')?.value?.trim();
- const col=$('#cat-nuevo-col')?.value||'#06b6d4';
+ const col=$('#cat-nuevo-col')?.value||'#7000ff';
  if(!nom){ Toast.mostrar('Escribe un nombre de categoría','aviso'); return; }
  try{
   const {data,error}=await sb.from('categorias_comandos').insert({nombre:nom,color:col,icono:'activity',orden:99}).select().single();

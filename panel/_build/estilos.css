@@ -2695,14 +2695,14 @@ table.t tr.hijo td:first-child {
 
 /* ── catálogo ── */
 :root[data-tema="claro"] .codebox {
-    background: rgba(0,0,0,.05);
-    border-color: rgba(0,0,0,.08);
-    color: #005c3c
+    background: rgba(112,0,255,.06);
+    border-color: rgba(112,0,255,.18);
+    color: #5500cc
 }
-:root[data-tema="claro"] .cata-tag.win { background: rgba(0,120,215,.12); border-color: rgba(0,120,215,.4); color: #005eb8 }
-:root[data-tema="claro"] .cata-tag.mac { background: rgba(0,0,0,.07);     border-color: rgba(0,0,0,.18);    color: #2c2c2e }
-:root[data-tema="claro"] .cata-tag.lin { background: rgba(255,160,0,.12); border-color: rgba(255,160,0,.4); color: #7c4a00 }
-:root[data-tema="claro"] .cata-tag.mul { background: rgba(0,184,90,.12);  border-color: rgba(0,184,90,.4);  color: #005c30 }
+:root[data-tema="claro"] .cata-tag.win { background: rgba(0,64,255,.10); border-color: rgba(0,64,255,.35); color: #0030cc }
+:root[data-tema="claro"] .cata-tag.mac { background: rgba(112,0,255,.10); border-color: rgba(112,0,255,.30); color: #5500cc }
+:root[data-tema="claro"] .cata-tag.lin { background: rgba(155,0,255,.10); border-color: rgba(155,0,255,.30); color: #7000cc }
+:root[data-tema="claro"] .cata-tag.mul { background: rgba(0,37,204,.10);  border-color: rgba(0,37,204,.35);  color: #0025cc }
 
 /* ── terminal (3 columnas) claro ── */
 :root[data-tema="claro"] .col {
@@ -2997,7 +2997,7 @@ table.t tr.hijo td:first-child {
 }
 :root[data-tema="claro"] .cata-tag.dest { background: rgba(220,20,60,.10); border-color: rgba(220,20,60,.30); color: #991b1b }
 :root[data-tema="claro"] .cata-tag.adm  { background: rgba(217,119,6,.10);  border-color: rgba(217,119,6,.30);  color: #92400e }
-:root[data-tema="claro"] .cata-tag.multi { background: rgba(124,58,237,.10); border-color: rgba(124,58,237,.30); color: #5b21b6 }
+:root[data-tema="claro"] .cata-tag.multi { background: rgba(0,37,204,.10); border-color: rgba(0,37,204,.30); color: #0025cc }
 
 /* Botones en pie de tarjeta */
 :root[data-tema="claro"] .cata-btn-run {
@@ -3019,7 +3019,7 @@ table.t tr.hijo td:first-child {
 /* Chips de filtro */
 :root[data-tema="claro"] .chip { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.12); color: rgba(0,0,0,.65) }
 :root[data-tema="claro"] .chip:hover { background: rgba(0,0,0,.09); color: var(--tx) }
-:root[data-tema="claro"] .chip.chip-on { background: rgba(26,102,255,.10); border-color: rgba(26,102,255,.35); color: #1a66ff }
+:root[data-tema="claro"] .chip.chip-on { background: rgba(0,64,255,.12); border-color: rgba(0,64,255,.40); color: #0040ff }
 :root[data-tema="claro"] .chip-pop {
     background: rgba(255,255,255,.92);
     border-color: rgba(0,0,0,.10);
@@ -3027,7 +3027,7 @@ table.t tr.hijo td:first-child {
 }
 :root[data-tema="claro"] .chip-opt { color: rgba(0,0,0,.70) }
 :root[data-tema="claro"] .chip-opt:hover { background: rgba(0,0,0,.06); color: var(--tx) }
-:root[data-tema="claro"] .chip-opt.act { background: rgba(26,102,255,.10); color: #1a66ff }
+:root[data-tema="claro"] .chip-opt.act { background: rgba(0,64,255,.12); color: #0040ff }
 
 /* ═══════════════════════════════════════════════════════════
    MODO CLARO — MINI MENÚ CONTEXTUAL (.mm-*)

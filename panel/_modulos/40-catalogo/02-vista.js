@@ -19,7 +19,7 @@ const VistaCatalogo={
    <button class="cata-pill${!this._cat?' act':''}" data-acc="cataPillCat" data-id="" style="--c:var(--verde)">
     <span class="cata-pill-dot"></span> Todas
    </button>
-   ${cats.map(cat=>`<button class="cata-pill${this._cat==cat.id?' act':''}" data-acc="cataPillCat" data-id="${cat.id}" style="--c:${esc(cat.color||'var(--cian)')}">
+   ${cats.map(cat=>`<button class="cata-pill${this._cat==cat.id?' act':''}" data-acc="cataPillCat" data-id="${cat.id}" style="--c:${esc(cat.color||'var(--verde)')}">
     <span class="cata-pill-dot"></span> ${esc(cat.nombre)}
    </button>`).join('')}
   </div>`;
@@ -114,7 +114,7 @@ const VistaCatalogo={
  _fila(c,admin){
   const cat=S.categorias.find(x=>x.id===c.categoria_id);
   const catNom=cat?.nombre||'Sin categoría';
-  const catColor=cat?.color||'#06b6d4';
+  const catColor=cat?.color||'#7000ff';
   const catIcon=cat?.icono||'activity';
   const taList=alertasDe(c);
   const taBadges = taList.length ?
@@ -304,9 +304,9 @@ Acc.cataPillCat=el=>{
 
 Acc.cataGestionarCategorias=()=>{
  const cats=S.categorias||[];
- const colores=['#00f59b','#06b6d4','#3b82f6','#8b5cf6','#a855f7','#ec4899','#f43f5e','#ef4444','#f59e0b','#10b981'];
+ const colores=['#7000ff','#0040ff','#9b00ff','#5500cc','#0025cc','#c0215a','#ef4444','#f59e0b','#7c3aed','#1d4ed8'];
  const listaHtml=cats.length?cats.map(c=>`<div class="item-c" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:12px">
-  <span style="width:14px;height:14px;border-radius:50%;background:${esc(c.color||'#06b6d4')}"></span>
+  <span style="width:14px;height:14px;border-radius:50%;background:${esc(c.color||'#7000ff')}"></span>
   <b style="flex:1">${esc(c.nombre)}</b>
   <small style="color:var(--tx3);font-family:var(--f-mono)">${esc(c.icono||'activity')}</small>
   <button class="ib pel" data-acc="cataEliminarCategoria" data-id="${c.id}" title="Eliminar">${ico('trash',14)}</button>
@@ -345,7 +345,7 @@ Acc.cataPickColor=el=>{
 
 Acc.cataGuardarCategoria=async()=>{
  const nom=$('#cat-nuevo-nom')?.value?.trim();
- const col=$('#cat-nuevo-col')?.value||'#06b6d4';
+ const col=$('#cat-nuevo-col')?.value||'#7000ff';
  if(!nom){ Toast.mostrar('Escribe un nombre de categoría','aviso'); return; }
  try{
   const {data,error}=await sb.from('categorias_comandos').insert({nombre:nom,color:col,icono:'activity',orden:99}).select().single();
