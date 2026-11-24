@@ -637,3 +637,178 @@ table.t tr.hijo td:first-child{padding-left:30px}
   transform: scale(1.15);
   box-shadow: 0 0 10px rgba(255,255,255,.4);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   MODO CLARO · Ajustes de armonía visual y botones de catálogo
+   ═══════════════════════════════════════════════════════════ */
+:root[data-tema="claro"] [style*="--c:#00f5"],
+:root[data-tema="claro"] [style*="--c: #00f5"],
+:root[data-tema="claro"] .cata-card[style*="#00f5"],
+:root[data-tema="claro"] .pcat-cab[style*="#00f5"] {
+  --c: #8b5cf6 !important;
+}
+:root[data-tema="claro"] .pcat-cab {
+  color: color-mix(in srgb, var(--c, #8b5cf6) 85%, #0f172a);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+:root[data-tema="claro"] .pcat-cab .badge {
+  background: rgba(0,0,0,.06);
+  color: #475569;
+}
+:root[data-tema="claro"] .pcard {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,.03);
+}
+:root[data-tema="claro"] .pcard:hover {
+  background: #f8fafc;
+  border-color: rgba(37,99,235,.3);
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+:root[data-tema="claro"] .pcard-h .cico.sm {
+  background: color-mix(in srgb, var(--c, #3b82f6) 12%, #ffffff) !important;
+  border: 1px solid color-mix(in srgb, var(--c, #3b82f6) 25%, transparent) !important;
+  color: color-mix(in srgb, var(--c, #3b82f6) 90%, #0a1420) !important;
+  filter: none !important;
+}
+:root[data-tema="claro"] .pcard-inf b { color: #0f172a; }
+:root[data-tema="claro"] .pcard-desc { color: #64748b; }
+
+/* Botón play en el panel lateral de la terminal: sin verde, con degradado */
+:root[data-tema="claro"] .pcard-play {
+  background: rgba(37,99,235,.08) !important;
+  border: 1px solid rgba(37,99,235,.22) !important;
+  color: #2563eb !important;
+}
+:root[data-tema="claro"] .pcard:hover .pcard-play,
+:root[data-tema="claro"] .pcard-play:hover {
+  background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(37,99,235,.35) !important;
+}
+
+/* Catálogo en modo claro */
+:root[data-tema="claro"] .cata-card {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 2px 10px rgba(15,23,42,.04);
+}
+:root[data-tema="claro"] .cata-card:hover {
+  background: #ffffff;
+  border-color: rgba(37,99,235,.35);
+  box-shadow: 0 10px 28px -4px rgba(15,23,42,.10), 0 0 0 1px rgba(37,99,235,.2);
+}
+:root[data-tema="claro"] .cata-card::before {
+  background: var(--c, #2563eb) !important;
+  opacity: 0.9 !important;
+}
+:root[data-tema="claro"] .cata-card-ico {
+  background: color-mix(in srgb, var(--c, #3b82f6) 12%, #ffffff) !important;
+  border: 1px solid color-mix(in srgb, var(--c, #3b82f6) 25%, transparent) !important;
+  color: color-mix(in srgb, var(--c, #3b82f6) 90%, #0a1420) !important;
+  filter: none !important;
+}
+:root[data-tema="claro"] .cata-card-info b { color: #0f172a; }
+:root[data-tema="claro"] .cata-card-info small {
+  color: color-mix(in srgb, var(--c, #2563eb) 85%, #0f172a) !important;
+  font-weight: 700 !important;
+  filter: none !important;
+}
+:root[data-tema="claro"] .cata-card-desc { color: #64748b; }
+:root[data-tema="claro"] .cata-card-code {
+  background: #f8fafc;
+  border: 1px solid rgba(0,0,0,.07);
+}
+:root[data-tema="claro"] .cata-card-code code { color: #0f172a; }
+
+/* Botón Ejecutar en catálogo: sin bordes verdes, con degradado rico */
+:root[data-tema="claro"] .cata-btn-run {
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9) !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 14px rgba(29,78,216,.28) !important;
+}
+:root[data-tema="claro"] .cata-btn-run:hover {
+  background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+  box-shadow: 0 6px 20px rgba(29,78,216,.40) !important;
+  transform: translateY(-1px);
+}
+:root[data-tema="claro"] .cata-btn-ico {
+  background: #f8fafc;
+  border: 1px solid rgba(0,0,0,.10);
+  color: #475569;
+}
+:root[data-tema="claro"] .cata-btn-ico:hover {
+  background: #ffffff;
+  border-color: rgba(0,0,0,.2);
+  color: #0f172a;
+}
+
+/* Botón Nuevo comando */
+:root[data-tema="claro"] .cata-wrap [data-acc="cataNew"],
+:root[data-tema="claro"] .cata-new-btn,
+:root[data-tema="claro"] button.cata-new-btn {
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9) !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(29,78,216,.35) !important;
+  font-weight: 700 !important;
+}
+:root[data-tema="claro"] .cata-wrap [data-acc="cataNew"]:hover,
+:root[data-tema="claro"] .cata-new-btn:hover,
+:root[data-tema="claro"] button.cata-new-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+  box-shadow: 0 6px 22px rgba(29,78,216,.48) !important;
+  transform: translateY(-1px);
+}
+
+/* Píldoras de categorías */
+:root[data-tema="claro"] .cata-pill {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,.10);
+  color: #475569;
+}
+:root[data-tema="claro"] .cata-pill:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: rgba(0,0,0,.2);
+}
+:root[data-tema="claro"] .cata-pill.act {
+  background: linear-gradient(135deg, #1e3a8a, #581c87) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(30,58,138,0.25) !important;
+}
+:root[data-tema="claro"] .cata-pill .cata-pill-dot {
+  background: var(--c, #3b82f6) !important;
+  filter: none !important;
+}
+:root[data-tema="claro"] .cata-pill.act .cata-pill-dot {
+  background: #ffffff !important;
+}
+
+/* Terminales en ejecución masiva en modo claro */
+:root[data-tema="claro"] .mosaico { background: transparent; }
+:root[data-tema="claro"] .tile {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.06) !important;
+}
+:root[data-tema="claro"] .tile-cab {
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(0,0,0,0.07) !important;
+  color: #0f172a !important;
+}
+:root[data-tema="claro"] .tile-cab b {
+  color: #0f172a !important;
+}
+:root[data-tema="claro"] .tile-term {
+  background: #ffffff !important;
+}
+:root[data-tema="claro"] .tile-term .xterm-viewport,
+:root[data-tema="claro"] .tile-term .xterm-screen,
+:root[data-tema="claro"] .tile-term .xterm {
+  background-color: #ffffff !important;
+}

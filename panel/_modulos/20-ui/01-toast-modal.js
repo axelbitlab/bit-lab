@@ -21,7 +21,7 @@ const Modal={
  cerrar(){const m=$('#modal');m.hidden=true;m.innerHTML=''}
 };
 const PanelAlertas={
- _abierto:false,_el:null,
+ _abierto:false,_el:null,_overlay:null,
  // Recopilar alertas de todos los dispositivos (mismo helper que VistaMonitoreo)
  _alertas(){
   const info={cpu:['CPU alta','pel','cpu'],memoria:['Memoria alta','ambar','cpu'],
@@ -42,6 +42,16 @@ const PanelAlertas={
   const btn=$('#btnNotif'); if(!btn)return;
   const alertas=this._alertas();
   const r=btn.getBoundingClientRect();
+
+  // Superposición con desenfoque de fondo idéntico al del menú contextual
+  const superposicion=document.createElement('div');
+  superposicion.id='ap-overlay';
+  superposicion.className='mm-overlay';
+  superposicion.style.zIndex='9998';
+  superposicion.addEventListener('click',()=>PanelAlertas.cerrar());
+  document.body.appendChild(superposicion);
+  this._overlay=superposicion;
+
   const panel=document.createElement('div');
   panel.id='alerta-panel'; panel.className='vid alerta-popup';
   panel.innerHTML=`<div class="ap-head"><span>${ico('bell',14)} <b>Alertas activas</b></span>
@@ -59,23 +69,27 @@ const PanelAlertas={
       ${ico('info',12)} Detalle
      </button>
     </div>
-   </div>`).join(''):'<div class="ap-vacio">✅ Sin alertas activas</div>'}
+   </div>`).join(''):`<div class="ap-vacio">${ico('check',14)} Sin alertas activas</div>`}
    ${S.silenciado?`<div class="ap-sil">${ico('bellOff',12)} Notificaciones silenciadas</div>`:''}
    <div class="ap-pie">
-    <button class="ib sm" data-acc="notifToggle">${S.silenciado?ico('bell',13)+' Activar':ico('bellOff',13)+' Silenciar'}</button>
+    <button class="ap-btn-sil" data-acc="notifToggle" title="Silenciar notificaciones">
+     ${S.silenciado?ico('bell',13)+' Activar notificaciones':ico('bellOff',13)+' Silenciar notificaciones'}
+    </button>
    </div>`;
-  const w=280, x=Math.max(8,Math.min(r.right-w,innerWidth-w-8));
-  panel.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${x}px;width:${w}px;z-index:9999`;
+  const anchoPanel=320;
+  const posicionX=Math.max(8,Math.min(r.right-anchoPanel,innerWidth-anchoPanel-8));
+  panel.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${posicionX}px;width:${anchoPanel}px;z-index:9999`;
   document.body.appendChild(panel);
   this._el=panel; this._abierto=true;
   setTimeout(()=>document.addEventListener('pointerdown',this._fuera,{capture:true,once:true}),0);
  },
  _fuera(e){
   const p=document.getElementById('alerta-panel');
-  if(p&&!p.contains(e.target)){PanelAlertas.cerrar()}
+  if(p&&!p.contains(e.target)&&!e.target.closest('#btnNotif')){PanelAlertas.cerrar()}
   else{setTimeout(()=>document.addEventListener('pointerdown',PanelAlertas._fuera,{capture:true,once:true}),0)}
  },
  cerrar(){
+  if(this._overlay){this._overlay.remove();this._overlay=null}
   if(this._el){this._el.remove();this._el=null}
   this._abierto=false;
  }

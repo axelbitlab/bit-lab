@@ -16,7 +16,7 @@ const VistaCatalogo={
 
   // Barra de píldoras de categorías horizontales (según diseño de la captura)
   const pillCategorias = `<div class="cata-pill-bar">
-   <button class="cata-pill${!this._cat?' act':''}" data-acc="cataPillCat" data-id="" style="--c:var(--verde)">
+   <button class="cata-pill${!this._cat?' act':''}" data-acc="cataPillCat" data-id="" style="--c:#8b5cf6">
     <span class="cata-pill-dot"></span> Todas
    </button>
    ${cats.map(cat=>`<button class="cata-pill${this._cat==cat.id?' act':''}" data-acc="cataPillCat" data-id="${cat.id}" style="--c:${esc(cat.color||'var(--cian)')}">
@@ -124,7 +124,7 @@ const VistaCatalogo={
    }).join(' ') : '';
   // BTL-200: badge multi-SO si tiene variantes
   const multi=typeof esMultiPlataforma==='function'&&esMultiPlataforma(c);
-  const soTag=multi?`<span class="cata-tag multi" title="Tiene script específico por SO: Windows, macOS y/o Linux">⚡ Multi-SO</span>`
+  const soTag=multi?`<span class="cata-tag multi" title="Tiene script específico por SO: Windows, macOS y/o Linux">Multi-SO</span>`
    :c.sistema==='windows'?`<span class="cata-tag win">Windows</span>`
    :c.sistema==='macos'?`<span class="cata-tag mac">macOS</span>`
    :c.sistema==='linux'?`<span class="cata-tag lin">Linux</span>`
@@ -335,6 +335,10 @@ Acc.cataGestionarCategorias=()=>{
   </div>`,
   pie:`<button class="btn" data-acc="mCerrar">Cerrar</button>`
  });
+};
+
+Acc.cataNew=()=>{
+ VistaCatalogo.abrirForm();
 };
 
 Acc.cataPickColor=el=>{

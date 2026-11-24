@@ -90,7 +90,7 @@ const MiniMenu={
    ${a('zap','var(--cian)','Fragmentos','Comandos rápidos','miniFrag',!on)}
    ${a('retry','var(--lima)','Reintentar',ultimaEj,'miniReintentar',!on)}
    ${a('history','var(--indigo)','Ver historial','Ejecuciones del equipo','miniHistorial',false)}
-   ${a('activity','var(--verde)','Diagnóstico','Info del sistema','miniDiag',!on)}
+   ${a('activity','#8b5cf6','Diagnóstico','Info del sistema','miniDiag',!on)}
   </div>`;
 
   // Comandos recomendados (top 4)

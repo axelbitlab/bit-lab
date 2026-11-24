@@ -42,7 +42,7 @@ const Datos={
  async comandos(){
   // Categorías base por defecto si la base de datos está vacía
   const defaultCats=[
-   {id:1,nombre:'Diagnóstico',color:'#00f59b',icono:'activity',orden:10},
+   {id:1,nombre:'Diagnóstico',color:'#8b5cf6',icono:'activity',orden:10},
    {id:2,nombre:'Red',color:'#06b6d4',icono:'wifi',orden:20},
    {id:3,nombre:'Servicios',color:'#3b82f6',icono:'cpu',orden:30},
    {id:4,nombre:'Mantenimiento',color:'#8b5cf6',icono:'wrench',orden:40},
@@ -53,7 +53,13 @@ const Datos={
   if(!cats || !cats.length){
    cats=leer('categorias_locales',defaultCats);
   }
-  S.categorias=(cats||[]).map(c=>({...c,color:c.color||'#06b6d4',icono:c.icono||'tag'}));
+  S.categorias=(cats||[]).map(c=>{
+   let col=c.color;
+   if((c.nombre||'').toLowerCase().includes('diagn') || c.id===1 || c.color==='#00f59b'){
+    col='#8b5cf6';
+   }
+   return {...c,color:col||'#8b5cf6',icono:c.icono||'tag'};
+  });
   // Intentar con variantes + tipos_alerta (array) y tipo_alerta (texto legacy).
   // Si alguna columna no existe, se hace fallback sin ella.
   let cmds, error;

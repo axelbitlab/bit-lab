@@ -2657,11 +2657,11 @@ table.t tr.hijo td:first-child {
 
 /* ── dock claro ── */
 :root[data-tema="claro"] #dock {
-    background: rgba(240,244,248,.55);
-    border: 1px solid rgba(255,255,255,.85);
+    background: rgba(245,241,255,.60);
+    border: 1px solid rgba(255,255,255,.88);
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,.95),
-        0 8px 32px rgba(0,30,60,.14)
+        0 8px 32px rgba(60,0,180,.12)
 }
 :root[data-tema="claro"] #dock .btn-d {
     color: var(--tx2)
@@ -2670,12 +2670,12 @@ table.t tr.hijo td:first-child {
     color: var(--tx)
 }
 :root[data-tema="claro"] #lente {
-    background: linear-gradient(160deg, rgba(0,184,90,.22), rgba(26,102,255,.24));
+    background: linear-gradient(160deg, rgba(106,0,224,.22), rgba(0,48,204,.28));
     border-color: rgba(255,255,255,.85);
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,.9),
-        inset 0 -8px 16px rgba(0,141,184,.08),
-        0 0 20px rgba(0,184,90,.15)
+        inset 0 -8px 16px rgba(80,0,180,.08),
+        0 0 20px rgba(106,0,224,.18)
 }
 
 /* ── tablas claro ── */
@@ -2719,10 +2719,10 @@ table.t tr.hijo td:first-child {
     background: rgba(0,0,0,.05)
 }
 :root[data-tema="claro"] .dv.sel {
-    background: rgba(26,102,255,.12)
+    background: rgba(106,0,224,.10)
 }
 :root[data-tema="claro"] .dv.act {
-    box-shadow: inset 0 0 0 1px rgba(0,141,184,.55)
+    box-shadow: inset 0 0 0 1px rgba(106,0,224,.55)
 }
 :root[data-tema="claro"] .tab {
     background: rgba(0,0,0,.04);
@@ -2732,7 +2732,7 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] .tab.act {
     background: rgba(255,255,255,.85);
     color: var(--tx);
-    box-shadow: inset 0 2px 0 var(--verde)
+    box-shadow: inset 0 2px 0 #6a00e0
 }
 :root[data-tema="claro"] .tab .x:hover {
     background: rgba(0,0,0,.12);
@@ -2755,16 +2755,16 @@ table.t tr.hijo td:first-child {
     border-top-color: rgba(0,0,0,.08)
 }
 :root[data-tema="claro"] .tentrada input {
-    color: #005c30
+    color: #0025cc
 }
 :root[data-tema="claro"] .tentrada .pr {
-    color: var(--cian)
+    color: #6a00e0
 }
 :root[data-tema="claro"] .ln.o { color: #0d1b2a }
 :root[data-tema="claro"] .ln.e { color: #9b1239 }
 :root[data-tema="claro"] .ln.s { color: var(--tx3); font-style: italic }
-:root[data-tema="claro"] .ln.i { color: #005c30 }
-:root[data-tema="claro"] .ln.i span { color: var(--cian) }
+:root[data-tema="claro"] .ln.i { color: #0030cc }
+:root[data-tema="claro"] .ln.i span { color: #6a00e0 }
 
 /* ── ejecución masiva claro ── */
 :root[data-tema="claro"] .tile>header {
@@ -2794,9 +2794,9 @@ table.t tr.hijo td:first-child {
     background: rgba(100,130,160,.35)
 }
 :root[data-tema="claro"] .prev {
-    background: rgba(0,0,0,.04);
-    border-color: rgba(0,0,0,.08);
-    color: #0d2a1a
+    background: rgba(106,0,224,.04);
+    border-color: rgba(106,0,224,.12);
+    color: #2d0066
 }
 :root[data-tema="claro"] .desb {
     border-color: rgba(217,48,96,.4);
@@ -2838,8 +2838,8 @@ table.t tr.hijo td:first-child {
     border-color: rgba(0,0,0,.09)
 }
 :root[data-tema="claro"] .seg button.on {
-    background: linear-gradient(135deg, rgba(0,184,90,.22), rgba(26,102,255,.22));
-    color: var(--tx)
+    background: linear-gradient(135deg, rgba(106,0,224,.18), rgba(0,48,204,.18));
+    color: #5a00bb
 }
 :root[data-tema="claro"] .item-c {
     background: rgba(255,255,255,.55);
@@ -2885,15 +2885,15 @@ table.t tr.hijo td:first-child {
 
 /* ── ws badge claro ── */
 :root[data-tema="claro"] .ws {
-    color: var(--verde);
-    border-color: rgba(0,184,90,.30);
-    background: rgba(0,184,90,.07)
+    color: #6a00e0;
+    border-color: rgba(106,0,224,.30);
+    background: rgba(106,0,224,.07)
 }
 
 /* ── ptabs claro ── */
 :root[data-tema="claro"] .ptabs button.on {
-    background: rgba(0,0,0,.09);
-    color: var(--tx)
+    background: rgba(106,0,224,.09);
+    color: #6a00e0
 }
 
 /* ── select arrow claro ── */
@@ -2925,9 +2925,9 @@ table.t tr.hijo td:first-child {
     box-shadow: 0 8px 28px rgba(0,30,60,.12)
 }
 :root[data-tema="claro"] .eq-card.sel {
-    border-color: rgba(26,102,255,.45);
-    background: rgba(26,102,255,.05);
-    box-shadow: 0 0 0 1px rgba(26,102,255,.25), 0 4px 16px rgba(26,102,255,.08)
+    border-color: rgba(106,0,224,.45);
+    background: rgba(106,0,224,.05);
+    box-shadow: 0 0 0 1px rgba(106,0,224,.25), 0 4px 16px rgba(106,0,224,.08)
 }
 :root[data-tema="claro"] .met-bar {
     background: rgba(0,0,0,.08)
@@ -2959,36 +2959,46 @@ table.t tr.hijo td:first-child {
     color: var(--tx)
 }
 :root[data-tema="claro"] .cata-pill.act {
-    background: color-mix(in srgb,var(--c) 15%,transparent);
-    border-color: color-mix(in srgb,var(--c) 40%,transparent);
-    color: var(--c)
+    background: rgba(106,0,224,.12);
+    border-color: rgba(106,0,224,.40);
+    color: #5a00bb
 }
-:root[data-tema="claro"] .cata-pill-dot { background: var(--c) }
 
 /* Tarjeta de comando */
 :root[data-tema="claro"] .cata-card {
-    background: rgba(255,255,255,.65);
-    border-color: color-mix(in srgb,var(--c) 20%,rgba(0,0,0,.08));
-    box-shadow: 0 2px 10px rgba(0,0,0,.06)
+    background: rgba(255,255,255,.78);
+    border-color: rgba(106,0,224,.20);
+    box-shadow: 0 2px 10px rgba(60,0,180,.06)
 }
 :root[data-tema="claro"] .cata-card:hover {
-    background: rgba(255,255,255,.88);
-    box-shadow: 0 6px 24px rgba(0,0,0,.10), 0 0 0 1px color-mix(in srgb,var(--c) 35%,transparent)
+    background: rgba(255,255,255,.92);
+    border-color: rgba(106,0,224,.38);
+    box-shadow: 0 6px 24px rgba(60,0,180,.12), 0 0 0 1px rgba(106,0,224,.30)
 }
-/* Iconos circulares de categoría y pills: girar verde→morado, cian→azul en modo claro */
-:root[data-tema="claro"] .cico,
-:root[data-tema="claro"] .cata-pill .cata-pill-dot {
-    filter: hue-rotate(200deg) saturate(1.5)
+/* Franja superior */
+:root[data-tema="claro"] .cata-card::before {
+    background: var(--c, #2563eb) !important;
+    opacity: 0.9 !important
 }
-/* Texto de nombre de categoría en tarjeta del catálogo */
-:root[data-tema="claro"] .cata-card-info small {
-    filter: hue-rotate(200deg) saturate(1.4) brightness(.85)
-}
+/* Iconos y dots de categoría: armonía y color semántico en lugar de morado plano */
 :root[data-tema="claro"] .cata-card-ico {
-    background: color-mix(in srgb,var(--c) 12%,transparent);
-    border-color: color-mix(in srgb,var(--c) 30%,transparent);
-    color: var(--c);
-    filter: hue-rotate(200deg) saturate(1.4)
+    background: color-mix(in srgb, var(--c, #3b82f6) 12%, #ffffff) !important;
+    border: 1px solid color-mix(in srgb, var(--c, #3b82f6) 25%, transparent) !important;
+    color: color-mix(in srgb, var(--c, #3b82f6) 90%, #0a1420) !important;
+    filter: none !important
+}
+:root[data-tema="claro"] .cata-pill .cata-pill-dot,
+:root[data-tema="claro"] .cata-pill-dot {
+    background: var(--c, #3b82f6) !important;
+    filter: none !important
+}
+:root[data-tema="claro"] .cata-pill.act .cata-pill-dot {
+    background: #ffffff !important
+}
+:root[data-tema="claro"] .cata-card-info small {
+    color: color-mix(in srgb, var(--c, #2563eb) 85%, #0f172a) !important;
+    font-weight: 700 !important;
+    filter: none !important
 }
 :root[data-tema="claro"] .cata-card-info b { color: rgba(0,0,0,.85) }
 :root[data-tema="claro"] .cata-card-desc { color: rgba(0,0,0,.55) }
@@ -2999,7 +3009,7 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] .cata-card-code code { color: rgba(0,0,0,.72) }
 :root[data-tema="claro"] .cata-card-foot { border-color: rgba(0,0,0,.07) }
 
-/* Tags dentro de la tarjeta (ya había win/mac/lin; añadir genéricos) */
+/* Tags dentro de la tarjeta */
 :root[data-tema="claro"] .cata-tag {
     background: rgba(0,0,0,.05);
     border-color: rgba(0,0,0,.12);
@@ -3009,14 +3019,34 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] .cata-tag.adm  { background: rgba(217,119,6,.10);  border-color: rgba(217,119,6,.30);  color: #92400e }
 :root[data-tema="claro"] .cata-tag.multi { background: rgba(0,37,204,.10); border-color: rgba(0,37,204,.30); color: #0025cc }
 
-/* Botones en pie de tarjeta */
+/* Botones en pie de tarjeta: degradado vivo, sin bordes verdes */
 :root[data-tema="claro"] .cata-btn-run {
-    background: color-mix(in srgb,var(--verde) 12%,transparent);
-    border-color: color-mix(in srgb,var(--verde) 35%,transparent);
-    color: color-mix(in srgb,var(--verde) 80%,#000)
+    background: linear-gradient(135deg, #1d4ed8, #6d28d9) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(29,78,216,.28) !important;
 }
 :root[data-tema="claro"] .cata-btn-run:hover {
-    background: color-mix(in srgb,var(--verde) 20%,transparent)
+    background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+    box-shadow: 0 6px 20px rgba(29,78,216,.40) !important;
+    transform: translateY(-1px);
+}
+:root[data-tema="claro"] .cata-wrap [data-acc="cataNew"],
+:root[data-tema="claro"] .cata-new-btn,
+:root[data-tema="claro"] button.cata-new-btn {
+    background: linear-gradient(135deg, #1d4ed8, #6d28d9) !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(29,78,216,.35) !important;
+    font-weight: 700 !important;
+}
+:root[data-tema="claro"] .cata-wrap [data-acc="cataNew"]:hover,
+:root[data-tema="claro"] .cata-new-btn:hover,
+:root[data-tema="claro"] button.cata-new-btn:hover {
+    background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+    box-shadow: 0 6px 22px rgba(29,78,216,.48) !important;
+    transform: translateY(-1px);
 }
 :root[data-tema="claro"] .cata-btn-ico {
     background: rgba(0,0,0,.05);
@@ -3029,7 +3059,7 @@ table.t tr.hijo td:first-child {
 /* Chips de filtro */
 :root[data-tema="claro"] .chip { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.12); color: rgba(0,0,0,.65) }
 :root[data-tema="claro"] .chip:hover { background: rgba(0,0,0,.09); color: var(--tx) }
-:root[data-tema="claro"] .chip.chip-on { background: rgba(0,64,255,.12); border-color: rgba(0,64,255,.40); color: #0040ff }
+:root[data-tema="claro"] .chip.chip-on { background: rgba(106,0,224,.12); border-color: rgba(106,0,224,.40); color: #5a00bb }
 :root[data-tema="claro"] .chip-pop {
     background: rgba(255,255,255,.92);
     border-color: rgba(0,0,0,.10);
@@ -3037,7 +3067,7 @@ table.t tr.hijo td:first-child {
 }
 :root[data-tema="claro"] .chip-opt { color: rgba(0,0,0,.70) }
 :root[data-tema="claro"] .chip-opt:hover { background: rgba(0,0,0,.06); color: var(--tx) }
-:root[data-tema="claro"] .chip-opt.act { background: rgba(0,64,255,.12); color: #0040ff }
+:root[data-tema="claro"] .chip-opt.act { background: rgba(106,0,224,.12); color: #5a00bb }
 
 /* ═══════════════════════════════════════════════════════════
    MODO CLARO — MINI MENÚ CONTEXTUAL (.mm-*)
@@ -3053,8 +3083,15 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] .mm-x { color: rgba(0,0,0,.45) }
 :root[data-tema="claro"] .mm-x:hover { background: rgba(0,0,0,.06); color: var(--tx) }
 
-:root[data-tema="claro"] .mm-alertas { border-color: rgba(0,0,0,.07) }
-:root[data-tema="claro"] .mm-alerta { background: rgba(0,0,0,.04) }
+:root[data-tema="claro"] .mm-alertas {
+    background: linear-gradient(90deg, rgba(239,68,68,.14), rgba(249,115,22,.10)) !important;
+    border-bottom: 1.5px solid rgba(239,68,68,.25) !important;
+}
+:root[data-tema="claro"] .mm-alerta {
+    background: rgba(239,68,68,.12) !important;
+    border: 1px solid rgba(239,68,68,.35) !important;
+    color: #dc2626 !important;
+}
 :root[data-tema="claro"] .mm-sin-alertas { background: rgba(0,0,0,.03); color: rgba(0,0,0,.45) }
 
 :root[data-tema="claro"] .mm-rejilla { border-color: rgba(0,0,0,.07) }
@@ -3095,9 +3132,9 @@ table.t tr.hijo td:first-child {
 }
 :root[data-tema="claro"] .ptabs button:hover { color: var(--tx); background: rgba(0,0,0,.04) }
 :root[data-tema="claro"] .ptabs button.on {
-    color: var(--verde);
-    border-color: var(--verde);
-    background: rgba(0,200,100,.08)
+    color: #6a00e0;
+    border-color: #6a00e0;
+    background: rgba(106,0,224,.08)
 }
 
 :root[data-tema="claro"] .pcard {
@@ -3127,7 +3164,7 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] .tcab .nm small { color: rgba(0,0,0,.50) }
 :root[data-tema="claro"] .tpest { border-color: rgba(0,0,0,.07) }
 :root[data-tema="claro"] .tpest button { color: rgba(0,0,0,.50) }
-:root[data-tema="claro"] .tpest button.on { color: var(--verde); border-color: var(--verde) }
+:root[data-tema="claro"] .tpest button.on { color: #6a00e0; border-color: #6a00e0 }
 :root[data-tema="claro"] .tpest button:hover { background: rgba(0,0,0,.04) }
 :root[data-tema="claro"] .tapanel {
     background: rgba(255,255,255,.55);
@@ -3151,7 +3188,7 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] .filtros { background: rgba(255,255,255,.55); border-color: rgba(0,0,0,.08) }
 :root[data-tema="claro"] .filtros .campo span { color: rgba(0,0,0,.55) }
 :root[data-tema="claro"] table.t tr.grupo { background: rgba(0,0,0,.03) }
-:root[data-tema="claro"] table.t tr.hijo { background: rgba(26,102,255,.03) }
+:root[data-tema="claro"] table.t tr.hijo { background: rgba(106,0,224,.03) }
 :root[data-tema="claro"] table.t tr:hover { background: rgba(0,0,0,.04) }
 :root[data-tema="claro"] .cmdn { color: rgba(0,0,0,.80) }
 :root[data-tema="claro"] .cmdt { color: rgba(0,0,0,.45) }
@@ -3177,8 +3214,8 @@ table.t tr.hijo td:first-child {
 }
 :root[data-tema="claro"] .mas-eq:hover { background: rgba(255,255,255,.85) }
 :root[data-tema="claro"] .mas-eq.sel {
-    background: rgba(26,102,255,.07);
-    border-color: rgba(26,102,255,.30)
+    background: rgba(106,0,224,.07);
+    border-color: rgba(106,0,224,.30)
 }
 :root[data-tema="claro"] .mas-cmd {
     background: rgba(255,255,255,.50);
@@ -3344,3 +3381,64 @@ table.t tr.hijo td:first-child {
 }
 .ap-btn-todo:hover { color: var(--verde); }
 
+
+/* ═══ CLARO: ajustes puntuales ═══ */
+
+/* "En vivo": el JS pone verde hardcoded inline → vencer solo en claro (oscuro intacto) */
+:root[data-tema="claro"] #ws-ind {
+    border-color: rgba(106,0,224,.32) !important;
+    background: rgba(106,0,224,.08) !important;
+    color: #5a00bb !important
+}
+
+/* Campana: NO agresiva. Solo el badge numérico es rojo. */
+:root[data-tema="claro"] #btnNotif { color: rgba(13,0,32,.55) }
+:root[data-tema="claro"] #btnNotif.tiene-alertas { color: #5a00bb }
+
+/* Popup de alertas */
+:root[data-tema="claro"] .alerta-popup {
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,.12) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 20px 50px -10px rgba(15,23,42,.22), 0 0 0 1px rgba(0,0,0,.04) !important;
+}
+:root[data-tema="claro"] .ap-head {
+    background: #f8fafc !important;
+    border-bottom: 1px solid rgba(0,0,0,.08) !important;
+    color: #0f172a !important;
+}
+:root[data-tema="claro"] .ap-item { border-bottom: 1px solid rgba(0,0,0,.06) !important; }
+:root[data-tema="claro"] .ap-item:hover { background: #f8fafc !important; }
+:root[data-tema="claro"] .ap-nombre { color: #0f172a !important; }
+:root[data-tema="claro"] .ap-msg { color: #64748b !important; }
+:root[data-tema="claro"] .ap-btn {
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,.12) !important;
+    color: #1e293b !important;
+}
+:root[data-tema="claro"] .ap-btn:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+:root[data-tema="claro"] .ap-btn-menu:hover { border-color: #2563eb !important; color: #2563eb !important; background: rgba(37,99,235,.06) !important; }
+:root[data-tema="claro"] .ap-btn-det:hover { border-color: #7c3aed !important; color: #7c3aed !important; background: rgba(124,58,237,.06) !important; }
+:root[data-tema="claro"] .ap-pie {
+    background: #f8fafc !important;
+    border-top: 1px solid rgba(0,0,0,.08) !important;
+    padding: 8px 12px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+}
+:root[data-tema="claro"] .ap-btn-sil {
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,.14) !important;
+    color: #334155 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04) !important;
+}
+:root[data-tema="claro"] .ap-btn-sil:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: rgba(0,0,0,.25) !important;
+}
+:root[data-tema="claro"] .ap-btn-todo:hover { color: #2563eb !important; }

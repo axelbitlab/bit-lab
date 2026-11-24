@@ -560,6 +560,14 @@ Acc.tGuardarCmd=function(){
  }
 };
 
+if(!Acc.cataNew){
+ Acc.cataNew=function(){
+  if(typeof VistaCatalogo!=='undefined'&&VistaCatalogo.abrirForm){
+   VistaCatalogo.abrirForm(null);
+  }
+ };
+}
+
 Acc.tReplay=function(el){
  const ejId=el.dataset.ej;
  const ej=(S.historialLocal||[]).find(function(x){return String(x.id)===String(ejId)});

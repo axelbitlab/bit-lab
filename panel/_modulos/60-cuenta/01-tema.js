@@ -14,6 +14,7 @@ const Tema={
   }
   // Actualizar paleta de xterm si está montado
   if(typeof Term!=='undefined'&&Term.actualizarTema) Term.actualizarTema();
+  if(typeof VistaMasiva!=='undefined'&&VistaMasiva.actualizarTema) VistaMasiva.actualizarTema();
  },
  iniciar(){ this.aplicar(this.actual()) }
 };

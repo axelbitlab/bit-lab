@@ -108,7 +108,7 @@ const VistaMasiva={
   return `<option value="">${label}</option>`+
    unicos.map(c=>{
     const multi=typeof esMultiPlataforma==='function'&&esMultiPlataforma(c);
-    const badge=multi?' ⚡':'';
+    const badge=multi?' (Multi-SO)':'';
     return `<option value="${c.id}">${esc(c.nombre)}${badge}</option>`;
    }).join('');
  },
@@ -140,14 +140,66 @@ const VistaMasiva={
   }).join('');
  },
 
+ _tema(){
+  return document.documentElement.getAttribute('data-tema')==='claro'?'claro':'oscuro';
+ },
+ _paleta(){
+  if(this._tema()==='claro'){
+   return {
+    background:'#ffffff',
+    foreground:'#0f172a',
+    cursor:'#2563eb',
+    selectionBackground:'rgba(37,99,235,.20)',
+    black:'#0f172a',
+    red:'#dc2626',
+    green:'#16a34a',
+    yellow:'#d97706',
+    blue:'#2563eb',
+    magenta:'#7c3aed',
+    cyan:'#0891b2',
+    white:'#f8fafc',
+    brightBlack:'#64748b',
+    brightRed:'#ef4444',
+    brightGreen:'#22c55e',
+    brightYellow:'#f59e0b',
+    brightBlue:'#3b82f6',
+    brightMagenta:'#8b5cf6',
+    brightCyan:'#06b6d4',
+    brightWhite:'#0f172a'
+   };
+  }
+  return {
+   background:'#07070b',
+   foreground:'#e2e8f0',
+   cursor:'#39ff88',
+   selectionBackground:'rgba(57,255,136,.22)',
+   black:'#1e1e2e',
+   red:'#ff5470',
+   green:'#39ff88',
+   yellow:'#ffb703',
+   blue:'#3b82f6',
+   magenta:'#c084fc',
+   cyan:'#22d3ee',
+   white:'#e2e8f0',
+   brightBlack:'#64748b',
+   brightRed:'#ff5470',
+   brightGreen:'#39ff88',
+   brightYellow:'#ffb703',
+   brightBlue:'#60a5fa',
+   brightMagenta:'#d8b4fe',
+   brightCyan:'#67e8f9',
+   brightWhite:'#f1f5f9'
+  };
+ },
+
  montar(){
   if(this._lote && this._lote.ejecuciones){
+   const paleta=this._paleta();
    this._lote.ejecuciones.forEach(ej=>{
     if(!ej.id)return;
     const host=$(`#tile-t-${ej.id}`);
     if(!host)return;
-    const t=new Terminal({theme:{background:'#07070b',foreground:'#e2e8f0',cursor:'#39ff88',
-     selectionBackground:'rgba(57,255,136,.22)'},
+    const t=new Terminal({theme:paleta,
      fontFamily:'JetBrains Mono, monospace',fontSize:11,lineHeight:1.3,
      cursorBlink:false,scrollback:1000,convertEol:true,allowTransparency:true});
     if(window.FitAddon){const f=new FitAddon.FitAddon();t.loadAddon(f);
@@ -157,6 +209,13 @@ const VistaMasiva={
    });
    this._suscribir();
   }
+ },
+
+ actualizarTema(){
+  const p=this._paleta();
+  Object.values(this._terms||{}).forEach(item=>{
+   if(item?.term?.options) item.term.options.theme=p;
+  });
  },
 
  salir(){
