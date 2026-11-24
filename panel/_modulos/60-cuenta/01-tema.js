@@ -12,6 +12,8 @@ const Tema={
    oA.classList.toggle('act',t==='oscuro');
    cA.classList.toggle('act',t==='claro');
   }
+  // Actualizar paleta de xterm si está montado
+  if(typeof Term!=='undefined'&&Term.actualizarTema) Term.actualizarTema();
  },
  iniciar(){ this.aplicar(this.actual()) }
 };
