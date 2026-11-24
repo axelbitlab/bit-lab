@@ -279,6 +279,22 @@ Inp.masQ=el=>{
   l.hidden=q&&!nm.includes(q);
  });
 };
+Chg.masComando=el=>{
+ const id=el.value;
+ const txt=$('#mas-texto');
+ if(!id||!txt){if(txt)txt.placeholder='…o escribe un comando manual';return}
+ const c=S.comandos.find(x=>String(x.id)===String(id));
+ if(!c)return;
+ // Si es Multi-SO, mostrar el script del primer SO disponible como referencia
+ let preview=c.script||'';
+ if(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c)&&c.variantes){
+  const v=c.variantes;
+  preview=v.windows||v.macos||v.linux||c.script||'';
+ }
+ txt.placeholder=preview||'Script del comando seleccionado';
+ // No sobrescribir si ya escribió algo manualmente
+ if(!txt.value.trim()) txt.value='';
+};
 Chg.masCheck=el=>{
  const id=el.dataset.id;
  if(el.checked){
@@ -327,7 +343,33 @@ Acc.masReintentar=async()=>{
  Toast.mostrar(`Reintentando ${fallidos.length} ejecuciones`,'ok');
  VistaMasiva._pollLote();
 };
-Acc.masDescargar=()=>Toast.mostrar('Descarga no implementada aún','aviso');
+Acc.masDescargar=async()=>{
+ if(!VistaMasiva._lote||!VistaMasiva._lote.ejecuciones||!VistaMasiva._lote.ejecuciones.length){
+  Toast.mostrar('No hay resultados para descargar','aviso'); return;
+ }
+ let txt='Bitlab-IT · Reporte de Ejecución Masiva\n'+'='.repeat(50)+'\n';
+ txt+=`Fecha: ${new Date().toLocaleString('es-MX')}\n`;
+ txt+=`Equipos: ${VistaMasiva._lote.total} · Exitosos: ${VistaMasiva._lote.ok} · Fallidos: ${VistaMasiva._lote.fail}\n\n`;
+ for(const ej of VistaMasiva._lote.ejecuciones){
+  const d=dev(ej.dispositivo_id);
+  txt+='─'.repeat(40)+'\n';
+  txt+=`Equipo: ${d?.nombre||ej.dispositivo_id} (${d?.sistema||'?'}) · Estado: ${ej.estado}\n`;
+  if(ej.id){
+   try{
+    const frags=await Datos.salida(ej.id,0);
+    if(frags&&frags.length) txt+=frags.map(f=>f.texto).join('');
+   }catch(_){}
+  }
+  txt+='\n';
+ }
+ const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url; a.download='bitlab-masiva-'+Date.now()+'.txt';
+ document.body.appendChild(a); a.click();
+ setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1000);
+ Toast.mostrar('Descarga lista','ok');
+};
 
 Mod.registrarVista({
  id:'masiva', nombre:'Masiva', icono:'layers', orden:50,

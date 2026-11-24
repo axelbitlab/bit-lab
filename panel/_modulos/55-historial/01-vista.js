@@ -227,6 +227,29 @@ Acc.histCancelar=async el=>{
  catch(e){Toast.mostrar('Error al cancelar','err',e.message)}
 };
 
+Acc.histReintentarLote=async el=>{
+ const loteId=el.dataset.lote;
+ if(!loteId)return;
+ // Obtener ejecuciones fallidas del lote
+ const {data:fallidas,error}=await sb.from('ejecuciones_comandos')
+  .select('id,dispositivo_id,comando_id,texto_comando')
+  .eq('lote_id',loteId)
+  .in('estado',['fallido','tiempo_agotado']);
+ if(error||!fallidas||!fallidas.length){
+  Toast.mostrar('No hay ejecuciones fallidas en este lote','aviso');
+  return;
+ }
+ let ok=0, fail=0;
+ for(const ej of fallidas){
+  try{
+   await Datos.ejecutar({dispositivo:ej.dispositivo_id,comando:ej.comando_id,texto:ej.texto_comando});
+   ok++;
+  }catch(e){ fail++; }
+ }
+ Toast.mostrar(`Reintentando ${ok} ejecución(es)${fail?' · '+fail+' error(es)':''}`,ok?'ok':'aviso');
+ VistaHistorial._cargar();
+};
+
 Mod.registrarVista({
  id:'historial', nombre:'Historial', icono:'history', orden:40,
  definicion:VistaHistorial

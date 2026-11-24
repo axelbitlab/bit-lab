@@ -1,5 +1,5 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795332800"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bitlab-IT · Panel</title><!-- build 1795332800 -->
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795487022"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bitlab-IT · Panel</title><!-- build 1795487022 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
@@ -4008,10 +4008,12 @@ Bus.on('sel',()=>{
  Sync();
  Nav.sub&&Nav.sub();
  Dock.marcar&&Dock.marcar();
- // Abrir mini menú si hay selección
+ // Abrir mini menú si hay selección individual (solo desde fuera de Terminal)
  if(Sel.ids.size>0 && typeof MiniMenu!=='undefined' && MiniMenu.abrir){
   const lista=Sel.lista;
-  if(lista.length===1){
+  // No abrir mini-menú automáticamente si estamos en la vista terminal
+  // (tAbrirSesion ya maneja la apertura de sesión directamente)
+  if(lista.length===1 && S.vista!=='terminal'){
    MiniMenu.abrir(lista[0].id, Sel.punto.x, Sel.punto.y);
   }
  }
@@ -4610,6 +4612,7 @@ Acc.fAgentes=()=>{
       <small>v${esc(d.version_agente||'—')} · ${d.en_linea?'latido '+relativo(d.visto):'sin latido '+relativo(d.visto)}</small></div>
      ${soB(d.sistema)}</div>`).join('')||'<div class="vacio">Sin equipos</div>'}</div>`});
 };
+Acc.fRefrescar=async()=>{Fab.cerrar();await Datos.cargar();Bus.emit('equipos');Toast.mostrar('Equipos actualizados','ok')};
 Acc.notif=()=>{
  if(!S.silenciado)Toast.mostrar('Notificaciones silenciadas','forzar','Puedes activarlas de nuevo aquí.');
  S.silenciado=!S.silenciado; guardar('silencio',S.silenciado); pintaNotif();
@@ -4999,7 +5002,11 @@ const VistaCatalogo={
   const q=this._q.toLowerCase(), so=this._so, cat=this._cat, ta=this._ta;
   return S.comandos.filter(c=>{
    if(q&&!c.nombre.toLowerCase().includes(q)&&!(c.descripcion||'').toLowerCase().includes(q))return false;
-   if(so&&c.sistema!==so)return false;
+   if(so){
+   const cs=(c.sistema||'').toLowerCase();
+   const esMult=typeof esMultiPlataforma==='function'&&esMultiPlataforma(c);
+   if(!esMult&&cs!==so&&cs!=='todos')return false;
+  }
    if(cat&&c.categoria_id!=cat)return false;
    if(ta){
     const lista=alertasDe(c);
@@ -5335,15 +5342,17 @@ Acc.cataEjecutar=el=>{
  const online=S.dispositivos.filter(d=>d.en_linea&&compat(c,d));
 
  if(dAct&&dAct.en_linea&&compat(c,dAct)){
+  const textoResuelto=(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c))
+   ?resolverScript(c,dAct):null;
   if(c.destructivo){
    Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
     html:`<p style="line-height:1.6">El comando <b>${esc(c.nombre)}</b> está marcado como <b style="color:var(--pel)">destructivo</b>.<br>¿Ejecutar en <b>${esc(dAct.nombre)}</b>?</p>`,
     pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
-     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}">Ejecutar de todas formas</button>`});
+     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}" data-txt="${esc(textoResuelto||c.script||'')}">Ejecutar de todas formas</button>`});
   }else{
    Sesion.abrir(dAct.id);
    Nav.ir('terminal');
-   setTimeout(()=>Motor.lanzar(null,c.id),120);
+   setTimeout(()=>{if(textoResuelto) Motor.lanzar(textoResuelto,null); else Motor.lanzar(null,c.id)},120);
   }
   return;
  }
@@ -5377,14 +5386,18 @@ Acc.cataLanzarEn=el=>{
  S.dispActivo=d.id; guardar('disp',d.id);
  Sesion.abrir(d.id);
  Nav.ir('terminal');
+ // Resolver variante Multi-SO si aplica
+ const textoResuelto=(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c))
+  ?resolverScript(c,d):null;
  setTimeout(()=>{
   if(c.destructivo){
    Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
     html:`<p style="line-height:1.6">El comando <b>${esc(c.nombre)}</b> está marcado como <b style="color:var(--pel)">destructivo</b>.<br>¿Continuar en <b>${esc(d.nombre)}</b>?</p>`,
     pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
-     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}">Ejecutar de todas formas</button>`});
+     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}" data-txt="${esc(textoResuelto||'')}">Ejecutar de todas formas</button>`});
   }else{
-   Motor.lanzar(null,c.id);
+   if(textoResuelto) Motor.lanzar(textoResuelto,null);
+   else Motor.lanzar(null,c.id);
   }
  },120);
 };
@@ -5805,7 +5818,14 @@ const VistaTerminal={
 
  _refrescarArbol(){
   const arbol=$('.arbol');
-  if(arbol) arbol.outerHTML=VistaTerminal._arbol(S.dispositivos);
+  if(!arbol) return;
+  const parent=arbol.parentElement;
+  if(parent){
+   const nuevo=document.createElement('div');
+   nuevo.innerHTML=VistaTerminal._arbol(S.dispositivos);
+   const nuevoArbol=nuevo.querySelector('.arbol');
+   if(nuevoArbol) parent.replaceChild(nuevoArbol, arbol);
+  }
  },
 
  _refrescarPanel(){
@@ -5828,6 +5848,46 @@ Acc.tAbrirSesion=function(el){
  if(!s) return;
  S.dispActivo=dispId;
  guardar('disp',dispId);
+ // Sincronizar selección global para que el mini-menú y otros módulos sepan cuál equipo está activo
+ if(typeof Sel!=='undefined') Sel.fijar([dispId]);
+ // Si ya estamos en terminal, actualizar en el lugar sin re-render completo
+ if(S.vista==='terminal'){
+  // Refrescar árbol (marca el equipo como activo)
+  VistaTerminal._refrescarArbol();
+  // Refrescar tabs y barra superior
+  const tabs=$('#ses-tabs');
+  if(tabs) tabs.outerHTML=VistaTerminal._tabs(S.sesiones,Sesion.actual());
+  const barra=$('#t-barra');
+  if(barra) barra.outerHTML=VistaTerminal._barra(Sesion.actual(),d);
+  // Remontar xterm con el nuevo equipo
+  const cuerpo=$('#tcuerpo');
+  if(cuerpo&&typeof Term!=='undefined'){
+   Term.mont(cuerpo);
+   Term.bienvenida(d);
+   (s.lineas||[]).forEach(function(l){
+    if(l.f==='s') Term.escr('[90m'+l.t+'[0m
+');
+    else if(l.f==='e') Term.escr('[31m'+l.t+'[0m
+');
+    else if(l.f==='i') Term.escr('[36m'+(l.p||'>')+' '+l.t+'[0m
+');
+    else Term.escr(l.t+'
+');
+   });
+  }
+  // Restaurar entrada y botón guardar
+  const ent=$('.tentrada');
+  if(!ent){
+   const central=$('.col.central');
+   if(central){
+    const guardEl=$('#t-guardar');
+    if(guardEl) central.insertBefore(VistaTerminal._entradaDOM(s,d),guardEl);
+   }
+  }
+  Nav.sub();
+  const inp=$('#t-input'); if(inp) inp.focus();
+  return;
+ }
  Nav.ir('terminal');
 };
 
@@ -6279,6 +6339,29 @@ Acc.histCancelar=async el=>{
  catch(e){Toast.mostrar('Error al cancelar','err',e.message)}
 };
 
+Acc.histReintentarLote=async el=>{
+ const loteId=el.dataset.lote;
+ if(!loteId)return;
+ // Obtener ejecuciones fallidas del lote
+ const {data:fallidas,error}=await sb.from('ejecuciones_comandos')
+  .select('id,dispositivo_id,comando_id,texto_comando')
+  .eq('lote_id',loteId)
+  .in('estado',['fallido','tiempo_agotado']);
+ if(error||!fallidas||!fallidas.length){
+  Toast.mostrar('No hay ejecuciones fallidas en este lote','aviso');
+  return;
+ }
+ let ok=0, fail=0;
+ for(const ej of fallidas){
+  try{
+   await Datos.ejecutar({dispositivo:ej.dispositivo_id,comando:ej.comando_id,texto:ej.texto_comando});
+   ok++;
+  }catch(e){ fail++; }
+ }
+ Toast.mostrar(`Reintentando ${ok} ejecución(es)${fail?' · '+fail+' error(es)':''}`,ok?'ok':'aviso');
+ VistaHistorial._cargar();
+};
+
 Mod.registrarVista({
  id:'historial', nombre:'Historial', icono:'history', orden:40,
  definicion:VistaHistorial
@@ -6651,6 +6734,22 @@ Inp.masQ=el=>{
   l.hidden=q&&!nm.includes(q);
  });
 };
+Chg.masComando=el=>{
+ const id=el.value;
+ const txt=$('#mas-texto');
+ if(!id||!txt){if(txt)txt.placeholder='…o escribe un comando manual';return}
+ const c=S.comandos.find(x=>String(x.id)===String(id));
+ if(!c)return;
+ // Si es Multi-SO, mostrar el script del primer SO disponible como referencia
+ let preview=c.script||'';
+ if(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c)&&c.variantes){
+  const v=c.variantes;
+  preview=v.windows||v.macos||v.linux||c.script||'';
+ }
+ txt.placeholder=preview||'Script del comando seleccionado';
+ // No sobrescribir si ya escribió algo manualmente
+ if(!txt.value.trim()) txt.value='';
+};
 Chg.masCheck=el=>{
  const id=el.dataset.id;
  if(el.checked){
@@ -6699,7 +6798,33 @@ Acc.masReintentar=async()=>{
  Toast.mostrar(`Reintentando ${fallidos.length} ejecuciones`,'ok');
  VistaMasiva._pollLote();
 };
-Acc.masDescargar=()=>Toast.mostrar('Descarga no implementada aún','aviso');
+Acc.masDescargar=async()=>{
+ if(!VistaMasiva._lote||!VistaMasiva._lote.ejecuciones||!VistaMasiva._lote.ejecuciones.length){
+  Toast.mostrar('No hay resultados para descargar','aviso'); return;
+ }
+ let txt='Bitlab-IT · Reporte de Ejecución Masiva\n'+'='.repeat(50)+'\n';
+ txt+=`Fecha: ${new Date().toLocaleString('es-MX')}\n`;
+ txt+=`Equipos: ${VistaMasiva._lote.total} · Exitosos: ${VistaMasiva._lote.ok} · Fallidos: ${VistaMasiva._lote.fail}\n\n`;
+ for(const ej of VistaMasiva._lote.ejecuciones){
+  const d=dev(ej.dispositivo_id);
+  txt+='─'.repeat(40)+'\n';
+  txt+=`Equipo: ${d?.nombre||ej.dispositivo_id} (${d?.sistema||'?'}) · Estado: ${ej.estado}\n`;
+  if(ej.id){
+   try{
+    const frags=await Datos.salida(ej.id,0);
+    if(frags&&frags.length) txt+=frags.map(f=>f.texto).join('');
+   }catch(_){}
+  }
+  txt+='\n';
+ }
+ const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url; a.download='bitlab-masiva-'+Date.now()+'.txt';
+ document.body.appendChild(a); a.click();
+ setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1000);
+ Toast.mostrar('Descarga lista','ok');
+};
 
 Mod.registrarVista({
  id:'masiva', nombre:'Masiva', icono:'layers', orden:50,
@@ -6968,6 +7093,32 @@ Acc.miniDiag=el=>{
   :'uname -a && uptime && free -h && df -h / && lscpu | head -10';
  setTimeout(()=>Motor.lanzar(diag),150);
  Toast.mostrar('Diagnóstico iniciado','ok',d.nombre);
+};
+
+Acc.miniLanzar=async el=>{
+ const cid=el.dataset.id;
+ const eqId=el.dataset.eq||MiniMenu._eqId;
+ const c=S.comandos.find(x=>String(x.id)===String(cid));
+ const d=dev(eqId);
+ if(!c||!d)return;
+ if(!d.en_linea){Toast.mostrar(d.nombre+' está fuera de línea','aviso');return}
+ // Resolver variante Multi-SO si aplica
+ const textoResuelto=(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c))
+  ?resolverScript(c,d):null;
+ MiniMenu.cerrar();
+ S.dispActivo=d.id; guardar('disp',d.id); Sesion.abrir(d.id);
+ Nav.ir('terminal');
+ setTimeout(()=>{
+  if(c.destructivo){
+   Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
+    html:`<p style="line-height:1.6">El comando <b>${esc(c.nombre)}</b> está marcado como <b style="color:var(--pel)">destructivo</b>.<br>¿Ejecutar en <b>${esc(d.nombre)}</b>?</p>`,
+    pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
+     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}" data-txt="${esc(textoResuelto||'')}">Ejecutar de todas formas</button>`});
+  }else{
+   if(textoResuelto) Motor.lanzar(textoResuelto,null);
+   else Motor.lanzar(null,c.id);
+  }
+ },150);
 };
 
 // Cerrar con ESC

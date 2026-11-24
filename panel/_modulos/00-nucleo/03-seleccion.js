@@ -99,10 +99,12 @@ Bus.on('sel',()=>{
  Sync();
  Nav.sub&&Nav.sub();
  Dock.marcar&&Dock.marcar();
- // Abrir mini menú si hay selección
+ // Abrir mini menú si hay selección individual (solo desde fuera de Terminal)
  if(Sel.ids.size>0 && typeof MiniMenu!=='undefined' && MiniMenu.abrir){
   const lista=Sel.lista;
-  if(lista.length===1){
+  // No abrir mini-menú automáticamente si estamos en la vista terminal
+  // (tAbrirSesion ya maneja la apertura de sesión directamente)
+  if(lista.length===1 && S.vista!=='terminal'){
    MiniMenu.abrir(lista[0].id, Sel.punto.x, Sel.punto.y);
   }
  }

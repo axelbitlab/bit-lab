@@ -261,6 +261,32 @@ Acc.miniDiag=el=>{
  Toast.mostrar('Diagnóstico iniciado','ok',d.nombre);
 };
 
+Acc.miniLanzar=async el=>{
+ const cid=el.dataset.id;
+ const eqId=el.dataset.eq||MiniMenu._eqId;
+ const c=S.comandos.find(x=>String(x.id)===String(cid));
+ const d=dev(eqId);
+ if(!c||!d)return;
+ if(!d.en_linea){Toast.mostrar(d.nombre+' está fuera de línea','aviso');return}
+ // Resolver variante Multi-SO si aplica
+ const textoResuelto=(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c))
+  ?resolverScript(c,d):null;
+ MiniMenu.cerrar();
+ S.dispActivo=d.id; guardar('disp',d.id); Sesion.abrir(d.id);
+ Nav.ir('terminal');
+ setTimeout(()=>{
+  if(c.destructivo){
+   Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
+    html:`<p style="line-height:1.6">El comando <b>${esc(c.nombre)}</b> está marcado como <b style="color:var(--pel)">destructivo</b>.<br>¿Ejecutar en <b>${esc(d.nombre)}</b>?</p>`,
+    pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
+     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}" data-txt="${esc(textoResuelto||'')}">Ejecutar de todas formas</button>`});
+  }else{
+   if(textoResuelto) Motor.lanzar(textoResuelto,null);
+   else Motor.lanzar(null,c.id);
+  }
+ },150);
+};
+
 // Cerrar con ESC
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape' && MiniMenu._el && !MiniMenu._el.hidden)MiniMenu.cerrar();

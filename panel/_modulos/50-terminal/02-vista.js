@@ -361,7 +361,14 @@ const VistaTerminal={
 
  _refrescarArbol(){
   const arbol=$('.arbol');
-  if(arbol) arbol.outerHTML=VistaTerminal._arbol(S.dispositivos);
+  if(!arbol) return;
+  const parent=arbol.parentElement;
+  if(parent){
+   const nuevo=document.createElement('div');
+   nuevo.innerHTML=VistaTerminal._arbol(S.dispositivos);
+   const nuevoArbol=nuevo.querySelector('.arbol');
+   if(nuevoArbol) parent.replaceChild(nuevoArbol, arbol);
+  }
  },
 
  _refrescarPanel(){
@@ -384,6 +391,46 @@ Acc.tAbrirSesion=function(el){
  if(!s) return;
  S.dispActivo=dispId;
  guardar('disp',dispId);
+ // Sincronizar selección global para que el mini-menú y otros módulos sepan cuál equipo está activo
+ if(typeof Sel!=='undefined') Sel.fijar([dispId]);
+ // Si ya estamos en terminal, actualizar en el lugar sin re-render completo
+ if(S.vista==='terminal'){
+  // Refrescar árbol (marca el equipo como activo)
+  VistaTerminal._refrescarArbol();
+  // Refrescar tabs y barra superior
+  const tabs=$('#ses-tabs');
+  if(tabs) tabs.outerHTML=VistaTerminal._tabs(S.sesiones,Sesion.actual());
+  const barra=$('#t-barra');
+  if(barra) barra.outerHTML=VistaTerminal._barra(Sesion.actual(),d);
+  // Remontar xterm con el nuevo equipo
+  const cuerpo=$('#tcuerpo');
+  if(cuerpo&&typeof Term!=='undefined'){
+   Term.mont(cuerpo);
+   Term.bienvenida(d);
+   (s.lineas||[]).forEach(function(l){
+    if(l.f==='s') Term.escr('[90m'+l.t+'[0m
+');
+    else if(l.f==='e') Term.escr('[31m'+l.t+'[0m
+');
+    else if(l.f==='i') Term.escr('[36m'+(l.p||'>')+' '+l.t+'[0m
+');
+    else Term.escr(l.t+'
+');
+   });
+  }
+  // Restaurar entrada y botón guardar
+  const ent=$('.tentrada');
+  if(!ent){
+   const central=$('.col.central');
+   if(central){
+    const guardEl=$('#t-guardar');
+    if(guardEl) central.insertBefore(VistaTerminal._entradaDOM(s,d),guardEl);
+   }
+  }
+  Nav.sub();
+  const inp=$('#t-input'); if(inp) inp.focus();
+  return;
+ }
  Nav.ir('terminal');
 };
 

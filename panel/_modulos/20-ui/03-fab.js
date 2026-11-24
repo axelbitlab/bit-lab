@@ -120,6 +120,7 @@ Acc.fAgentes=()=>{
       <small>v${esc(d.version_agente||'—')} · ${d.en_linea?'latido '+relativo(d.visto):'sin latido '+relativo(d.visto)}</small></div>
      ${soB(d.sistema)}</div>`).join('')||'<div class="vacio">Sin equipos</div>'}</div>`});
 };
+Acc.fRefrescar=async()=>{Fab.cerrar();await Datos.cargar();Bus.emit('equipos');Toast.mostrar('Equipos actualizados','ok')};
 Acc.notif=()=>{
  if(!S.silenciado)Toast.mostrar('Notificaciones silenciadas','forzar','Puedes activarlas de nuevo aquí.');
  S.silenciado=!S.silenciado; guardar('silencio',S.silenciado); pintaNotif();

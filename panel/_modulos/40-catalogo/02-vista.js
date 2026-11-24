@@ -98,7 +98,11 @@ const VistaCatalogo={
   const q=this._q.toLowerCase(), so=this._so, cat=this._cat, ta=this._ta;
   return S.comandos.filter(c=>{
    if(q&&!c.nombre.toLowerCase().includes(q)&&!(c.descripcion||'').toLowerCase().includes(q))return false;
-   if(so&&c.sistema!==so)return false;
+   if(so){
+   const cs=(c.sistema||'').toLowerCase();
+   const esMult=typeof esMultiPlataforma==='function'&&esMultiPlataforma(c);
+   if(!esMult&&cs!==so&&cs!=='todos')return false;
+  }
    if(cat&&c.categoria_id!=cat)return false;
    if(ta){
     const lista=alertasDe(c);
@@ -434,15 +438,17 @@ Acc.cataEjecutar=el=>{
  const online=S.dispositivos.filter(d=>d.en_linea&&compat(c,d));
 
  if(dAct&&dAct.en_linea&&compat(c,dAct)){
+  const textoResuelto=(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c))
+   ?resolverScript(c,dAct):null;
   if(c.destructivo){
    Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
     html:`<p style="line-height:1.6">El comando <b>${esc(c.nombre)}</b> está marcado como <b style="color:var(--pel)">destructivo</b>.<br>¿Ejecutar en <b>${esc(dAct.nombre)}</b>?</p>`,
     pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
-     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}">Ejecutar de todas formas</button>`});
+     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}" data-txt="${esc(textoResuelto||c.script||'')}">Ejecutar de todas formas</button>`});
   }else{
    Sesion.abrir(dAct.id);
    Nav.ir('terminal');
-   setTimeout(()=>Motor.lanzar(null,c.id),120);
+   setTimeout(()=>{if(textoResuelto) Motor.lanzar(textoResuelto,null); else Motor.lanzar(null,c.id)},120);
   }
   return;
  }
@@ -476,14 +482,18 @@ Acc.cataLanzarEn=el=>{
  S.dispActivo=d.id; guardar('disp',d.id);
  Sesion.abrir(d.id);
  Nav.ir('terminal');
+ // Resolver variante Multi-SO si aplica
+ const textoResuelto=(typeof esMultiPlataforma==='function'&&esMultiPlataforma(c))
+  ?resolverScript(c,d):null;
  setTimeout(()=>{
   if(c.destructivo){
    Modal.abrir({aria:'Confirmar ejecución',ancho:420,titulo:'Acción destructiva',
     html:`<p style="line-height:1.6">El comando <b>${esc(c.nombre)}</b> está marcado como <b style="color:var(--pel)">destructivo</b>.<br>¿Continuar en <b>${esc(d.nombre)}</b>?</p>`,
     pie:`<button class="btn" data-acc="mCerrar">Cancelar</button>
-     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}">Ejecutar de todas formas</button>`});
+     <button class="btn pel" data-acc="tConfirmar" data-id="${c.id}" data-txt="${esc(textoResuelto||'')}">Ejecutar de todas formas</button>`});
   }else{
-   Motor.lanzar(null,c.id);
+   if(textoResuelto) Motor.lanzar(textoResuelto,null);
+   else Motor.lanzar(null,c.id);
   }
  },120);
 };
