@@ -20,6 +20,76 @@ const Modal={
  },
  cerrar(){const m=$('#modal');m.hidden=true;m.innerHTML=''}
 };
-const pintaNotif=()=>{const b=$('#btnNotif');if(!b)return;b.innerHTML=ico(S.silenciado?'bellOff':'bell',16);b.setAttribute('aria-pressed',S.silenciado)};
+const PanelAlertas={
+ _abierto:false,_el:null,
+ // Recopilar alertas de todos los dispositivos (mismo helper que VistaMonitoreo)
+ _alertas(){
+  const info={cpu:['CPU alta','pel','cpu'],memoria:['Memoria alta','ambar','cpu'],
+   disco:['Disco casi lleno','ambar','hardDrive'],proceso:['Proceso elevado','indigo','activity'],
+   red:['Sin contacto reciente','tx3','wifiOff']};
+  const lista=[];
+  S.dispositivos.forEach(d=>{
+   const aa=(typeof Datos!=='undefined'&&Datos._alertasActivas)?Datos._alertasActivas(d):[];
+   aa.forEach(tipo=>{
+    const [msg,col,ic]=info[tipo]||[tipo,'tx3','alert'];
+    lista.push({id:d.id,tipo,mensaje:msg,color:`var(--${col})`,icono:ic,nombre:d.nombre});
+   });
+  });
+  return lista;
+ },
+ abrir(){
+  if(this._abierto){this.cerrar();return}
+  const btn=$('#btnNotif'); if(!btn)return;
+  const alertas=this._alertas();
+  const r=btn.getBoundingClientRect();
+  const panel=document.createElement('div');
+  panel.id='alerta-panel'; panel.className='vid alerta-popup';
+  panel.innerHTML=`<div class="ap-head"><span>${ico('bell',14)} <b>Alertas activas</b></span>
+   <span class="badge">${alertas.length}</span></div>
+   ${alertas.length?alertas.map(a=>`<div class="ap-item" data-acc="apIrEquipo" data-id="${a.id}">
+    <span style="color:${a.color};flex:none">${ico(a.icono,14)}</span>
+    <div><b>${esc(a.nombre)}</b><small>${esc(a.mensaje)}</small></div>
+   </div>`).join(''):'<div class="ap-vacio">Sin alertas activas</div>'}
+   ${S.silenciado?`<div class="ap-sil">${ico('bellOff',12)} Notificaciones silenciadas</div>`:''}
+   <div class="ap-pie">
+    <button class="ib sm" data-acc="notifToggle">${S.silenciado?ico('bell',13)+' Activar':ico('bellOff',13)+' Silenciar'}</button>
+   </div>`;
+  const w=280, x=Math.max(8,Math.min(r.right-w,innerWidth-w-8));
+  panel.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${x}px;width:${w}px;z-index:9999`;
+  document.body.appendChild(panel);
+  this._el=panel; this._abierto=true;
+  setTimeout(()=>document.addEventListener('pointerdown',this._fuera,{capture:true,once:true}),0);
+ },
+ _fuera(e){
+  const p=document.getElementById('alerta-panel');
+  if(p&&!p.contains(e.target)){PanelAlertas.cerrar()}
+  else{setTimeout(()=>document.addEventListener('pointerdown',PanelAlertas._fuera,{capture:true,once:true}),0)}
+ },
+ cerrar(){
+  if(this._el){this._el.remove();this._el=null}
+  this._abierto=false;
+ }
+};
+
+const pintaNotif=()=>{
+ const b=$('#btnNotif');if(!b)return;
+ const alertas=PanelAlertas._alertas();
+ const silenciado=S.silenciado;
+ b.innerHTML=ico(silenciado?'bellOff':'bell',16);
+ b.setAttribute('aria-pressed',silenciado);
+ b.setAttribute('data-badge',alertas.length||'');
+ b.classList.toggle('tiene-alertas',alertas.length>0&&!silenciado);
+};
 
 Acc.mCerrar=()=>Modal.cerrar();
+Acc.apIrEquipo=el=>{
+ const id=el.closest('[data-id]')?.dataset.id;
+ PanelAlertas.cerrar();
+ if(id&&typeof Sel!=='undefined') Sel.fijar([id]);
+ if(typeof Nav!=='undefined') Nav.ir('monitoreo');
+};
+Acc.notifToggle=()=>{
+ S.silenciado=!S.silenciado; guardar('silencio',S.silenciado);
+ pintaNotif(); PanelAlertas.cerrar();
+ Toast.mostrar(S.silenciado?'Notificaciones silenciadas':'Notificaciones activadas',S.silenciado?'aviso':'ok');
+};

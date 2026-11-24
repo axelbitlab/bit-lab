@@ -39,7 +39,7 @@ const VistaMonitoreo={
   /* ── Alertas activas ── */
   let al='';
   if(alertas.length){
-   al=`<div class="alerta-banda">
+   al=`<div class="alerta-banda" id="alerta-banda-wrap" hidden>
     <div class="banda-h">${ico('alert',14)} <b>Alertas activas</b> <span class="badge">${alertas.length}</span></div>
     <div class="alerta-lista" id="alerta-lista">`;
    alertas.slice(0,8).forEach(a=>{
@@ -157,12 +157,39 @@ const VistaMonitoreo={
  montar(){
   Bus.on('equipos',this._onEquipos);
   Bus.on('sel',this._onSel);
+  // Animación de alertas: mostrar banda 5s luego colapsar a campana
+  const alertas=this._todasAlertas();
+  if(alertas.length) this._animarAlertas(alertas);
+ },
+
+ _animarAlertas(alertas){
+  const banda=$('#alerta-banda-wrap');
+  if(!banda)return;
+  banda.classList.add('visible');
+  // Actualizar badge de campana
+  const btn=$('#btnNotif');
+  if(btn){
+   btn.setAttribute('data-badge',alertas.length);
+   btn.classList.add('tiene-alertas');
+  }
+  // 5 segundos después → colapsar hacia campana
+  setTimeout(()=>{
+   banda.classList.add('colapsando');
+   const btnR=$('#btnNotif');
+   if(btnR){
+    const br=btnR.getBoundingClientRect();
+    const wr=banda.getBoundingClientRect();
+    banda.style.setProperty('--dest-x',(br.left-wr.left+br.width/2-wr.width/2)+'px');
+    banda.style.setProperty('--dest-y',(br.top-wr.top-wr.height+br.height/2)+'px');
+   }
+   setTimeout(()=>{banda.hidden=true;banda.classList.remove('visible','colapsando')},600);
+  },5000);
  },
  salir(){
   Bus.off('equipos',this._onEquipos);
   Bus.off('sel',this._onSel);
  },
- _onEquipos(){VistaMonitoreo.refrescar()},
+ _onEquipos(){VistaMonitoreo.refrescar();if(typeof pintaNotif==='function')pintaNotif();},
  _onSel(){VistaMonitoreo.refrescar()}
 };
 

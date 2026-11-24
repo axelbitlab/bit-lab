@@ -1,26 +1,26 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795492913"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bitlab-IT · Panel</title><!-- build 1795492913 -->
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="build-id" content="1795493353"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bitlab-IT · Panel</title><!-- build 1795493353 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
 <style>
 :root {
     color-scheme: dark;
-    --neg: #04070a;
-    --tx: #e6f5ee;
-    --tx2: #98afa6;
-    --tx3: #62786f;
-    --verde: #39ff88;
-    --azul: #2f7bff;
-    --cian: #22e5ff;
-    --lima: #b7ff3c;
-    --indigo: #8a7dff;
+    --neg: #06040c;
+    --tx: #ede0ff;
+    --tx2: #a898c8;
+    --tx3: #5e4d7a;
+    --verde: #b56eff;
+    --azul: #ff6b35;
+    --cian: #ff4a6e;
+    --lima: #d4a8ff;
+    --indigo: #9d4eff;
     --pel: #ff4d6d;
     --ambar: #ffc857;
     --f-disp: 'Unbounded', system-ui, sans-serif;
     --f-cuerpo: 'Manrope', system-ui, sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
-    --rim: rgba(255, 255, 255, .12)
+    --rim: rgba(200, 170, 255, .14)
 }
 
 * {
@@ -51,7 +51,7 @@ button {
 }
 
 :focus-visible {
-    outline: 2px solid var(--cian);
+    outline: 2px solid var(--verde);
     outline-offset: 2px
 }
 
@@ -88,7 +88,7 @@ pre,
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
-    background: radial-gradient(120% 90% at 50% 0%, #07100f 0%, #04070a 60%);
+    background: radial-gradient(120% 90% at 50% 0%, #110820 0%, #06040c 60%);
     contain: strict
 }
 
@@ -105,7 +105,7 @@ pre,
     height: 48vmax;
     right: -14vmax;
     top: -16vmax;
-    background: radial-gradient(circle, rgba(25, 255, 138, .65), transparent 66%);
+    background: radial-gradient(circle, rgba(170, 80, 255, .65), transparent 66%);
     opacity: .45
 }
 
@@ -114,7 +114,7 @@ pre,
     height: 54vmax;
     left: -20vmax;
     bottom: -26vmax;
-    background: radial-gradient(circle, rgba(31, 107, 255, .7), transparent 66%);
+    background: radial-gradient(circle, rgba(255, 80, 60, .6), transparent 66%);
     opacity: .45
 }
 
@@ -123,7 +123,7 @@ pre,
     height: 26vmax;
     left: 44%;
     top: 34%;
-    background: radial-gradient(circle, rgba(18, 217, 255, .5), transparent 66%);
+    background: radial-gradient(circle, rgba(130, 50, 220, .4), transparent 66%);
     opacity: .2
 }
 
@@ -221,7 +221,7 @@ pre,
 
 .btn.pri {
     background: linear-gradient(135deg, var(--verde), var(--cian));
-    color: #021a10;
+    color: #0e0820;
     border-color: rgba(255, 255, 255, .45);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 0 26px rgba(57, 255, 136, .35)
 }
@@ -232,7 +232,7 @@ pre,
 
 .btn.azul {
     background: linear-gradient(135deg, var(--azul), var(--cian));
-    color: #02121d;
+    color: #1a0a06;
     border-color: rgba(255, 255, 255, .4);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 0 24px rgba(47, 123, 255, .4)
 }
@@ -295,7 +295,7 @@ button.chip:hover {
 }
 
 .chip.on {
-    color: #03150c;
+    color: #0e0820;
     background: linear-gradient(135deg, var(--verde), var(--cian));
     border-color: transparent
 }
@@ -341,7 +341,7 @@ select {
 }
 
 select option {
-    background: #0b1218;
+    background: #100c1a;
     color: var(--tx)
 }
 
@@ -377,8 +377,8 @@ input[type=checkbox]:checked::after {
     content: "";
     width: 9px;
     height: 5px;
-    border-left: 2px solid #02110a;
-    border-bottom: 2px solid #02110a;
+    border-left: 2px solid #0e0820;
+    border-bottom: 2px solid #0e0820;
     transform: rotate(-45deg) translate(1px, -1px)
 }
 
@@ -629,7 +629,7 @@ label.campo>*:not(span) {
     display: grid;
     place-items: center;
     font: 700 12px var(--f-cuerpo);
-    color: #02141a;
+    color: #1a0407;
     background: linear-gradient(135deg, var(--cian), var(--azul));
     border: 1px solid rgba(255, 255, 255, .4)
 }
@@ -744,7 +744,7 @@ label.campo>*:not(span) {
     display: grid;
     place-items: center;
     font: 700 12px var(--f-cuerpo);
-    color: #02141a;
+    color: #1a0407;
     background: linear-gradient(135deg, var(--cian), var(--azul));
     border: 1px solid rgba(255, 255, 255, .4)
 }
@@ -925,7 +925,7 @@ label.campo>*:not(span) {
 }
 
 .nodo.sel .pt {
-    box-shadow: 0 0 18px var(--azul), 0 0 0 4px rgba(47, 123, 255, .4), 0 0 0 8px rgba(34, 229, 255, .16);
+    box-shadow: 0 0 18px var(--verde), 0 0 0 4px rgba(181, 110, 255, .4), 0 0 0 8px rgba(157, 78, 255, .16);
     transform: scale(1.15)
 }
 
@@ -1397,7 +1397,7 @@ table.t tr.hijo td:first-child {
     font: 700 9px var(--f-mono);
     margin-left: -8px;
     border: 2px solid #0a1116;
-    color: #02141a;
+    color: #1a0407;
     background: var(--c)
 }
 
@@ -3184,6 +3184,92 @@ table.t tr.hijo td:first-child {
 :root[data-tema="claro"] .tile {
     background: rgba(255,255,255,.60);
     border-color: rgba(0,0,0,.08)
+}
+
+
+/* ===== ALERTAS: animación banda → campana ===== */
+#alerta-banda-wrap {
+    overflow: hidden;
+    animation: none;
+    transition: opacity .4s, transform .6s cubic-bezier(.4,0,.2,1), scale .6s;
+    transform-origin: top center;
+}
+#alerta-banda-wrap.visible {
+    display: block !important;
+}
+#alerta-banda-wrap.colapsando {
+    opacity: 0;
+    transform: translate(var(--dest-x, 0), var(--dest-y, -60px)) scale(.1);
+    transition: opacity .55s ease-in, transform .6s cubic-bezier(.8,0,1,1), scale .6s;
+}
+
+/* Badge en la campana */
+#btnNotif {
+    position: relative;
+}
+#btnNotif[data-badge]:not([data-badge=""]):not([data-badge="0"])::after {
+    content: attr(data-badge);
+    position: absolute;
+    top: -4px; right: -4px;
+    min-width: 16px; height: 16px;
+    padding: 0 4px;
+    background: var(--pel);
+    color: #fff;
+    font: 600 10px var(--f-cuerpo);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+    pointer-events: none;
+}
+#btnNotif.tiene-alertas {
+    color: var(--ambar);
+    animation: campana-shake 1.2s ease 1;
+}
+@keyframes campana-shake {
+    0%,100%{transform:rotate(0)}
+    15%{transform:rotate(-18deg)}
+    30%{transform:rotate(14deg)}
+    45%{transform:rotate(-10deg)}
+    60%{transform:rotate(6deg)}
+    75%{transform:rotate(-3deg)}
+}
+
+/* Panel de alertas flotante */
+.alerta-popup {
+    border-radius: 16px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,.55), 0 0 0 1px var(--rim);
+    animation: popup-in .18s ease;
+}
+@keyframes popup-in {
+    from{opacity:0;transform:translateY(-8px) scale(.96)}
+    to{opacity:1;transform:translateY(0) scale(1)}
+}
+.ap-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(255,255,255,.04);
+    border-bottom: 1px solid var(--rim);
+    font-size: 13px;
+}
+.ap-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--rim);
+    cursor: pointer;
+    transition: background .15s;
+}
+.ap-item:hover { background: rgba(255,255,255,.05); }
+.ap-item div b { display:block; font-size:13px; }
+.ap-item div small { color: var(--tx2); font-size:11.5px; }
+.ap-vacio { padding:16px 14px; color:var(--tx3); font-size:13px; text-align:center; }
+.ap-sil { padding:6px 14px; color:var(--tx3); font-size:11.5px; display:flex;align-items:center;gap:6px; }
+.ap-pie {
+    padding: 8px 10px;
+    background: rgba(255,255,255,.03);
+    border-top: 1px solid var(--rim);
+    display: flex; justify-content: flex-end;
 }
 
 
@@ -5098,9 +5184,79 @@ const Modal={
  },
  cerrar(){const m=$('#modal');m.hidden=true;m.innerHTML=''}
 };
-const pintaNotif=()=>{const b=$('#btnNotif');if(!b)return;b.innerHTML=ico(S.silenciado?'bellOff':'bell',16);b.setAttribute('aria-pressed',S.silenciado)};
+const PanelAlertas={
+ _abierto:false,_el:null,
+ // Recopilar alertas de todos los dispositivos (mismo helper que VistaMonitoreo)
+ _alertas(){
+  const info={cpu:['CPU alta','pel','cpu'],memoria:['Memoria alta','ambar','cpu'],
+   disco:['Disco casi lleno','ambar','hardDrive'],proceso:['Proceso elevado','indigo','activity'],
+   red:['Sin contacto reciente','tx3','wifiOff']};
+  const lista=[];
+  S.dispositivos.forEach(d=>{
+   const aa=(typeof Datos!=='undefined'&&Datos._alertasActivas)?Datos._alertasActivas(d):[];
+   aa.forEach(tipo=>{
+    const [msg,col,ic]=info[tipo]||[tipo,'tx3','alert'];
+    lista.push({id:d.id,tipo,mensaje:msg,color:`var(--${col})`,icono:ic,nombre:d.nombre});
+   });
+  });
+  return lista;
+ },
+ abrir(){
+  if(this._abierto){this.cerrar();return}
+  const btn=$('#btnNotif'); if(!btn)return;
+  const alertas=this._alertas();
+  const r=btn.getBoundingClientRect();
+  const panel=document.createElement('div');
+  panel.id='alerta-panel'; panel.className='vid alerta-popup';
+  panel.innerHTML=`<div class="ap-head"><span>${ico('bell',14)} <b>Alertas activas</b></span>
+   <span class="badge">${alertas.length}</span></div>
+   ${alertas.length?alertas.map(a=>`<div class="ap-item" data-acc="apIrEquipo" data-id="${a.id}">
+    <span style="color:${a.color};flex:none">${ico(a.icono,14)}</span>
+    <div><b>${esc(a.nombre)}</b><small>${esc(a.mensaje)}</small></div>
+   </div>`).join(''):'<div class="ap-vacio">Sin alertas activas</div>'}
+   ${S.silenciado?`<div class="ap-sil">${ico('bellOff',12)} Notificaciones silenciadas</div>`:''}
+   <div class="ap-pie">
+    <button class="ib sm" data-acc="notifToggle">${S.silenciado?ico('bell',13)+' Activar':ico('bellOff',13)+' Silenciar'}</button>
+   </div>`;
+  const w=280, x=Math.max(8,Math.min(r.right-w,innerWidth-w-8));
+  panel.style.cssText=`position:fixed;top:${r.bottom+6}px;left:${x}px;width:${w}px;z-index:9999`;
+  document.body.appendChild(panel);
+  this._el=panel; this._abierto=true;
+  setTimeout(()=>document.addEventListener('pointerdown',this._fuera,{capture:true,once:true}),0);
+ },
+ _fuera(e){
+  const p=document.getElementById('alerta-panel');
+  if(p&&!p.contains(e.target)){PanelAlertas.cerrar()}
+  else{setTimeout(()=>document.addEventListener('pointerdown',PanelAlertas._fuera,{capture:true,once:true}),0)}
+ },
+ cerrar(){
+  if(this._el){this._el.remove();this._el=null}
+  this._abierto=false;
+ }
+};
+
+const pintaNotif=()=>{
+ const b=$('#btnNotif');if(!b)return;
+ const alertas=PanelAlertas._alertas();
+ const silenciado=S.silenciado;
+ b.innerHTML=ico(silenciado?'bellOff':'bell',16);
+ b.setAttribute('aria-pressed',silenciado);
+ b.setAttribute('data-badge',alertas.length||'');
+ b.classList.toggle('tiene-alertas',alertas.length>0&&!silenciado);
+};
 
 Acc.mCerrar=()=>Modal.cerrar();
+Acc.apIrEquipo=el=>{
+ const id=el.closest('[data-id]')?.dataset.id;
+ PanelAlertas.cerrar();
+ if(id&&typeof Sel!=='undefined') Sel.fijar([id]);
+ if(typeof Nav!=='undefined') Nav.ir('monitoreo');
+};
+Acc.notifToggle=()=>{
+ S.silenciado=!S.silenciado; guardar('silencio',S.silenciado);
+ pintaNotif(); PanelAlertas.cerrar();
+ Toast.mostrar(S.silenciado?'Notificaciones silenciadas':'Notificaciones activadas',S.silenciado?'aviso':'ok');
+};
 
 /* ░▒ _modulos/20-ui/02-nav-dock.js ▒░ */
 /* =====================================================================
@@ -5282,11 +5438,7 @@ Acc.fAgentes=()=>{
      ${soB(d.sistema)}</div>`).join('')||'<div class="vacio">Sin equipos</div>'}</div>`});
 };
 Acc.fRefrescar=async()=>{Fab.cerrar();await Datos.cargar();Bus.emit('equipos');Toast.mostrar('Equipos actualizados','ok')};
-Acc.notif=()=>{
- if(!S.silenciado)Toast.mostrar('Notificaciones silenciadas','forzar','Puedes activarlas de nuevo aquí.');
- S.silenciado=!S.silenciado; guardar('silencio',S.silenciado); pintaNotif();
- if(!S.silenciado)Toast.mostrar('Notificaciones activadas','ok');
-};
+Acc.notif=()=>PanelAlertas.abrir();
 
 /* ░▒ _modulos/30-equipos/01-vista.js ▒░ */
 /* =====================================================================
@@ -5330,7 +5482,7 @@ const VistaMonitoreo={
   /* ── Alertas activas ── */
   let al='';
   if(alertas.length){
-   al=`<div class="alerta-banda">
+   al=`<div class="alerta-banda" id="alerta-banda-wrap" hidden>
     <div class="banda-h">${ico('alert',14)} <b>Alertas activas</b> <span class="badge">${alertas.length}</span></div>
     <div class="alerta-lista" id="alerta-lista">`;
    alertas.slice(0,8).forEach(a=>{
@@ -5448,12 +5600,39 @@ const VistaMonitoreo={
  montar(){
   Bus.on('equipos',this._onEquipos);
   Bus.on('sel',this._onSel);
+  // Animación de alertas: mostrar banda 5s luego colapsar a campana
+  const alertas=this._todasAlertas();
+  if(alertas.length) this._animarAlertas(alertas);
+ },
+
+ _animarAlertas(alertas){
+  const banda=$('#alerta-banda-wrap');
+  if(!banda)return;
+  banda.classList.add('visible');
+  // Actualizar badge de campana
+  const btn=$('#btnNotif');
+  if(btn){
+   btn.setAttribute('data-badge',alertas.length);
+   btn.classList.add('tiene-alertas');
+  }
+  // 5 segundos después → colapsar hacia campana
+  setTimeout(()=>{
+   banda.classList.add('colapsando');
+   const btnR=$('#btnNotif');
+   if(btnR){
+    const br=btnR.getBoundingClientRect();
+    const wr=banda.getBoundingClientRect();
+    banda.style.setProperty('--dest-x',(br.left-wr.left+br.width/2-wr.width/2)+'px');
+    banda.style.setProperty('--dest-y',(br.top-wr.top-wr.height+br.height/2)+'px');
+   }
+   setTimeout(()=>{banda.hidden=true;banda.classList.remove('visible','colapsando')},600);
+  },5000);
  },
  salir(){
   Bus.off('equipos',this._onEquipos);
   Bus.off('sel',this._onSel);
  },
- _onEquipos(){VistaMonitoreo.refrescar()},
+ _onEquipos(){VistaMonitoreo.refrescar();if(typeof pintaNotif==='function')pintaNotif();},
  _onSel(){VistaMonitoreo.refrescar()}
 };
 

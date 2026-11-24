@@ -125,8 +125,4 @@ Acc.fAgentes=()=>{
      ${soB(d.sistema)}</div>`).join('')||'<div class="vacio">Sin equipos</div>'}</div>`});
 };
 Acc.fRefrescar=async()=>{Fab.cerrar();await Datos.cargar();Bus.emit('equipos');Toast.mostrar('Equipos actualizados','ok')};
-Acc.notif=()=>{
- if(!S.silenciado)Toast.mostrar('Notificaciones silenciadas','forzar','Puedes activarlas de nuevo aquí.');
- S.silenciado=!S.silenciado; guardar('silencio',S.silenciado); pintaNotif();
- if(!S.silenciado)Toast.mostrar('Notificaciones activadas','ok');
-};
+Acc.notif=()=>PanelAlertas.abrir();
