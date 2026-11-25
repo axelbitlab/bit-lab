@@ -1,132 +1,127 @@
 #!/usr/bin/env python3
 """
-Ensamblador del panel Bitlab-IT.
+Ensamblador del Panel Bitlab-IT.
 
-Combina los módulos en panel/_modulos/ más los estilos y plantillas
-en panel/_build/ para producir panel/index.html con un build-id único
-que rompe la caché del navegador.
+Combina los módulos organizados en 'panel/modulos/' (estilos, plantillas HTML y lógica JS)
+para generar 'panel/index.html' unificado con identificador de compilación (build-id)
+que previene problemas de caché en navegadores.
 
-Uso:
-    python3 panel/ensamblar.py
-    python3 panel/ensamblar.py --modular      # usa _modulos/
-    python3 panel/ensamblar.py --build        # usa _build/ (legado)
-
-Por defecto usa _modulos/ si existe y tiene archivos; si no, _build/.
+Estructura modular:
+- modulos/estilos/: CSS base, componentes, vistas y menús.
+- modulos/plantilla/: Encabezado HTML con CDN y cuerpo base de la aplicación.
+- modulos/nucleo/: Utilidades globales, iconos SVG y gestión de selección.
+- modulos/datos/: Cliente Supabase, servicios, realtime, autenticación y variantes multi-SO.
+- modulos/interfaz/: Modales, notificaciones toast, barra dock y menús contextuales.
+- modulos/monitoreo/: Cuadrícula de equipos y métricas de estado.
+- modulos/catalogo/: Catálogo de comandos agrupados y filtrado por SO.
+- modulos/terminal/: Emulador xterm, pestañas multi-equipo y motor de ejecución en streaming.
+- modulos/historial/: Bitácora de ejecuciones históricas y visor de salida.
+- modulos/ejecucion_masiva/: Asistente de lanzamiento por lotes.
+- modulos/cuenta/: Selector de tema claro/oscuro y perfil de usuario.
+- modulos/arranque/: Atajos de teclado y arranque del ciclo de vida.
 """
 import sys
 import time
 from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parent     # panel/
-MOD  = RAIZ / "_modulos"
-BUI  = RAIZ / "_build"
+RAIZ = Path(__file__).resolve().parent
+MOD = RAIZ / "modulos"
 
-ESTILOS_DEMO = RAIZ / "_build" / "c-estilos-demo.css"
-ESTILOS_BASE = RAIZ / "_build" / "estilos.css"
-CUERPO       = RAIZ / "_build" / "d-cuerpo.html"
-CDN          = RAIZ / "_build" / "cdn-scripts.html"
+# Orden explícito y controlado de estilos CSS
+ARCHIVOS_CSS = [
+    MOD / "estilos" / "base.css",
+    MOD / "estilos" / "componentes.css",
+    MOD / "estilos" / "vistas.css",
+    MOD / "estilos" / "mini-menu.css",
+]
+
+# Plantillas base HTML
+PLANTILLA_HEAD = MOD / "plantilla" / "encabezado.html"
+PLANTILLA_BODY = MOD / "plantilla" / "cuerpo.html"
+
+# Secuencia determinista de dependencias JavaScript
+MODULOS_JS_ORDEN = [
+    # 1. Núcleo base: utilidades, iconos y gestión de selección de equipos
+    ("nucleo", ["utilidades.js", "iconos.js", "seleccion.js"]),
+    # 2. Capa de datos: Supabase, servicios, tiempo real, permisos y variantes multi-SO
+    ("datos", ["supabase.js", "servicio.js", "tiempo_real.js", "acceso.js", "variantes.js"]),
+    # 3. Interfaz y componentes globales: modales, toasts, dock de navegación y menús
+    ("interfaz", ["avisos_modales.js", "navegacion.js", "boton_flotante.js", "menu_contextual.js"]),
+    # 4. Módulos de vistas principales
+    ("monitoreo", ["vista.js"]),
+    ("catalogo", ["constantes.js", "vista.js"]),
+    ("terminal", ["emulador.js", "vista.js", "motor.js"]),
+    ("historial", ["vista.js"]),
+    ("ejecucion_masiva", ["vista.js"]),
+    ("cuenta", ["tema.js", "vista.js"]),
+    # 5. Arranque y eventos globales del sistema
+    ("arranque", ["eventos.js", "inicio.js"]),
+]
 
 
-def leer(p: Path) -> str:
+def leer_archivo(ruta: Path) -> str:
+    """Lee el contenido de un archivo UTF-8 de forma segura."""
     try:
-        return p.read_text(encoding="utf-8")
+        return ruta.read_text(encoding="utf-8")
     except FileNotFoundError:
+        print(f"[!] Advertencia: Archivo no encontrado: {ruta}")
         return ""
 
 
-def archivos_js_modulares() -> list[Path]:
-    """Lista los JS de panel/_modulos/ en orden: carpeta alfabética, luego
-    archivo alfabético dentro de cada carpeta."""
-    if not MOD.exists():
-        return []
-    salida = []
-    for carpeta in sorted(d for d in MOD.iterdir() if d.is_dir()):
-        for arch in sorted(carpeta.iterdir()):
-            if arch.suffix == ".js":
-                salida.append(arch)
-    return salida
+def compilar_css() -> str:
+    """Concatena los archivos CSS en el orden especificado."""
+    partes = []
+    for css_file in ARCHIVOS_CSS:
+        if css_file.exists():
+            contenido = leer_archivo(css_file)
+            partes.append(f"/* === {css_file.name} === */\n{contenido}")
+        else:
+            print(f"[!] CSS no encontrado: {css_file}")
+    return "\n\n".join(partes)
 
 
-def archivos_css_modulares() -> list[Path]:
-    carp = MOD / "estilos"
-    if not carp.exists():
-        return []
-    return sorted(p for p in carp.iterdir() if p.suffix == ".css")
+def compilar_js() -> str:
+    """Concatena los módulos JavaScript en orden estricto de dependencias."""
+    bloques = []
+    total_archivos = 0
+    for carpeta, archivos in MODULOS_JS_ORDEN:
+        for arch in archivos:
+            ruta = MOD / carpeta / arch
+            if ruta.exists():
+                contenido = leer_archivo(ruta)
+                bloques.append(f"/* ░▒ modulo: {carpeta}/{arch} ▒░ */\n{contenido}")
+                total_archivos += 1
+            else:
+                print(f"[!] Módulo JS no encontrado: {ruta}")
+    return "\n\n".join(bloques), total_archivos
 
 
-def archivos_js_legado() -> list[Path]:
-    """Fallback: archivos .js dentro de _build/ en orden alfabético."""
-    if not BUI.exists():
-        return []
-    return sorted(p for p in BUI.iterdir() if p.suffix == ".js")
-
-
-def construir(modo: str) -> str:
+def construir() -> str:
+    """Ensambla el documento HTML completo."""
     build_id = str(int(time.time()))
-    css_demo = leer(ESTILOS_DEMO)
-    css_base = leer(ESTILOS_BASE)
-    cuerpo   = leer(CUERPO)
-    cdn      = leer(CDN)
+    css_total = compilar_css()
+    js_bundle, num_modulos = compilar_js()
 
-    # CSS extra desde los módulos (mini-menú, etc.)
-    css_extra = "\n".join(leer(p) for p in archivos_css_modulares())
+    encabezado = leer_archivo(PLANTILLA_HEAD)
+    cuerpo = leer_archivo(PLANTILLA_BODY)
 
-    # Selección de fuente de JS
-    if modo == "modular":
-        js_files = archivos_js_modulares()
-    elif modo == "legado":
-        js_files = archivos_js_legado()
-    else:
-        js_files = archivos_js_modulares() or archivos_js_legado()
+    # Inyección de build-id y estilos
+    html_head = encabezado.replace("{{BUILD_ID}}", build_id).replace("{{ESTILOS_CSS}}", css_total)
 
-    partes_js = []
-    for p in js_files:
-        contenido = leer(p)
-        # pequeño comentario para rastrear qué archivo entró
-        partes_js.append(f"/* ░▒ {p.relative_to(RAIZ)} ▒░ */\n{contenido}")
-
-    js_bundle = "\n".join(partes_js)
-
-    html = (
-        '<!doctype html><html lang="es"><head><meta charset="utf-8">'
-        f'<meta name="build-id" content="{build_id}">'
-        '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">'
-        '<meta http-equiv="Pragma" content="no-cache">'
-        '<meta http-equiv="Expires" content="0">'
-        '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'
-        '<title>Bitlab-IT · Panel</title>'
-        f'<!-- build {build_id} -->\n'
-        '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
-        '<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">\n'
-        '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">\n'
-        '<style>\n'
-        + css_base
-        + '\n/* ====== Estilos demo ====== */\n'
-        + css_demo
-        + '\n/* ====== Estilos de módulos (fase A) ====== */\n'
-        + css_extra
-        + '\n</style>\n'
-        + cdn
-        + '\n'
-        + cuerpo
-        + '\n<script>\n'
-        + js_bundle
-        + '\n</script>\n</body></html>'
-    )
-    return html
+    # Armado final
+    html_final = f"{html_head}\n{cuerpo}\n<script>\n{js_bundle}\n</script>\n</body>\n</html>"
+    return html_final, build_id, num_modulos
 
 
 def main():
-    modo = "auto"
-    if "--modular" in sys.argv: modo = "modular"
-    elif "--build" in sys.argv or "--legado" in sys.argv: modo = "legado"
-
     salida = RAIZ / "index.html"
-    html = construir(modo)
+    html, build_id, num_modulos = construir()
     salida.write_text(html, encoding="utf-8")
     tam = len(html.encode("utf-8"))
-    mod_real = "modular" if archivos_js_modulares() else "legado"
-    print(f"✓ {salida} ({tam} bytes, build {html[html.index('build-id') + 19:html.index('build-id') + 29]}, modo={mod_real if modo=='auto' else modo})")
+    print(f"✓ Panel compilado exitosamente: {salida}")
+    print(f"  - Tamaño final: {tam:,} bytes")
+    print(f"  - Build ID: {build_id}")
+    print(f"  - Módulos JS incluidos: {num_modulos}")
 
 
 if __name__ == "__main__":

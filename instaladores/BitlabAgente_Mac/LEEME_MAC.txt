@@ -1,0 +1,65 @@
+===================================================
+ Bitlab Terminal - Agente para Mac  v1.0.0
+===================================================
+
+CONTENIDO DEL PAQUETE:
+  instalar.command      - Instalador principal (doble clic)
+  agente.sh             - Script del agente (ejecutado por launchd)
+  config.json           - Configuración (URL y credenciales Supabase)
+  DESINSTALAR.command   - Desinstalador de doble clic
+  DESINSTALAR.sh        - Desinstalador por línea de comandos
+  LEEME_MAC.txt         - Este manual
+
+INSTALACIÓN RÁPIDA:
+  1. Haz doble clic en "instalar.command".
+  2. Si config.json ya contiene la clave de registro, se instalará 100% automático.
+     Si no, el instalador te solicitará pegarla en pantalla.
+  3. Espera unos segundos hasta ver el mensaje de confirmación en verde:
+     "OK Equipo registrado como [nombre]"
+  4. Presiona Enter y listo.
+
+¿POR QUÉ MACOS MUESTRA "APPLE NO HA PODIDO VERIFICAR..."?
+  En macOS Sonoma y macOS Sequoia, cualquier archivo descargado de internet
+  (navegador, Claude, Slack, email, etc.) recibe una marca de seguridad llamada
+  "Quarantine" (cuarentena). Como este instalador es un script propio y no una app
+  con certificado comercial anual de Apple Developer, Gatekeeper lo bloquea.
+
+  Para desbloquearlo en cualquier Mac donde se descargue:
+    Opción A (Ajustes de Mac):
+      Ajustes del Sistema → Privacidad y Seguridad → desplazarse hasta "Seguridad"
+      y presionar el botón "Abrir de todas formas".
+
+    Opción B (Automático en Terminal):
+      Abre Terminal y pega este comando en la carpeta descomprimida:
+        xattr -cr . && chmod +x *.command *.sh
+      Y listo, ya podrás darle doble clic siempre sin bloqueos.
+
+DÓNDE SE INSTALA:
+  ~/Library/Application Support/BitlabAgente/
+    agente.sh        - Script en ejecución
+    config.json      - Configuración activa
+    credencial.json  - Token del equipo (generado automáticamente)
+    logs/            - Registros (agente.log y launchd.log)
+    tmp/             - Archivos de trabajo
+
+ARRANQUE AUTOMÁTICO:
+  Se crea un servicio de usuario (LaunchAgent) en:
+    ~/Library/LaunchAgents/com.bitlabit.agente.plist
+  Inicia solo cada vez que abres sesión y se mantiene activo en segundo plano.
+  No requiere permisos de administrador (root / sudo).
+
+DESINSTALACIÓN:
+  Simplemente haz doble clic en "DESINSTALAR.command" o ejecuta:
+    ~/Library/Application\ Support/BitlabAgente/DESINSTALAR.sh
+
+COMANDOS DE DIAGNÓSTICO:
+  Ver logs en vivo:
+    tail -f ~/Library/Application\ Support/BitlabAgente/logs/agente.log
+
+  Ver estado del servicio:
+    launchctl list | grep bitlabit
+
+  Reiniciar manualmente:
+    launchctl unload ~/Library/LaunchAgents/com.bitlabit.agente.plist
+    launchctl load   ~/Library/LaunchAgents/com.bitlabit.agente.plist
+===================================================

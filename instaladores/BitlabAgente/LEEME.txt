@@ -1,0 +1,17 @@
+Bitlab Terminal - Agente para Windows
+======================================
+
+INSTALACION
+  1. Descomprime esta carpeta completa en cualquier lugar.
+  2. Doble clic en INSTALAR.bat y acepta el aviso de Windows.
+  3. Si Windows pregunta, elige "Si" para dar permisos de administrador.
+  4. Espera a que diga "Listo". El equipo ya aparece en el panel.
+
+DESINSTALACION
+  1. Doble clic en DESINSTALAR.bat y acepta el aviso de Windows.
+
+NOTAS
+  - La clave de registro ya viene incluida en config.json.
+  - El agente arranca solo cada vez que se enciende el equipo.
+  - Para actualizar, solo vuelve a correr INSTALAR.bat.
+  - Registro de actividad: C:\ProgramData\BitlabAgente\logs\agente.log

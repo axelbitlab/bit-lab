@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Bitlab-IT · Terminal en Vivo</title>
+  <!-- Tipografías de alta legibilidad -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Estilos del emulador xterm y módulos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
+  <link rel="stylesheet" href="modulos/estilos/base.css">
+  <link rel="stylesheet" href="modulos/estilos/componentes.css">
+  <link rel="stylesheet" href="modulos/estilos/vistas.css">
+  <link rel="stylesheet" href="modulos/estilos/terminal.css">
+  <!-- Librerías cliente CDN y configuración -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+  <script src="config.js"></script>
+</head>
+<body data-pagina="terminal" class="terminal-page">
+  <div class="fondo" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+
+  <div id="app">
+    <header class="top">
+      <div>
+        <h1 id="tit">Terminal en Vivo</h1>
+        <div class="ts" id="subt">Conectando consola…</div>
+      </div>
+      <div class="der">
+        <span class="ws" id="ws-ind"><i></i><span id="ws-txt">Conectado</span></span>
+        <button class="ib" id="btnNotif" data-acc="notif" aria-label="Notificaciones" title="Notificaciones"></button>
+        <button class="yo" id="yo" data-acc="cuenta" title="Mi cuenta">··</button>
+      </div>
+    </header>
+    <main id="vista" class="llena"></main>
+  </div>
+
+  <!-- Modal: Mi cuenta -->
+  <div id="m-cuenta" class="modal" hidden>
+    <div class="modal-bg" data-acc="cuentaCerrar"></div>
+    <div class="modal-caja vid panel">
+      <header class="modal-head">
+        <div class="modal-tit"><span class="cico" style="--c:var(--cian)" id="mc-ico"></span><div><b>Mi cuenta</b><small id="mc-sub">—</small></div></div>
+        <button class="ib" data-acc="cuentaCerrar" aria-label="Cerrar" id="mc-cerrar"></button>
+      </header>
+      <div class="modal-cuerpo">
+        <section class="mc-sec">
+          <h3 class="mc-h">Sesión</h3>
+          <div class="mc-info">
+            <div class="mc-row"><span class="mc-k">Correo</span><span class="mc-v" id="mc-correo">—</span></div>
+            <div class="mc-row"><span class="mc-k">Rol</span><span class="mc-v" id="mc-rol">—</span></div>
+          </div>
+        </section>
+        <section class="mc-sec">
+          <h3 class="mc-h">Apariencia</h3>
+          <div class="mc-tema">
+            <button class="mc-opt" data-acc="temaSet" data-tema="oscuro" id="mc-t-oscuro">
+              <span class="mc-opt-ic" id="mc-ic-oscuro"></span>
+              <span>Oscuro</span>
+            </button>
+            <button class="mc-opt" data-acc="temaSet" data-tema="claro" id="mc-t-claro">
+              <span class="mc-opt-ic" id="mc-ic-claro"></span>
+              <span>Claro</span>
+            </button>
+          </div>
+        </section>
+        <section class="mc-sec">
+          <h3 class="mc-h">Cambiar contraseña</h3>
+          <form id="f-cambia-pass" class="mc-form">
+            <label class="lbl-f"><span>Contraseña nueva</span>
+              <input type="password" id="mc-pass1" class="inp-f" required minlength="8" placeholder="Mínimo 8 caracteres"></label>
+            <label class="lbl-f"><span>Confirmar contraseña</span>
+              <input type="password" id="mc-pass2" class="inp-f" required minlength="8" placeholder="Repite la nueva contraseña"></label>
+            <div class="err" id="mc-pass-err"></div>
+            <div class="ok" id="mc-pass-ok"></div>
+            <button class="btn pri" type="submit" id="mc-pass-btn">Actualizar contraseña</button>
+          </form>
+        </section>
+        <section class="mc-sec">
+          <button class="btn pel" style="width:100%" data-acc="salir">Cerrar sesión</button>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dock de navegación inferior -->
+  <nav id="dock" class="vid" aria-label="Secciones del módulo"><i id="lente"></i></nav>
+
+  <div id="modal" hidden></div>
+  <div id="toasts" aria-live="polite"></div>
+
+  <!-- Scripts modulares para terminal -->
+  <script src="modulos/nucleo/utilidades.js"></script>
+  <script src="modulos/nucleo/iconos.js"></script>
+  <script src="modulos/nucleo/seleccion.js"></script>
+  <script src="modulos/datos/supabase.js"></script>
+  <script src="modulos/datos/servicio.js"></script>
+  <script src="modulos/datos/tiempo_real.js"></script>
+  <script src="modulos/datos/acceso.js"></script>
+  <script src="modulos/datos/variantes.js"></script>
+  <script src="modulos/interfaz/avisos_modales.js"></script>
+  <script src="modulos/interfaz/navegacion.js"></script>
+  <script src="modulos/catalogo/constantes.js"></script>
+  <script src="modulos/terminal/emulador.js"></script>
+  <script src="modulos/terminal/vista.js"></script>
+  <script src="modulos/terminal/motor.js"></script>
+  <script src="modulos/cuenta/tema.js"></script>
+  <script src="modulos/cuenta/vista.js"></script>
+  <script src="modulos/arranque/eventos.js"></script>
+  <script src="modulos/arranque/inicio.js"></script>
+</body>
+</html>
